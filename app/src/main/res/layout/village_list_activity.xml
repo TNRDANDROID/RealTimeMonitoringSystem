@@ -11,6 +11,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f8f8f8"
     android:orientation="vertical">
 
 
@@ -39,6 +40,8 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
                     android:layout_gravity="start"
+                    android:onClick="@{()-> activity.onBackPressed()}"
+
                     android:src="@mipmap/back_arrow" />
 
                 <TextView
@@ -77,15 +80,15 @@
                 <!--android:layout_alignParentBottom="true"-->
                 <!--app:shimmer_demo_shimmer_color="#8FFFFFFF" />-->
 
-            <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/road_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_alignParentBottom="true"
-            android:fadeScrollbars="false"
-            android:scrollbarSize="4dp"
-            android:scrollbars="vertical" />
+            <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                android:id="@+id/village_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:shimmer_demo_shimmer_color="#8FFFFFFF"
+                android:layout_alignParentBottom="true"
+                android:fadeScrollbars="false"
+                android:scrollbarSize="4dp"
+                android:scrollbars="vertical" />
 
             <TextView
                 android:id="@+id/not_found_tv"

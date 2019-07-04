@@ -147,7 +147,7 @@ public class dbData {
         Cursor cursor = null;
 
         try {
-            cursor = db.rawQuery("select * from "+DBHelper.VILLAGE_TABLE_NAME,null);
+            cursor = db.rawQuery("select * from "+DBHelper.VILLAGE_TABLE_NAME+" order by pvname asc",null);
             // cursor = db.query(CardsDBHelper.TABLE_CARDS,
             //       COLUMNS, null, null, null, null, null);
             if (cursor.getCount() > 0) {

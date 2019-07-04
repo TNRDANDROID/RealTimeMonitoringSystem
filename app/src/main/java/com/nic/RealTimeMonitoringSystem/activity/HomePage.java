@@ -44,6 +44,8 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
         homeScreenBinding = DataBindingUtil.setContentView(this, R.layout.home_screen);
         homeScreenBinding.setActivity(this);
         prefManager = new PrefManager(this);
+        homeScreenBinding.tvName.setText(prefManager.getDesignation());
+        homeScreenBinding.designation.setText(prefManager.getDesignation());
         if (Utils.isOnline()) {
             fetchAllResponseFromApi();
         }
@@ -79,7 +81,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
 
     public void getDistrictList() {
         try {
-            new ApiService(this).makeJSONObjectRequest("DistrictList", Api.Method.POST, UrlGenerator.getOpenUrl(), districtListJsonParams(), "not cache", this);
+            new ApiService(this).makeJSONObjectRequest("DistrictList", Api.Method.POST, UrlGenerator.getServicesListUrl(), districtListJsonParams(), "not cache", this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -87,7 +89,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
 
     public void getBlockList() {
         try {
-            new ApiService(this).makeJSONObjectRequest("BlockList", Api.Method.POST, UrlGenerator.getOpenUrl(), blockListJsonParams(), "not cache", this);
+            new ApiService(this).makeJSONObjectRequest("BlockList", Api.Method.POST, UrlGenerator.getServicesListUrl(), blockListJsonParams(), "not cache", this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -95,7 +97,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
 
     public void getVillageList() {
         try {
-            new ApiService(this).makeJSONObjectRequest("VillageList", Api.Method.POST, UrlGenerator.getOpenUrl(), villageListJsonParams(), "not cache", this);
+            new ApiService(this).makeJSONObjectRequest("VillageList", Api.Method.POST, UrlGenerator.getServicesListUrl(), villageListJsonParams(), "not cache", this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -110,53 +112,57 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
     }
 
     public JSONObject blockListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.blockListDistrictWiseJsonParams(this).toString());
         JSONObject dataSet = new JSONObject();
-        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_BLOCK_LIST_ALL);
-        Log.d("object", "" + dataSet);
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("blockListDistrictWise", "" + authKey);
         return dataSet;
     }
 
     public JSONObject villageListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.villageListDistrictBlockWiseJsonParams(this).toString());
         JSONObject dataSet = new JSONObject();
-        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_VILLAGE_LIST_ALL);
-        Log.d("object", "" + dataSet);
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("villageListDistrictWise", "" + authKey);
         return dataSet;
     }
 
     @Override
     public void OnMyResponse(ServerResponse serverResponse) {
         try {
-            JSONObject loginResponse = serverResponse.getJsonResponse();
             String urlType = serverResponse.getApi();
-            String status = loginResponse.getString(AppConstant.KEY_STATUS);
-            String response = loginResponse.getString(AppConstant.KEY_RESPONSE);
             JSONObject responseObj = serverResponse.getJsonResponse();
+                if ("BlockList".equals(urlType) && responseObj != null) {
+                    String key = responseObj.getString(AppConstant.ENCODE_DATA);
+                    String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                    JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
+                    if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                        new InsertBlockTask().execute(jsonObject);
+                    }
+                    Log.d("BlockList", "" + responseDecryptedBlockKey);
+                }
+
 
             if ("DistrictList".equals(urlType) && responseObj != null) {
-                if (status.equalsIgnoreCase("OK") && response.equalsIgnoreCase("OK")) {
-                    new InsertDistrictTask().execute(responseObj.getJSONArray(AppConstant.JSON_DATA));
-                } else if (status.equalsIgnoreCase("OK") && response.equalsIgnoreCase("NO_RECORD")) {
-                    Log.d("Record", responseObj.getString(AppConstant.KEY_MESSAGE));
+                String key = responseObj.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                    new InsertDistrictTask().execute(jsonObject);
                 }
-                Log.d("DistrictList", "" + responseObj.getJSONArray(AppConstant.JSON_DATA));
-            }
-
-            if ("BlockList".equals(urlType) && responseObj != null) {
-                if (status.equalsIgnoreCase("OK") && response.equalsIgnoreCase("OK")) {
-                    new InsertBlockTask().execute(responseObj.getJSONArray(AppConstant.JSON_DATA));
-                } else if (status.equalsIgnoreCase("OK") && response.equalsIgnoreCase("NO_RECORD")) {
-                    Log.d("Record", responseObj.getString(AppConstant.KEY_MESSAGE));
-                }
-                Log.d("BlockList", "" + responseObj.getJSONArray(AppConstant.JSON_DATA));
+                Log.d("DistrictList", "" + responseDecryptedBlockKey);
             }
 
             if ("VillageList".equals(urlType) && responseObj != null) {
-                if (status.equalsIgnoreCase("OK") && response.equalsIgnoreCase("OK")) {
-                    new InsertVillageTask().execute(responseObj.getJSONArray(AppConstant.JSON_DATA));
-                } else if (status.equalsIgnoreCase("OK") && response.equalsIgnoreCase("NO_RECORD")) {
-                    Log.d("Record", responseObj.getString(AppConstant.KEY_MESSAGE));
+                String key = responseObj.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                    new InsertVillageTask().execute(jsonObject);
                 }
-                Log.d("VillageList", "" + responseObj.getJSONArray(AppConstant.JSON_DATA));
+                Log.d("VillageList", "" + responseDecryptedBlockKey);
             }
 
         } catch (JSONException e) {
@@ -164,16 +170,20 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
         }
     }
 
-    public class InsertDistrictTask extends AsyncTask<JSONArray, Void, Void> {
+    public class InsertDistrictTask extends AsyncTask<JSONObject, Void, Void> {
 
         @Override
-        protected Void doInBackground(JSONArray... params) {
+        protected Void doInBackground(JSONObject... params) {
             dbData.open();
             ArrayList<RealTimeMonitoringSystem> districtlist_count = dbData.getAll_District();
             if (districtlist_count.size() <= 0) {
                 if (params.length > 0) {
                     JSONArray jsonArray = new JSONArray();
-                    jsonArray = params[0];
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.JSON_DATA);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     for (int i = 0; i < jsonArray.length(); i++) {
                         RealTimeMonitoringSystem districtListValue = new RealTimeMonitoringSystem();
                         try {
@@ -194,16 +204,20 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
 
     }
 
-    public class InsertBlockTask extends AsyncTask<JSONArray, Void, Void> {
+    public class InsertBlockTask extends AsyncTask<JSONObject, Void, Void> {
 
         @Override
-        protected Void doInBackground(JSONArray... params) {
+        protected Void doInBackground(JSONObject... params) {
             dbData.open();
             ArrayList<RealTimeMonitoringSystem> blocklist_count = dbData.getAll_Block();
             if (blocklist_count.size() <= 0) {
                 if (params.length > 0) {
                     JSONArray jsonArray = new JSONArray();
-                    jsonArray = params[0];
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.JSON_DATA);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     for (int i = 0; i < jsonArray.length(); i++) {
                         RealTimeMonitoringSystem blocktListValue = new RealTimeMonitoringSystem();
                         try {
@@ -225,16 +239,20 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
 
     }
 
-    public class InsertVillageTask extends AsyncTask<JSONArray, Void, Void> {
+    public class InsertVillageTask extends AsyncTask<JSONObject, Void, Void> {
 
         @Override
-        protected Void doInBackground(JSONArray... params) {
+        protected Void doInBackground(JSONObject... params) {
             dbData.open();
             ArrayList<RealTimeMonitoringSystem> villagelist_count = dbData.getAll_Village();
             if (villagelist_count.size() <= 0) {
                 if (params.length > 0) {
                     JSONArray jsonArray = new JSONArray();
-                    jsonArray = params[0];
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.JSON_DATA);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     for (int i = 0; i < jsonArray.length(); i++) {
                         RealTimeMonitoringSystem villageListValue = new RealTimeMonitoringSystem();
                         try {
@@ -263,7 +281,9 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
     }
 
     public void viewHousingWorks() {
-
+        Intent intent = new Intent(this, VillageListScreen.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
 

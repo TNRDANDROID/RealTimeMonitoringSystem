@@ -14,7 +14,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
-
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -30,16 +29,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.FileProvider;
 
-import com.nic.RealTimeMonitoringSystem.application.NICApplication;
 import com.nic.RealTimeMonitoringSystem.BuildConfig;
-import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
 import com.nic.RealTimeMonitoringSystem.R;
+import com.nic.RealTimeMonitoringSystem.application.NICApplication;
+import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
 import com.nic.RealTimeMonitoringSystem.session.PrefManager;
-import com.nic.RealTimeMonitoringSystem.support.MyCustomTextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -1150,5 +1147,24 @@ public class Utils {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         return formatter.format(date);
+    }
+
+    public static JSONObject blockListDistrictWiseJsonParams(Activity activity) throws JSONException {
+        prefManager = new PrefManager(activity);
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_BLOCK_LIST_DISTRICT_WISE);
+        dataSet.put(AppConstant.DISTRICT_CODE, prefManager.getDistrictCode());
+        Log.d("blockListDistrictWise", "" + dataSet);
+        return dataSet;
+    }
+
+    public static JSONObject villageListDistrictBlockWiseJsonParams(Activity activity) throws JSONException {
+        prefManager = new PrefManager(activity);
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_VILLAGE_LIST_DISTRICT_BLOCK_WISE);
+        dataSet.put(AppConstant.DISTRICT_CODE, prefManager.getDistrictCode());
+        dataSet.put(AppConstant.BLOCK_CODE, prefManager.getBlockCode());
+        Log.d("villageListDistBlock", "" + dataSet);
+        return dataSet;
     }
 }

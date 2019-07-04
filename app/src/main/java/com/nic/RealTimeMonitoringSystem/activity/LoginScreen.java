@@ -247,7 +247,9 @@ Log.d("params",""+params);
                         prefManager.setPvCode(jsonObject.get(AppConstant.PV_CODE));
                         prefManager.setDistrictName(jsonObject.get(AppConstant.DISTRICT_NAME));
                         prefManager.setBlockName(jsonObject.get(AppConstant.BLOCK_NAME));
-                        Log.d("userdata", "" + prefManager.getDistrictCode() + prefManager.getBlockCode() + prefManager.getPvCode() + prefManager.getDistrictName() + prefManager.getBlockName());
+                        prefManager.setDesignation(jsonObject.get(AppConstant.DESIG_NAME));
+                        prefManager.setName(String.valueOf(jsonObject.get(AppConstant.DESIG_NAME)));
+                        Log.d("userdata", "" + prefManager.getDistrictCode() + prefManager.getBlockCode() + prefManager.getPvCode() + prefManager.getDistrictName() + prefManager.getBlockName()+prefManager.getName());
                         prefManager.setUserPassKey(decryptedKey);
                         showHomeScreen();
                     } else {

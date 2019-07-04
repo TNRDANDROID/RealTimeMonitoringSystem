@@ -34,24 +34,17 @@ public class AppConstant {
     public static String PV_CODE = "pvcode";
     public static String BLOCK_NAME = "bname";
     public static String PV_NAME = "pvname";
+    public static String DESIG_NAME = "desig_name";
 
 
-    /******** BANK NAME TABLE *****/
 
-    public static String BANK_ID = "bank_id";
-    public static String OMC_NAME = "omc_name";
-    public static String BANK_NAME = "bank_name";
-
-    /******* BANK BRANCH TABLE ****/
 
 
     public static String KEY_MOTIVATOR_SCHEDULE = "motivator_schedule";
 
-    /******************* t_schedule **********************/
 
-
-    public static String KEY_MOTIVATOR_ID = "motivator_id";
-
+    public static String KEY_VILLAGE_LIST_DISTRICT_BLOCK_WISE = "village_list_district_block_wise";
+    public static String KEY_BLOCK_LIST_DISTRICT_WISE = "block_list_district_wise";
 
 
 

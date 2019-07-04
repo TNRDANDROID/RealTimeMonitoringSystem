@@ -38,6 +38,8 @@ public class PrefManager {
     private static final String KEY_BLOCK_CODE = "Block_Code";
     private static final String KEY_PV_CODE = "Pv_Code";
     private static final String KEY_DISTRICT_NAME = "District_Name";
+    private static final String KEY_DESIGNATION = "Designation";
+    private static final String KEY_NAME = "Name";
     private static final String KEY_BLOCK_NAME = "Block_Name";
     private static final String KEY_VILLAGE_LIST_PV_NAME = "Village_List_Pv_Name";
     private static final String KEY_SPINNER_SELECTED_BLOCKCODE = "spinner_selected_block_code";
@@ -208,23 +210,25 @@ public class PrefManager {
     }
 
 
-    public void setVillageListPvName(String key) {
-        editor.putString(KEY_VILLAGE_LIST_PV_NAME,  key);
+    public Object setDesignation(Object key) {
+        editor.putString(KEY_DESIGNATION, String.valueOf(key));
+        editor.commit();
+        return key;
+    }
+
+    public String getDesignation() {
+        return pref.getString(KEY_DESIGNATION, null);
+    }
+
+
+
+    public void setName(String userName) {
+        editor.putString(KEY_NAME, userName);
         editor.commit();
     }
 
-    public String getVillageListPvName() {
-        return pref.getString(KEY_VILLAGE_LIST_PV_NAME, null);
-    }
-
-
-    public void setKeySpinnerSelectedBlockcode(String userName) {
-        editor.putString(KEY_SPINNER_SELECTED_BLOCKCODE, userName);
-        editor.commit();
-    }
-
-    public String getKeySpinnerSelectedBlockcode() {
-        return pref.getString(KEY_SPINNER_SELECTED_BLOCKCODE, null);
+    public String getName() {
+        return pref.getString(KEY_NAME, null);
     }
 
     public void setKeySpinnerSelectedPvcode(String userName) {

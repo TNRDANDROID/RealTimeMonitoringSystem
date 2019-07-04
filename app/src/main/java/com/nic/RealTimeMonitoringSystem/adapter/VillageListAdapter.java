@@ -1,6 +1,7 @@
 package com.nic.RealTimeMonitoringSystem.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -30,6 +31,7 @@ public class VillageListAdapter extends RecyclerView.Adapter<VillageListAdapter.
     public VillageListAdapter(Context context, List<RealTimeMonitoringSystem> villageListValues) {
         this.context = context;
         this.villageListValues = villageListValues;
+        this.villageValuesFiltered = villageListValues;
 
     }
 
@@ -56,8 +58,10 @@ public class VillageListAdapter extends RecyclerView.Adapter<VillageListAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        holder.adapterVillageListBinding.villageName.setText(villageValuesFiltered.get(position).getVillageListPvName());
-        letter = String.valueOf(villageValuesFiltered.get(position).getVillageListPvName().charAt(0));
+        holder.adapterVillageListBinding.villageName.setText(villageValuesFiltered.get(position).getPvName());
+
+        Log.d("text",""+villageValuesFiltered.get(position).getPvName());
+        letter = String.valueOf(villageValuesFiltered.get(position).getPvName().charAt(0));
 
         TextDrawable drawable = TextDrawable.builder()
                 .buildRound(letter, generator.getRandomColor());
@@ -80,7 +84,7 @@ public class VillageListAdapter extends RecyclerView.Adapter<VillageListAdapter.
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
-                        if (row.getVillageListPvName().toLowerCase().contains(charString.toLowerCase()) || row.getVillageListPvName().toLowerCase().contains(charString.toUpperCase())) {
+                        if (row.getPvName().toLowerCase().contains(charString.toLowerCase()) || row.getPvName().toLowerCase().contains(charString.toUpperCase())) {
                             filteredList.add(row);
                         }
                     }
