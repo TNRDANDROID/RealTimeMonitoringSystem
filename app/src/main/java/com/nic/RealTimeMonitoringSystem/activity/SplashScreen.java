@@ -2,7 +2,6 @@ package com.nic.RealTimeMonitoringSystem.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.os.Handler;
 import android.widget.Button;
 import android.widget.TextView;
@@ -29,7 +28,7 @@ public class SplashScreen extends AppCompatActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         splashScreenBinding = DataBindingUtil.setContentView(this,R.layout.splash_screen);
-splashScreenBinding.setActivity(this);
+        splashScreenBinding.setActivity(this);
         prefManager = new PrefManager(this);
         showSignInScreen();
 //        if (Utils.isOnline()) {

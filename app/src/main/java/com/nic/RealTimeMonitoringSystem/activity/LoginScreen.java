@@ -66,9 +66,7 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
         loginScreenBinding = DataBindingUtil.setContentView(this, R.layout.login_screen);
         loginScreenBinding.setActivity(this);
         intializeUI();
-        if (Utils.isOnline()) {
-            fetchAllResponseFromApi();
-        }
+
 
     }
 
@@ -125,14 +123,7 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
 
     }
 
-    public void fetchAllResponseFromApi() {
 
-        getVillageList();
-        getDistrictList();
-        getBlockList();
-
-
-    }
 
     @Override
     public void onClick(View v) {
@@ -160,7 +151,6 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
     }
 
     public void checkLoginScreen() {
-
         final String username = loginScreenBinding.userName.getText().toString().trim();
         final String password = loginScreenBinding.password.getText().toString().trim();
         prefManager.setUserPassword(password);
@@ -226,58 +216,14 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
 
         Log.d("user", "" + loginScreenBinding.userName.getText().toString().trim());
 
-
+Log.d("params",""+params);
         return params;
     }
 
     //The method for opening the registration page and another processes or checks for registering
 
 
-    public void getDistrictList() {
-        try {
-            new ApiService(this).makeJSONObjectRequest("DistrictList", Api.Method.POST, UrlGenerator.getOpenUrl(), districtListJsonParams(), "not cache", this);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void getBlockList() {
-        try {
-            new ApiService(this).makeJSONObjectRequest("BlockList", Api.Method.POST, UrlGenerator.getOpenUrl(), blockListJsonParams(), "not cache", this);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getVillageList() {
-        try {
-            new ApiService(this).makeJSONObjectRequest("VillageList", Api.Method.POST, UrlGenerator.getOpenUrl(), villageListJsonParams(), "not cache", this);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public JSONObject districtListJsonParams() throws JSONException {
-        JSONObject dataSet = new JSONObject();
-        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_DISTRICT_LIST_ALL);
-        Log.d("object", "" + dataSet);
-        return dataSet;
-    }
-
-    public JSONObject blockListJsonParams() throws JSONException {
-        JSONObject dataSet = new JSONObject();
-        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_BLOCK_LIST_ALL);
-        Log.d("object", "" + dataSet);
-        return dataSet;
-    }
-
-    public JSONObject villageListJsonParams() throws JSONException {
-        JSONObject dataSet = new JSONObject();
-        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_VILLAGE_LIST_ALL);
-        Log.d("object", "" + dataSet);
-        return dataSet;
-    }
 
     @Override
     public void OnMyResponse(ServerResponse serverResponse) {

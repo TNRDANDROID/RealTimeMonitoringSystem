@@ -13,7 +13,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#5fb0c9"
+        android:background="@color/colorAccent"
         android:orientation="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true">
 
@@ -74,7 +74,6 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-
                             android:layout_centerHorizontal="true"
                             android:layout_toRightOf="@+id/image"
                             android:background="@android:color/transparent"
@@ -120,7 +119,7 @@
                             android:background="@android:color/transparent"
                             android:hint="Password"
                             android:inputType="textPassword"
-                            android:padding="@dimen/_5sdp"
+
                             android:singleLine="true"
                             android:textColor="@android:color/black"
                             android:textSize="16dp"
@@ -173,7 +172,7 @@
             android:layout_height="100dp"
             android:layout_below="@+id/login_title"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="34dp"
+            android:layout_marginTop="35dp"
             android:background="@drawable/profile_image_background"
             android:elevation="4dp"
             android:padding="@dimen/_15sdp"
