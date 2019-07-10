@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.location.LocationListener;
@@ -16,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -32,11 +34,14 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.nic.RealTimeMonitoringSystem.R;
+import com.nic.RealTimeMonitoringSystem.adapter.CommonAdapter;
 import com.nic.RealTimeMonitoringSystem.api.Api;
 import com.nic.RealTimeMonitoringSystem.api.ServerResponse;
+import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
 import com.nic.RealTimeMonitoringSystem.dataBase.DBHelper;
 import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
 import com.nic.RealTimeMonitoringSystem.databinding.CameraScreenBinding;
+import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
 import com.nic.RealTimeMonitoringSystem.session.PrefManager;
 import com.nic.RealTimeMonitoringSystem.support.MyEditTextView;
 import com.nic.RealTimeMonitoringSystem.support.MyLocationListener;
@@ -75,6 +80,9 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
     public static SQLiteDatabase db;
     private com.nic.RealTimeMonitoringSystem.dataBase.dbData dbData = new dbData(this);
     private MyEditTextView description;
+    private List<RealTimeMonitoringSystem> StageList = new ArrayList<>();
+    String  pref_stage;
+
 
 
     @Override
@@ -91,6 +99,7 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
 
 
         intializeUI();
+        loadOfflineStageListDBValues();
     }
 
     public void intializeUI() {
@@ -103,7 +112,20 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
         cameraScreenBinding.homeImg.setOnClickListener(this);
         cameraScreenBinding.btnSave.setOnClickListener(this);
 
+        cameraScreenBinding.stage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) {
+                    pref_stage = StageList.get(position).getWorkStageName();
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+
+        });
     }
 
     @Override
@@ -112,7 +134,27 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+    public void loadOfflineStageListDBValues() {
+        StageList.clear();
+        Cursor Stage = null;
+        Stage = db.rawQuery("select * from " + DBHelper.WORK_STAGE_TABLE, null);
 
+        RealTimeMonitoringSystem stageListValue = new RealTimeMonitoringSystem();
+        stageListValue.setFinancialYear("Select Stage");
+        StageList.add(stageListValue);
+        if (Stage.getCount() > 0) {
+            if (Stage.moveToFirst()) {
+                do {
+                    RealTimeMonitoringSystem stageList = new RealTimeMonitoringSystem();
+                    String financialYear = Stage.getString(Stage.getColumnIndexOrThrow(AppConstant.WORK_SATGE_NAME));
+                    stageList.setFinancialYear(financialYear);
+                    StageList.add(stageList);
+                } while (Stage.moveToNext());
+            }
+        }
+
+        cameraScreenBinding.stage.setAdapter(new CommonAdapter(this, StageList, "FinYearList"));
+    }
 
     private void captureImage() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

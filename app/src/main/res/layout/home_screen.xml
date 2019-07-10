@@ -68,7 +68,7 @@
                     android:layout_centerInParent="true"
                     android:background="@drawable/circle"
                     android:padding="8dp"
-                    android:src="@mipmap/log_out"
+                    android:src="@mipmap/avatar"
                     />
             </RelativeLayout>
 
@@ -182,7 +182,7 @@
                     android:id="@+id/view_housing_works"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()-> activity.viewHousingWorks()}"
+                    android:onClick="@{()-> activity.viewVillageList()}"
                     android:orientation="vertical">
 
                     <TextView

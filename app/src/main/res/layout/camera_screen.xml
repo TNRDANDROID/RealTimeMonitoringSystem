@@ -92,7 +92,7 @@
                 android:visibility="visible" />
 
             <Spinner
-                android:id="@+id/scheme"
+                android:id="@+id/stage"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

@@ -35,10 +35,18 @@ public class AppConstant {
     public static String BLOCK_NAME = "bname";
     public static String PV_NAME = "pvname";
     public static String DESIG_NAME = "desig_name";
-
-
-
-
+    public static String N_YEAR = "nyear";
+    public static String KEY_SCHEME_FINYEAR_LIST_LAST_NYEARS = "scheme_finyear_list_last_nyears";
+    public static String STAGE_LIST = "work_type_stage_link";
+    public static String FINANCIAL_YEAR = "fin_year";
+    public static String WORK_GROUP_ID = "work_group_id";
+    public static String WORK_TYPE_ID = "work_type_id";
+    public static String WORK_STAGE_CODE = "work_stage_code";
+    public static String WORK_STAGE_ORDER = "work_stage_order";
+    public static String WORK_SATGE_NAME = "work_stage_name";
+    public static String KEY_SCHEME_LIST_DISTRICT_FINYEAR_WISE = "scheme_list_district_finyear_wise";
+    public static String KEY_SCHEME_SEQUENTIAL_ID = "scheme_seq_id";
+    public static String KEY_SCHEME_NAME = "scheme_name";
 
     public static String KEY_MOTIVATOR_SCHEDULE = "motivator_schedule";
 

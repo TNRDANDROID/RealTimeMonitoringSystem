@@ -41,19 +41,14 @@ public class PrefManager {
     private static final String KEY_DESIGNATION = "Designation";
     private static final String KEY_NAME = "Name";
     private static final String KEY_BLOCK_NAME = "Block_Name";
-    private static final String KEY_VILLAGE_LIST_PV_NAME = "Village_List_Pv_Name";
-    private static final String KEY_SPINNER_SELECTED_BLOCKCODE = "spinner_selected_block_code";
     private static final String KEY_SPINNER_SELECTED_PVCODE = "spinner_selected_pv_code";
     private static final String KEY_AUTOCOMPLETE_SELECTED_BANK_NAME = "autocomplete_selected_bank_name";
     private static final String KEY_AUTOCOMPLETE_SELECTED_BANK_ID = "autocomplete_selected_bank_id";
     private static final String KEY_SPINNER_SELECTED_CATEGORY_ID= "spinner_selected_category_id";
-    private static final String KEY_SPINNER_SELECTED_CATEGORY_OTHERS_ID= "spinner_selected_category_others_id";
     private static final String KEY_BLOCK_CODE_JSON = "block_code_json";
     private static final String KEY_VILLAGE_CODE_JSON = "village_code_json";
-    private static final String KEY_AUTOCOMPLETE_SELECTED_BRANCH_ID = "autocomplete_selected_branch_id";
-    private static final String KEY_AUTOCOMPLETE_SELECTED_IFSC_CODE = "autocomplete_selected_ifsc_code";
-    private static final String KEY_SPINNER_SELECTED_CATEGORY_NAME = "spinner_selected_category_name";
-    private static final String KEY_ACTIVITY_NAME= "activity_name";
+    private static final String KEY_SCHEME_NAME = "Scheme_Name";
+    private static final String KEY_FINANCIALYEAR_NAME = "FinancialYear_Name";
 
 
     private static final String IMEI = "imei";
@@ -231,6 +226,21 @@ public class PrefManager {
         return pref.getString(KEY_NAME, null);
     }
 
+    public  void setSchemeName(String key) {
+        editor.putString(KEY_SCHEME_NAME,key);
+        editor.commit();
+    }
+
+    public String getSchemeName() {return pref.getString(KEY_SCHEME_NAME,null);}
+
+    public void setFinancialyearName(String key) {
+        editor.putString(KEY_FINANCIALYEAR_NAME,key);
+        editor.commit();
+    }
+
+    public String getFinancialyearName() {return pref.getString(KEY_FINANCIALYEAR_NAME,null);}
+
+
     public void setKeySpinnerSelectedPvcode(String userName) {
         editor.putString(KEY_SPINNER_SELECTED_PVCODE, userName);
         editor.commit();
@@ -238,36 +248,6 @@ public class PrefManager {
 
     public String getKeySpinnerSelectedPVcode() {
         return pref.getString(KEY_SPINNER_SELECTED_PVCODE, null);
-    }
-
-    public void setKeyAutocompleteSelectedBankName(String userName) {
-        editor.putString(KEY_AUTOCOMPLETE_SELECTED_BANK_NAME, userName);
-        editor.commit();
-    }
-
-    public String getKeyAutocompleteSelectedBankName() {
-        return pref.getString(KEY_AUTOCOMPLETE_SELECTED_BANK_NAME, null);
-    }
-
-
-    public Integer setKeyAutocompleteSelectedBankID(Integer userName) {
-        editor.putInt(KEY_AUTOCOMPLETE_SELECTED_BANK_ID, userName);
-        editor.commit();
-        return userName;
-    }
-
-    public Integer getKeyAutocompleteSelectedBankID() {
-        return pref.getInt(KEY_AUTOCOMPLETE_SELECTED_BANK_ID, 0);
-    }
-
-    public Integer setSpinnerSelectedCategoryId(Integer userName) {
-        editor.putInt(KEY_SPINNER_SELECTED_CATEGORY_ID, userName);
-        editor.commit();
-        return userName;
-    }
-
-    public Integer getSpinnerSelectedCategoryId() {
-        return pref.getInt(KEY_SPINNER_SELECTED_CATEGORY_ID, 0);
     }
 
 
@@ -323,39 +303,6 @@ public class PrefManager {
         Log.d("prefVillageJson",""+jsonData);
         return jsonData;
     }
-    public Integer setKeyAutocompleteSelectedBranchID(Integer userName) {
-        editor.putInt(KEY_AUTOCOMPLETE_SELECTED_BRANCH_ID, userName);
-        editor.commit();
-        return userName;
-    }
 
-    public Integer getKeyAutocompleteSelectedBranchID() {
-        return pref.getInt(KEY_AUTOCOMPLETE_SELECTED_BRANCH_ID, 0);
-    }
 
-    public void setKeyAutocompleteSelectedIfscCode(String userName) {
-        editor.putString(KEY_AUTOCOMPLETE_SELECTED_IFSC_CODE, userName);
-        editor.commit();
-    }
-
-    public String getKeyAutocompleteSelectedIfscCode() {
-        return pref.getString(KEY_AUTOCOMPLETE_SELECTED_IFSC_CODE, null);
-    }
-
-    public void setSpinnerSelectedCategoryName(String userName) {
-        editor.putString(KEY_SPINNER_SELECTED_CATEGORY_NAME, userName);
-        editor.commit();
-    }
-
-    public String getSpinnerSelectedCategoryName() {
-        return pref.getString(KEY_SPINNER_SELECTED_CATEGORY_NAME, null);
-    }
-    public void setActivityName(String userName) {
-        editor.putString(KEY_ACTIVITY_NAME, userName);
-        editor.commit();
-    }
-
-    public String getActivityName() {
-        return pref.getString(KEY_ACTIVITY_NAME, null);
-    }
 }

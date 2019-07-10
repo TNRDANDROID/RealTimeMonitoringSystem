@@ -65,7 +65,7 @@ public class MyDialog {
 //                }
                 if(type.equals("Logout")) {
                     dbData.open();
-
+                    dbData.deleteAll();
                     prefManager.clearSession();
                 }
 

@@ -12,59 +12,181 @@ public class RealTimeMonitoringSystem {
     private String districtName;
 
     private String blockCode;
-    private String VillageListDistrictCode;
-    private String VillageListBlockCode;
+    private String SchemeGroupName;
+    private String SchemeName;
     private String Description;
     private String Latitude;
     private String selectedBlockCode;
 
-    private int Bank_Id;
-    private String OMC_Name;
-    private int Branch_Id;
-    private String Branch_Name;
+    private String FinancialYear;
+    private String AgencyName;
+    private String WorkGroupNmae;
+    private String WorkName;
     private String PvCode;
     private String PvName;
 
     private String blockName;
-    private String Bank_Name;
-    private String IFSC_Code;
+    private String Gender;
+    private String CurrentStage;
 
     private String Name;
-    private String VillageListPvName;
-    private String VillageListPvCode;
-    private int motivatorCategoryId;
+    private String BeneficiaryName;
+    private String workGroupID;
+    private String workTypeID;
 
-    private Integer scheduleId;
-    private Integer scheduleMasterId;
-    private Integer motivatorId;
-    private String scheduleFromDate;
-    private String scheduletoDate;
-    private String scheduleDescription;
-    private Integer totalActivity;
-    private Integer completedActivity;
+    public String getBeneficiaryFatherName() {
+        return BeneficiaryFatherName;
+    }
+
+    public void setBeneficiaryFatherName(String beneficiaryFatherName) {
+        BeneficiaryFatherName = beneficiaryFatherName;
+    }
+
+    private String BeneficiaryFatherName;
+    private String Community;
+    private String IntialAmount;
+
+    private String AmountSpendSoFar;
+    private String LastVisitedDate;
+
     private Integer pendingActivity;
+    public String workStageName;
+    private String workStageCode;
+    private String workStageOrder;
+    private String schemeName;
+    private Integer schemeSequentialID;
 
-    private Integer VillageLinkId;
-    private Integer scheduleActivityId;
-    private Integer ActivityId;
-    private String ActivityName;
-    private String placeOfActivity;
+    public Integer getSchemeSequentialID() {
+        return schemeSequentialID;
+    }
+
+    public void setSchemeSequentialID(Integer schemeSequentialID) {
+        this.schemeSequentialID = schemeSequentialID;
+    }
+
     private Integer noOfPhotos;
-    private Integer serialNo;
+
+    public String getSchemeGroupName() {
+        return SchemeGroupName;
+    }
+
+    public void setSchemeGroupName(String schemeGroupName) {
+        SchemeGroupName = schemeGroupName;
+    }
+
+    public String getSchemeName() {
+        return SchemeName;
+    }
+
+    public void setSchemeName(String schemeName) {
+        SchemeName = schemeName;
+    }
+
+    public String getFinancialYear() {
+        return FinancialYear;
+    }
+
+    public void setFinancialYear(String financialYear) {
+        FinancialYear = financialYear;
+    }
+
+    public String getAgencyName() {
+        return AgencyName;
+    }
+
+    public void setAgencyName(String agencyName) {
+        AgencyName = agencyName;
+    }
+
+    public String getWorkGroupNmae() {
+        return WorkGroupNmae;
+    }
+
+    public void setWorkGroupNmae(String workGroupNmae) {
+        WorkGroupNmae = workGroupNmae;
+    }
+
+    public String getWorkName() {
+        return WorkName;
+    }
+
+    public void setWorkName(String workName) {
+        WorkName = workName;
+    }
+
+    public String getGender() {
+        return Gender;
+    }
+
+    public void setGender(String gender) {
+        Gender = gender;
+    }
+
+    public String getCurrentStage() {
+        return CurrentStage;
+    }
+
+    public void setCurrentStage(String currentStage) {
+        CurrentStage = currentStage;
+    }
+
+    public String getBeneficiaryName() {
+        return BeneficiaryName;
+    }
+
+    public void setBeneficiaryName(String beneficiaryName) {
+        BeneficiaryName = beneficiaryName;
+    }
+
+    public String getCommunity() {
+        return Community;
+    }
+
+    public void setCommunity(String community) {
+        Community = community;
+    }
+
+    public String getIntialAmount() {
+        return IntialAmount;
+    }
+
+    public void setIntialAmount(String intialAmount) {
+        IntialAmount = intialAmount;
+    }
+
+    public String getAmountSpendSoFar() {
+        return AmountSpendSoFar;
+    }
+
+    public void setAmountSpendSoFar(String amountSpendSoFar) {
+        AmountSpendSoFar = amountSpendSoFar;
+    }
+
+    public String getLastVisitedDate() {
+        return LastVisitedDate;
+    }
+
+    public void setLastVisitedDate(String lastVisitedDate) {
+        LastVisitedDate = lastVisitedDate;
+    }
+
+    public Integer getWorkId() {
+        return WorkId;
+    }
+
+    public void setWorkId(Integer workId) {
+        WorkId = workId;
+    }
+
+    private Integer WorkId;
 
     private String type;
     private String imageRemark;
     private String dateTime;
     private String imageAvailable;
-    private String activityStatus;
 
-    public String getActivityStatus() {
-        return activityStatus;
-    }
 
-    public void setActivityStatus(String activityStatus) {
-        this.activityStatus = activityStatus;
-    }
+
     public String getImageAvailable() {
         return imageAvailable;
     }
@@ -97,37 +219,7 @@ public class RealTimeMonitoringSystem {
         this.dateTime = dateTime;
     }
 
-    public Integer getScheduleActivityId() {
-        return scheduleActivityId;
-    }
 
-    public void setScheduleActivityId(Integer scheduleActivityId) {
-        this.scheduleActivityId = scheduleActivityId;
-    }
-
-    public Integer getActivityId() {
-        return ActivityId;
-    }
-
-    public void setActivityId(Integer activityId) {
-        ActivityId = activityId;
-    }
-
-    public String getActivityName() {
-        return ActivityName;
-    }
-
-    public void setActivityName(String activityName) {
-        ActivityName = activityName;
-    }
-
-    public String getPlaceOfActivity() {
-        return placeOfActivity;
-    }
-
-    public void setPlaceOfActivity(String placeOfActivity) {
-        this.placeOfActivity = placeOfActivity;
-    }
 
     public Integer getNoOfPhotos() {
         return noOfPhotos;
@@ -137,77 +229,6 @@ public class RealTimeMonitoringSystem {
         this.noOfPhotos = noOfPhotos;
     }
 
-    public Integer getSerialNo() {
-        return serialNo;
-    }
-
-    public void setSerialNo(Integer serialNo) {
-        this.serialNo = serialNo;
-    }
-
-    public Integer getVillageLinkId() {
-        return VillageLinkId;
-    }
-
-    public void setVillageLinkId(Integer villageLinkId) {
-        VillageLinkId = villageLinkId;
-    }
-
-    public Integer getScheduleId() {
-        return scheduleId;
-    }
-
-    public void setScheduleId(Integer scheduleId) {
-        this.scheduleId = scheduleId;
-    }
-
-    public Integer getScheduleMasterId() {
-        return scheduleMasterId;
-    }
-
-    public void setScheduleMasterId(Integer scheduleMasterId) {
-        this.scheduleMasterId = scheduleMasterId;
-    }
-
-    public Integer getMotivatorId() {
-        return motivatorId;
-    }
-
-    public void setMotivatorId(Integer motivatorId) {
-        this.motivatorId = motivatorId;
-    }
-
-    public String getScheduleFromDate() {
-        return scheduleFromDate;
-    }
-
-    public void setScheduleFromDate(String scheduleFromDate) {
-        this.scheduleFromDate = scheduleFromDate;
-    }
-
-    public String getScheduletoDate() {
-        return scheduletoDate;
-    }
-
-    public void setScheduletoDate(String scheduletoDate) {
-        this.scheduletoDate = scheduletoDate;
-    }
-
-    public Integer getTotalActivity() {
-        return totalActivity;
-    }
-
-    public void setTotalActivity(Integer totalActivity) {
-        this.totalActivity = totalActivity;
-    }
-
-    public Integer getCompletedActivity() {
-        return completedActivity;
-    }
-
-    public void setCompletedActivity(Integer completedActivity) {
-        this.completedActivity = completedActivity;
-    }
 
     public Integer getPendingActivity() {
         return pendingActivity;
@@ -217,31 +238,8 @@ public class RealTimeMonitoringSystem {
         this.pendingActivity = pendingActivity;
     }
 
-    public String getScheduleDescription() {
-        return scheduleDescription;
-    }
 
-    public void setScheduleDescription(String scheduleDescription) {
-        this.scheduleDescription = scheduleDescription;
-    }
 
-    public int getMotivatorCategoryId() {
-        return motivatorCategoryId;
-    }
-
-    public void setMotivatorCategoryId(int motivatorCategoryId) {
-        this.motivatorCategoryId = motivatorCategoryId;
-    }
-
-    public String getMotivatorCategoryName() {
-        return motivatorCategoryName;
-    }
-
-    public void setMotivatorCategoryName(String motivatorCategoryName) {
-        this.motivatorCategoryName = motivatorCategoryName;
-    }
-
-    private String motivatorCategoryName;
 
     public String getPvName() {
         return PvName;
@@ -251,38 +249,7 @@ public class RealTimeMonitoringSystem {
         PvName = pvName;
     }
 
-    public String getBank_Name() {
-        return Bank_Name;
-    }
 
-    public void setBank_Name(String bank_Name) {
-        Bank_Name = bank_Name;
-    }
-
-
-    public int getBranch_Id() {
-        return Branch_Id;
-    }
-
-    public void setBranch_Id(int branch_Id) {
-        Branch_Id = branch_Id;
-    }
-
-    public String getBranch_Name() {
-        return Branch_Name;
-    }
-
-    public void setBranch_Name(String branch_Name) {
-        Branch_Name = branch_Name;
-    }
-
-    public String getIFSC_Code() {
-        return IFSC_Code;
-    }
-
-    public void setIFSC_Code(String IFSC_Code) {
-        this.IFSC_Code = IFSC_Code;
-    }
 
     public String getDistrictName() {
         return districtName;
@@ -373,21 +340,7 @@ public class RealTimeMonitoringSystem {
 
     private Bitmap Image;
 
-    public String getVillageListDistrictCode() {
-        return VillageListDistrictCode;
-    }
 
-    public void setVillageListDistrictCode(String villageListDistrictCode) {
-        VillageListDistrictCode = villageListDistrictCode;
-    }
-
-    public String getVillageListBlockCode() {
-        return VillageListBlockCode;
-    }
-
-    public void setVillageListBlockCode(String villageListBlockCode) {
-        VillageListBlockCode = villageListBlockCode;
-    }
 
     public String getPvCode() {
         return PvCode;
@@ -397,35 +350,45 @@ public class RealTimeMonitoringSystem {
         this.PvCode = pvCode;
     }
 
-    public String getOMC_Name() {
-        return OMC_Name;
+    public void setWorkStageName(String workStageName) {
+        this.workStageName = workStageName;
     }
 
-    public void setOMC_Name(String OMC_Name) {
-        this.OMC_Name = OMC_Name;
+    public String getWorkStageName() {
+        return workStageName;
     }
 
-    public int getBank_Id() {
-        return Bank_Id;
+    public void setWorkGroupID(String workGroupID) {
+        this.workGroupID = workGroupID;
     }
 
-    public void setBank_Id(int bank_Id) {
-        Bank_Id = bank_Id;
+    public String getWorkGroupID() {
+        return workGroupID;
     }
 
-    public String getVillageListPvName() {
-        return VillageListPvName;
+    public void setWorkTypeID(String workTypeID) {
+        this.workTypeID = workTypeID;
     }
 
-    public void setVillageListPvName(String villageListPvName) {
-        VillageListPvName = villageListPvName;
+    public String getWorkTypeID() {
+        return workTypeID;
     }
 
-    public String getVillageListPvCode() {
-        return VillageListPvCode;
+    public void setWorkStageCode(String workStageCode) {
+        this.workStageCode = workStageCode;
     }
 
-    public void setVillageListPvCode(String villageListPvCode) {
-        VillageListPvCode = villageListPvCode;
+    public String getWorkStageCode() {
+        return workStageCode;
     }
+
+    public void setWorkStageOrder(String workStageOrder) {
+        this.workStageOrder = workStageOrder;
+    }
+
+    public String getWorkStageOrder() {
+        return workStageOrder;
+    }
+
+
 }

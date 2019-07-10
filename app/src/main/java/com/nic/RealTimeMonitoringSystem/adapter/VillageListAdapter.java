@@ -1,8 +1,10 @@
 package com.nic.RealTimeMonitoringSystem.adapter;
 
+import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.nic.RealTimeMonitoringSystem.R;
+import com.nic.RealTimeMonitoringSystem.activity.WorkListScreen;
 import com.nic.RealTimeMonitoringSystem.databinding.AdapterVillageListBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
 
@@ -60,13 +63,18 @@ public class VillageListAdapter extends RecyclerView.Adapter<VillageListAdapter.
 
         holder.adapterVillageListBinding.villageName.setText(villageValuesFiltered.get(position).getPvName());
 
-        Log.d("text",""+villageValuesFiltered.get(position).getPvName());
         letter = String.valueOf(villageValuesFiltered.get(position).getPvName().charAt(0));
 
         TextDrawable drawable = TextDrawable.builder()
                 .buildRound(letter, generator.getRandomColor());
 
         holder.adapterVillageListBinding.villageFirstLetter.setImageDrawable(drawable);
+        holder.adapterVillageListBinding.villageCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewHousingWorks();
+            }
+        });
     }
 
 
@@ -103,6 +111,13 @@ public class VillageListAdapter extends RecyclerView.Adapter<VillageListAdapter.
                 notifyDataSetChanged();
             }
         };
+    }
+
+    public void viewHousingWorks() {
+        Activity activity = (Activity) context;
+        Intent intent = new Intent(activity, WorkListScreen.class);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
     @Override

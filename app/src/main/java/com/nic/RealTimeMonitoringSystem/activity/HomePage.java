@@ -37,6 +37,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
     private HomeScreenBinding homeScreenBinding;
     private PrefManager prefManager;
     public dbData dbData = new dbData(this);
+    private String isHome;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,15 +47,23 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
         prefManager = new PrefManager(this);
         homeScreenBinding.tvName.setText(prefManager.getDesignation());
         homeScreenBinding.designation.setText(prefManager.getDesignation());
-        if (Utils.isOnline()) {
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle != null) {
+            isHome = bundle.getString("Home");
+        }
+        if (Utils.isOnline() && !isHome.equalsIgnoreCase("Home")) {
             fetchAllResponseFromApi();
         }
     }
 
+
     public void fetchAllResponseFromApi() {
+        getSchemeList();
         getVillageList();
-        getDistrictList();
-        getBlockList();
+//        getDistrictList();
+//        getBlockList();
+        getStageList();
+        getFinYearList();
     }
 
     @Override
@@ -103,11 +112,36 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
         }
     }
 
+    public void getFinYearList() {
+        try {
+            new ApiService(this).makeJSONObjectRequest("FinYearList", Api.Method.POST, UrlGenerator.getServicesListUrl(), finyearListJsonParams(), "not cache", this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getStageList() {
+        try {
+            new ApiService(this).makeJSONObjectRequest("StageList", Api.Method.POST, UrlGenerator.getServicesListUrl(), stageListJsonParams(), "not cache", this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getSchemeList() {
+        try {
+            new ApiService(this).makeJSONObjectRequest("SchemeList", Api.Method.POST, UrlGenerator.getServicesListUrl(), schemeListJsonParams(), "not cache", this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     public JSONObject districtListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.districtListJsonParams().toString());
         JSONObject dataSet = new JSONObject();
-        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_DISTRICT_LIST_ALL);
-        Log.d("object", "" + dataSet);
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("districtList", "" + authKey);
         return dataSet;
     }
 
@@ -126,6 +160,33 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
         dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
         dataSet.put(AppConstant.DATA_CONTENT, authKey);
         Log.d("villageListDistrictWise", "" + authKey);
+        return dataSet;
+    }
+
+    public JSONObject finyearListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.schemeFinyearListJsonParams().toString());
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("finYearList", "" + authKey);
+        return dataSet;
+    }
+
+    public JSONObject stageListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.stageListJsonParams().toString());
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("StageList", "" + authKey);
+        return dataSet;
+    }
+
+    public JSONObject schemeListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.schemeListBlockWiseJsonParams(this).toString());
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("schemeList", "" + authKey);
         return dataSet;
     }
 
@@ -154,7 +215,15 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
                 }
                 Log.d("DistrictList", "" + responseDecryptedBlockKey);
             }
-
+            if ("SchemeList".equals(urlType) && responseObj != null) {
+                String key = responseObj.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedSchemeKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedSchemeKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                    new InsertSchemeTask().execute(jsonObject);
+                }
+                Log.d("SchemeList", "" + responseDecryptedSchemeKey);
+            }
             if ("VillageList".equals(urlType) && responseObj != null) {
                 String key = responseObj.getString(AppConstant.ENCODE_DATA);
                 String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
@@ -163,6 +232,24 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
                     new InsertVillageTask().execute(jsonObject);
                 }
                 Log.d("VillageList", "" + responseDecryptedBlockKey);
+            }
+            if ("FinYearList".equals(urlType) && responseObj != null) {
+                String key = responseObj.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedSchemeKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedSchemeKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                    new InsertFinYearTask().execute(jsonObject);
+                }
+                Log.d("FinYear", "" + responseDecryptedSchemeKey);
+            }
+            if ("StageList".equals(urlType) && responseObj != null) {
+                String key = responseObj.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                    new InsertStageTask().execute(jsonObject);
+                }
+                Log.d("StageList", "" + responseDecryptedKey);
             }
 
         } catch (JSONException e) {
@@ -275,12 +362,108 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
 
     }
 
+    public class InsertSchemeTask extends AsyncTask<JSONObject, Void, Void> {
+
+        @Override
+        protected Void doInBackground(JSONObject... params) {
+
+            dbData.open();
+            ArrayList<RealTimeMonitoringSystem> scheme_count = dbData.getAll_Scheme();
+            if (scheme_count.size() <= 0) {
+                if (params.length > 0) {
+                    JSONArray jsonArray = new JSONArray();
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.JSON_DATA);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        RealTimeMonitoringSystem schemeList = new RealTimeMonitoringSystem();
+                        try {
+                            schemeList.setSchemeSequentialID(jsonArray.getJSONObject(i).getInt(AppConstant.KEY_SCHEME_SEQUENTIAL_ID));
+                            schemeList.setSchemeName(jsonArray.getJSONObject(i).getString(AppConstant.KEY_SCHEME_NAME));
+                            schemeList.setFinancialYear(jsonArray.getJSONObject(i).getString(AppConstant.FINANCIAL_YEAR));
+
+                            dbData.insertScheme(schemeList);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+
+    public class InsertFinYearTask extends AsyncTask<JSONObject, Void, Void> {
+
+        @Override
+        protected Void doInBackground(JSONObject... params) {
+            ArrayList<RealTimeMonitoringSystem> finYear_count = dbData.getAll_FinYear();
+            if (finYear_count.size() <= 0) {
+                if (params.length > 0) {
+                    JSONArray jsonArray = new JSONArray();
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.JSON_DATA);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        RealTimeMonitoringSystem finYear = new RealTimeMonitoringSystem();
+                        try {
+                            finYear.setFinancialYear(jsonArray.getJSONObject(i).getString(AppConstant.FINANCIAL_YEAR));
+                            dbData.insertFinYear(finYear);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+    }
+
+    public class InsertStageTask extends AsyncTask<JSONObject, Void, Void> {
+
+        @Override
+        protected Void doInBackground(JSONObject... params) {
+            ArrayList<RealTimeMonitoringSystem> stage_count = dbData.getAll_Stage();
+            if (stage_count.size() <= 0) {
+                if (params.length > 0) {
+                    JSONArray jsonArray = new JSONArray();
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.JSON_DATA);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        RealTimeMonitoringSystem stage = new RealTimeMonitoringSystem();
+                        try {
+                            stage.setWorkGroupID(jsonArray.getJSONObject(i).getString(AppConstant.WORK_GROUP_ID));
+                            stage.setWorkTypeID(jsonArray.getJSONObject(i).getString(AppConstant.WORK_TYPE_ID));
+                            stage.setWorkStageOrder(jsonArray.getJSONObject(i).getString(AppConstant.WORK_STAGE_ORDER));
+                            stage.setWorkStageCode(jsonArray.getJSONObject(i).getString(AppConstant.WORK_STAGE_CODE));
+                            stage.setWorkStageName(jsonArray.getJSONObject(i).getString(AppConstant.WORK_SATGE_NAME));
+
+                            dbData.insertStage(stage);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+    }
     @Override
     public void OnError(VolleyError volleyError) {
 
     }
 
-    public void viewHousingWorks() {
+    public void viewVillageList() {
         Intent intent = new Intent(this, VillageListScreen.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);

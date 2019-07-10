@@ -1148,6 +1148,12 @@ public class Utils {
         Date date = new Date();
         return formatter.format(date);
     }
+    public static JSONObject districtListJsonParams() throws JSONException {
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_DISTRICT_LIST_ALL);
+        Log.d("object", "" + dataSet);
+        return dataSet;
+    }
 
     public static JSONObject blockListDistrictWiseJsonParams(Activity activity) throws JSONException {
         prefManager = new PrefManager(activity);
@@ -1167,4 +1173,29 @@ public class Utils {
         Log.d("villageListDistBlock", "" + dataSet);
         return dataSet;
     }
+
+    public static JSONObject schemeFinyearListJsonParams() throws JSONException {
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_SCHEME_FINYEAR_LIST_LAST_NYEARS);
+        dataSet.put(AppConstant.N_YEAR, 3);
+        Log.d("object", "" + dataSet);
+        return dataSet;
+    }
+
+    public static JSONObject stageListJsonParams() throws JSONException {
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.STAGE_LIST);
+        Log.d("object", "" + dataSet);
+        return dataSet;
+    }
+
+    public static JSONObject schemeListBlockWiseJsonParams(Activity activity) throws JSONException {
+        prefManager = new PrefManager(activity);
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_SCHEME_LIST_DISTRICT_FINYEAR_WISE);
+        dataSet.put(AppConstant.DISTRICT_CODE, prefManager.getDistrictCode());
+        Log.d("objectschemeLis", "" + dataSet);
+        return dataSet;
+    }
+
 }
