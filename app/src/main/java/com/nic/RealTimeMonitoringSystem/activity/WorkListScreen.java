@@ -21,9 +21,15 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.VolleyError;
+import com.bumptech.glide.util.Util;
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.adapter.CommonAdapter;
 import com.nic.RealTimeMonitoringSystem.adapter.WorkListAdapter;
+import com.nic.RealTimeMonitoringSystem.api.Api;
+import com.nic.RealTimeMonitoringSystem.api.ApiService;
+import com.nic.RealTimeMonitoringSystem.api.ServerResponse;
 import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
 import com.nic.RealTimeMonitoringSystem.dataBase.DBHelper;
 import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
@@ -31,13 +37,19 @@ import com.nic.RealTimeMonitoringSystem.databinding.ActivityWorkListBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
 import com.nic.RealTimeMonitoringSystem.session.PrefManager;
 import com.nic.RealTimeMonitoringSystem.support.MyDividerItemDecoration;
+import com.nic.RealTimeMonitoringSystem.utils.UrlGenerator;
+import com.nic.RealTimeMonitoringSystem.utils.Utils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkListScreen extends AppCompatActivity implements View.OnClickListener {
+public class WorkListScreen extends AppCompatActivity implements View.OnClickListener,Api.ServerResponseListener {
     private ActivityWorkListBinding activityWorkListBinding;
-    private RecyclerView recyclerView;
+    private ShimmerRecyclerView recyclerView;
     private WorkListAdapter workListAdapter;
     public dbData dbData = new dbData(this);
     private SearchView searchView;
@@ -61,8 +73,9 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
             e.printStackTrace();
         }
         prefManager = new PrefManager(this);
+        prefManager.setPvCode(getIntent().getStringExtra(AppConstant.PV_CODE));
         setSupportActionBar(activityWorkListBinding.toolbar);
-        initRecyclerView();
+        // initRecyclerView();
 
         activityWorkListBinding.finyearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -70,7 +83,8 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                 if (position > 0) {
                     pref_finYear = FinYearList.get(position).getFinancialYear();
                     prefManager.setFinancialyearName(pref_finYear);
-                    loadOfflineSchemeListDBValues(pref_finYear);
+                    //  loadOfflineSchemeListDBValues(pref_finYear);
+                    getWorkList();
                 }
             }
 
@@ -106,18 +120,21 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initRecyclerView() {
+        activityWorkListBinding.workList.setVisibility(View.VISIBLE);
         recyclerView = activityWorkListBinding.workList;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
+        recyclerView.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 20));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                new fetchScheduletask().execute();
-            }
-        }, 2000);
+        new fetchScheduletask().execute();
+//
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                new fetchScheduletask().execute();
+//            }
+//        }, 2000);
     }
 
     public class fetchScheduletask extends AsyncTask<Void, Void,
@@ -125,17 +142,29 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
         @Override
         protected ArrayList<RealTimeMonitoringSystem> doInBackground(Void... params) {
             dbData.open();
-            ArrayList<RealTimeMonitoringSystem> villageList = new ArrayList<>();
-            villageList = dbData.getAll_Village();
-            Log.d("VILLAGE_COUNT", String.valueOf(villageList.size()));
-            return villageList;
+            ArrayList<RealTimeMonitoringSystem> workList = new ArrayList<>();
+            workList = dbData.getAllWorkLIst();
+            Log.d("WORKLIST_COUNT", String.valueOf(workList.size()));
+            return workList;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<RealTimeMonitoringSystem> villageList) {
-            super.onPostExecute(villageList);
-            workListAdapter = new WorkListAdapter(WorkListScreen.this, villageList);
+        protected void onPostExecute(ArrayList<RealTimeMonitoringSystem> workList) {
+            super.onPostExecute(workList);
+            workListAdapter = new WorkListAdapter(WorkListScreen.this, workList);
             recyclerView.setAdapter(workListAdapter);
+            recyclerView.showShimmerAdapter();
+            recyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadCards();
+                }
+            }, 2000);
+        }
+
+        private void loadCards() {
+
+            recyclerView.hideShimmerAdapter();
         }
     }
 
@@ -233,6 +262,119 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
 
+    }
+
+    public void getWorkList() {
+        try {
+            new ApiService(this).makeJSONObjectRequest("WorkList", Api.Method.POST, UrlGenerator.getWorkListUrl(), workListJsonParams(), "not cache", this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public JSONObject workListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.workListBlockWiseJsonParams(this).toString());
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("workList", "" + authKey);
+        return dataSet;
+    }
+
+    public void OnMyResponse(ServerResponse serverResponse) {
+        try {
+            String urlType = serverResponse.getApi();
+            JSONObject responseObj = serverResponse.getJsonResponse();
+
+            if ("WorkList".equals(urlType) && responseObj != null) {
+                String key = responseObj.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedSchemeKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedSchemeKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                    new InsertWorkListTask().execute(jsonObject.getJSONObject(AppConstant.JSON_DATA));
+                    initRecyclerView();
+                } else if(jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("NO_RECORD")){
+                    dbData.open();
+                    if(Utils.isOnline()){
+                        dbData.deleteWorkListTable();
+                    }
+                    initRecyclerView();
+                    Utils.showAlert(this,"NO RECORD FOUND!");
+                }
+                Log.d("SchemeList", "" + responseDecryptedSchemeKey);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void OnError(VolleyError volleyError) {
+
+    }
+
+    public class InsertWorkListTask extends AsyncTask<JSONObject, Void, Void> {
+
+        @Override
+        protected Void doInBackground(JSONObject... params) {
+
+            dbData.open();
+            if(Utils.isOnline()){
+                dbData.deleteWorkListTable();
+            }
+            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllWorkLIst();
+            if (workList_count.size() <= 0) {
+                if (params.length > 0) {
+                    JSONArray jsonArray = new JSONArray();
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.MAIN_WORK);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        RealTimeMonitoringSystem workList = new RealTimeMonitoringSystem();
+                        try {
+                            workList.setDistictCode(jsonArray.getJSONObject(i).getString(AppConstant.DISTRICT_CODE));
+                            workList.setBlockCode(jsonArray.getJSONObject(i).getString(AppConstant.BLOCK_CODE));
+                            workList.setPvCode(jsonArray.getJSONObject(i).getString(AppConstant.PV_CODE));
+                            workList.setWorkId(jsonArray.getJSONObject(i).getInt(AppConstant.WORK_ID));
+                            workList.setSchemeGroupID(jsonArray.getJSONObject(i).getInt(AppConstant.SCHEME_GROUP_ID));
+                            workList.setSchemeID(jsonArray.getJSONObject(i).getInt(AppConstant.SCHEME_ID));
+                            workList.setSchemeGroupName(jsonArray.getJSONObject(i).getString(AppConstant.SCHEME_GROUP_NAME));
+                            workList.setSchemeName(jsonArray.getJSONObject(i).getString(AppConstant.KEY_SCHEME_NAME));
+                            workList.setFinancialYear(jsonArray.getJSONObject(i).getString(AppConstant.FINANCIAL_YEAR));
+                            workList.setAgencyName(jsonArray.getJSONObject(i).getString(AppConstant.AGENCY_NAME));
+                            workList.setWorkGroupNmae(jsonArray.getJSONObject(i).getString(AppConstant.WORK_GROUP_NAME));
+                            workList.setWorkName(jsonArray.getJSONObject(i).getString(AppConstant.WORK_NAME));
+                            workList.setWorkGroupID(jsonArray.getJSONObject(i).getString(AppConstant.WORK_GROUP_ID));
+                            workList.setWorkTypeID(jsonArray.getJSONObject(i).getString(AppConstant.WORK_TYPE));
+                            workList.setCurrentStage(jsonArray.getJSONObject(i).getInt(AppConstant.CURRENT_STAGE_OF_WORK));
+                            workList.setIntialAmount(jsonArray.getJSONObject(i).getString(AppConstant.AS_VALUE));
+                            workList.setAmountSpendSoFar(jsonArray.getJSONObject(i).getString(AppConstant.AMOUNT_SPENT_SOFAR));
+                            workList.setStageName(jsonArray.getJSONObject(i).getString(AppConstant.STAGE_NAME));
+                            workList.setBeneficiaryName(jsonArray.getJSONObject(i).getString(AppConstant.BENEFICIARY_NAME));
+                            workList.setBeneficiaryFatherName(jsonArray.getJSONObject(i).getString(AppConstant.BENEFICIARY_FATHER_NAME));
+                            workList.setWorkTypeName(jsonArray.getJSONObject(i).getString(AppConstant.WORK_TYPE_NAME));
+                            workList.setYnCompleted(jsonArray.getJSONObject(i).getString(AppConstant.YN_COMPLETED));
+                            workList.setCdProtWorkYn(jsonArray.getJSONObject(i).getString(AppConstant.CD_PROT_WORK_YN));
+                            workList.setStateCode(jsonArray.getJSONObject(i).getInt(AppConstant.STATE_CODE));
+                            workList.setDistrictName(jsonArray.getJSONObject(i).getString(AppConstant.DISTRICT_NAME));
+                            workList.setBlockName(jsonArray.getJSONObject(i).getString(AppConstant.BLOCK_NAME));
+                            workList.setPvName(jsonArray.getJSONObject(i).getString(AppConstant.PV_NAME));
+                            workList.setCommunity(jsonArray.getJSONObject(i).getString(AppConstant.COMMUNITY_NAME));
+                            workList.setGender(jsonArray.getJSONObject(i).getString(AppConstant.GENDER));
+                            workList.setLastVisitedDate(jsonArray.getJSONObject(i).getString(AppConstant.LAST_VISITED_DATE));
+
+                            dbData.insertWorkList(workList);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            return null;
+        }
     }
 }
 

@@ -16,6 +16,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.activity.WorkListScreen;
+import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
 import com.nic.RealTimeMonitoringSystem.databinding.AdapterVillageListBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
 
@@ -59,7 +60,7 @@ public class VillageListAdapter extends RecyclerView.Adapter<VillageListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
 
         holder.adapterVillageListBinding.villageName.setText(villageValuesFiltered.get(position).getPvName());
 
@@ -72,7 +73,7 @@ public class VillageListAdapter extends RecyclerView.Adapter<VillageListAdapter.
         holder.adapterVillageListBinding.villageCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewHousingWorks();
+                viewHousingWorks(position);
             }
         });
     }
@@ -113,9 +114,10 @@ public class VillageListAdapter extends RecyclerView.Adapter<VillageListAdapter.
         };
     }
 
-    public void viewHousingWorks() {
+    public void viewHousingWorks(int pos) {
         Activity activity = (Activity) context;
         Intent intent = new Intent(activity, WorkListScreen.class);
+        intent.putExtra(AppConstant.PV_CODE,villageValuesFiltered.get(pos).getPvCode());
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }

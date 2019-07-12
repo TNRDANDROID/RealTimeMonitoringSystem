@@ -135,7 +135,7 @@
                     android:text="Select Scheme"
                     android:textColor="@android:color/holo_red_dark"
                     android:textSize="@dimen/_15sdp"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     customfontdemo:fontName="@string/font_circular_bold" />
 
                 <RelativeLayout
@@ -148,7 +148,7 @@
                     android:layout_marginRight="@dimen/margin_left_20dp"
                     android:background="@drawable/rectangle_box"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <TextView
 
@@ -191,16 +191,17 @@
                     android:visibility="gone"
                     customfontdemo:fontName="@string/font_circular_bold" />
 
-                <androidx.recyclerview.widget.RecyclerView
+                <com.cooltechworks.views.shimmer.ShimmerRecyclerView
                     android:id="@+id/work_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/habitation_tv"
                     android:layout_alignParentBottom="true"
-                    android:layout_margin="5dp"
                     android:fadeScrollbars="false"
                     android:scrollbarSize="4dp"
-                    android:scrollbars="vertical" />
+                    android:scrollbars="vertical"
+                    app:shimmer_demo_shimmer_color="#8FFFFFFF"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/not_found_tv"

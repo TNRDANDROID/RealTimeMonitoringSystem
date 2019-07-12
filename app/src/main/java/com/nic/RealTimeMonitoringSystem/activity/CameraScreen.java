@@ -136,8 +136,11 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
     }
     public void loadOfflineStageListDBValues() {
         StageList.clear();
+
+        String workGroupId = getIntent().getStringExtra(AppConstant.WORK_GROUP_ID);
+        String workTypeid = getIntent().getStringExtra(AppConstant.WORK_TYPE_ID);
         Cursor Stage = null;
-        Stage = db.rawQuery("select * from " + DBHelper.WORK_STAGE_TABLE, null);
+        Stage = db.rawQuery("select * from " + DBHelper.WORK_STAGE_TABLE + "  where (work_group_id = " + workGroupId + " and work_type_id = " + workTypeid + ") order by work_stage_order asc", null);
 
         RealTimeMonitoringSystem stageListValue = new RealTimeMonitoringSystem();
         stageListValue.setFinancialYear("Select Stage");

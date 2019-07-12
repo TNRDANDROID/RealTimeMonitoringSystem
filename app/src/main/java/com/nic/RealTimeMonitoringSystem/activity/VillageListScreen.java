@@ -80,7 +80,7 @@ public class VillageListScreen extends AppCompatActivity implements View.OnClick
                 public void run() {
                     loadCards();
                 }
-            }, 2000);
+            }, 1000);
         }
     }
 

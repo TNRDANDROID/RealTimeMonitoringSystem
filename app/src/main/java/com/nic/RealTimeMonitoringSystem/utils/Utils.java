@@ -1103,7 +1103,7 @@ public class Utils {
         return dataSet;
     }
 
-    public static String formatDate (String date){
+    public static String formatDateReverse (String date){
         String initDateFormat = "yyyy-MM-dd";
         String endDateFormat = "dd-MM-yyyy";
 
@@ -1177,7 +1177,7 @@ public class Utils {
     public static JSONObject schemeFinyearListJsonParams() throws JSONException {
         JSONObject dataSet = new JSONObject();
         dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_SCHEME_FINYEAR_LIST_LAST_NYEARS);
-        dataSet.put(AppConstant.N_YEAR, 3);
+        dataSet.put(AppConstant.N_YEAR, 6);
         Log.d("object", "" + dataSet);
         return dataSet;
     }
@@ -1195,6 +1195,18 @@ public class Utils {
         dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_SCHEME_LIST_DISTRICT_FINYEAR_WISE);
         dataSet.put(AppConstant.DISTRICT_CODE, prefManager.getDistrictCode());
         Log.d("objectschemeLis", "" + dataSet);
+        return dataSet;
+    }
+
+    public static JSONObject workListBlockWiseJsonParams(Activity activity) throws JSONException {
+        prefManager = new PrefManager(activity);
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.WORK_LIST_BASED_ON_FINYEAR_VILLAGE);
+        dataSet.put(AppConstant.FINANCIAL_YEAR, prefManager.getFinancialyearName());
+        dataSet.put(AppConstant.DISTRICT_CODE, prefManager.getDistrictCode());
+        dataSet.put(AppConstant.BLOCK_CODE, prefManager.getBlockCode());
+        dataSet.put(AppConstant.PV_CODE, prefManager.getPvCode());
+        Log.d("objectworkLis", "" + dataSet);
         return dataSet;
     }
 

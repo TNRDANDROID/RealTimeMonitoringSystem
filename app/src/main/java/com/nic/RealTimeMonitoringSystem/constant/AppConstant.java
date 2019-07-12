@@ -54,6 +54,33 @@ public class AppConstant {
     public static String KEY_VILLAGE_LIST_DISTRICT_BLOCK_WISE = "village_list_district_block_wise";
     public static String KEY_BLOCK_LIST_DISTRICT_WISE = "block_list_district_wise";
 
+    public static String WORK_LIST_BASED_ON_FINYEAR_VILLAGE = "finyear_village_wise_work_list";
+    public static String WORK_ID = "work_id";
+    public static String SCHEME_GROUP_ID = "scheme_group_id";
+    public static String SCHEME_ID = "scheme_id";
+    public static String SCHEME_GROUP_NAME = "schemegrp_name";
+    public static String AGENCY_NAME = "agency_name";
+    public static String WORK_GROUP_NAME = "wrkgrpname";
+    public static String WORK_NAME = "work_name";
+    public static String WORK_TYPE = "work_type";
+    public static String CURRENT_STAGE_OF_WORK = "current_stage_of_work";
+    public static String AS_VALUE = "as_value";
+    public static String AMOUNT_SPENT_SOFAR = "amount_spent_sofar";
+    public static String STAGE_NAME = "stage_name";
+    public static String BENEFICIARY_NAME = "hai_beneficiary_name";
+    public static String BENEFICIARY_FATHER_NAME = "hai_beneficiary_fhname";
+    public static String WORK_TYPE_NAME = "worktypname";
+    public static String YN_COMPLETED = "yn_completed";
+    public static String CD_PROT_WORK_YN = "cd_prot_work_yn";
+    public static String STATE_CODE = "state_code";
+    public static String COMMUNITY_NAME = "community_name";
+    public static String GENDER = "gender_text";
+    public static String LAST_VISITED_DATE = "upd_date";
+
+    public static String MAIN_WORK = "main_work";
+    public static String ADDITIONAL_WORK = "additional_work";
+    public static String TYPE_OF_WORK = "type_of_work";
+
 
 
 

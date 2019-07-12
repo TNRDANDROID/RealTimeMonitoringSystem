@@ -27,7 +27,7 @@ public class RealTimeMonitoringSystem {
 
     private String blockName;
     private String Gender;
-    private String CurrentStage;
+    private Integer CurrentStage;
 
     private String Name;
     private String BeneficiaryName;
@@ -53,8 +53,88 @@ public class RealTimeMonitoringSystem {
     public String workStageName;
     private String workStageCode;
     private String workStageOrder;
-    private String schemeName;
     private Integer schemeSequentialID;
+
+    private Integer schemeGroupID;
+    private Integer schemeID;
+    private Integer asValue;
+    private String stageName;
+    private String workTypeName;
+    private String ynCompleted;
+    private String cdProtWorkYn;
+    private Integer stateCode;
+
+    public String getYnCompleted() {
+        return ynCompleted;
+    }
+
+    public void setYnCompleted(String ynCompleted) {
+        this.ynCompleted = ynCompleted;
+    }
+
+    public String getCdProtWorkYn() {
+        return cdProtWorkYn;
+    }
+
+    public void setCdProtWorkYn(String cdProtWorkYn) {
+        this.cdProtWorkYn = cdProtWorkYn;
+    }
+
+    public Integer getStateCode() {
+        return stateCode;
+    }
+
+    public void setStateCode(Integer stateCode) {
+        this.stateCode = stateCode;
+    }
+
+    public String getWorkTypeName() {
+        return workTypeName;
+    }
+
+    public void setWorkTypeName(String workTypeName) {
+        this.workTypeName = workTypeName;
+    }
+
+    public Integer getCurrentStage() {
+        return CurrentStage;
+    }
+
+    public void setCurrentStage(Integer currentStage) {
+        CurrentStage = currentStage;
+    }
+
+    public String getStageName() {
+        return stageName;
+    }
+
+    public void setStageName(String stageName) {
+        this.stageName = stageName;
+    }
+
+    public Integer getAsValue() {
+        return asValue;
+    }
+
+    public void setAsValue(Integer asValue) {
+        this.asValue = asValue;
+    }
+
+    public Integer getSchemeID() {
+        return schemeID;
+    }
+
+    public void setSchemeID(Integer schemeID) {
+        this.schemeID = schemeID;
+    }
+
+    public Integer getSchemeGroupID() {
+        return schemeGroupID;
+    }
+
+    public void setSchemeGroupID(Integer schemeGroupID) {
+        this.schemeGroupID = schemeGroupID;
+    }
 
     public Integer getSchemeSequentialID() {
         return schemeSequentialID;
@@ -120,14 +200,6 @@ public class RealTimeMonitoringSystem {
 
     public void setGender(String gender) {
         Gender = gender;
-    }
-
-    public String getCurrentStage() {
-        return CurrentStage;
-    }
-
-    public void setCurrentStage(String currentStage) {
-        CurrentStage = currentStage;
     }
 
     public String getBeneficiaryName() {

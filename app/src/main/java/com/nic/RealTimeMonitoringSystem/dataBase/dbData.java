@@ -306,6 +306,103 @@ public class dbData {
         return cards;
     }
 
+    public RealTimeMonitoringSystem insertWorkList(RealTimeMonitoringSystem realTimeMonitoringSystem) {
+
+        ContentValues values = new ContentValues();
+        values.put(AppConstant.DISTRICT_CODE, realTimeMonitoringSystem.getDistictCode());
+        values.put(AppConstant.BLOCK_CODE, realTimeMonitoringSystem.getBlockCode());
+        values.put(AppConstant.PV_CODE, realTimeMonitoringSystem.getPvCode());
+        values.put(AppConstant.WORK_ID, realTimeMonitoringSystem.getWorkId());
+        values.put(AppConstant.SCHEME_GROUP_ID, realTimeMonitoringSystem.getSchemeGroupID());
+        values.put(AppConstant.SCHEME_ID, realTimeMonitoringSystem.getSchemeID());
+        values.put(AppConstant.SCHEME_GROUP_NAME, realTimeMonitoringSystem.getSchemeGroupName());
+        values.put(AppConstant.KEY_SCHEME_NAME, realTimeMonitoringSystem.getSchemeName());
+        values.put(AppConstant.FINANCIAL_YEAR, realTimeMonitoringSystem.getFinancialYear());
+        values.put(AppConstant.AGENCY_NAME, realTimeMonitoringSystem.getAgencyName());
+        values.put(AppConstant.WORK_GROUP_NAME, realTimeMonitoringSystem.getWorkGroupNmae());
+        values.put(AppConstant.WORK_NAME, realTimeMonitoringSystem.getWorkName());
+        values.put(AppConstant.WORK_GROUP_ID, realTimeMonitoringSystem.getWorkGroupID());
+        values.put(AppConstant.WORK_TYPE, realTimeMonitoringSystem.getWorkTypeID());
+        values.put(AppConstant.CURRENT_STAGE_OF_WORK, realTimeMonitoringSystem.getCurrentStage());
+        values.put(AppConstant.AS_VALUE, realTimeMonitoringSystem.getAsValue());
+        values.put(AppConstant.AMOUNT_SPENT_SOFAR, realTimeMonitoringSystem.getAmountSpendSoFar());
+        values.put(AppConstant.STAGE_NAME, realTimeMonitoringSystem.getStageName());
+        values.put(AppConstant.BENEFICIARY_NAME, realTimeMonitoringSystem.getBeneficiaryName());
+        values.put(AppConstant.BENEFICIARY_FATHER_NAME, realTimeMonitoringSystem.getBeneficiaryFatherName());
+        values.put(AppConstant.WORK_TYPE_NAME, realTimeMonitoringSystem.getWorkTypeName());
+        values.put(AppConstant.YN_COMPLETED, realTimeMonitoringSystem.getYnCompleted());
+        values.put(AppConstant.CD_PROT_WORK_YN, realTimeMonitoringSystem.getCdProtWorkYn());
+        values.put(AppConstant.STATE_CODE, realTimeMonitoringSystem.getStateCode());
+        values.put(AppConstant.DISTRICT_NAME, realTimeMonitoringSystem.getDistrictName());
+        values.put(AppConstant.BLOCK_NAME, realTimeMonitoringSystem.getBlockName());
+        values.put(AppConstant.PV_NAME, realTimeMonitoringSystem.getPvName());
+        values.put(AppConstant.COMMUNITY_NAME, realTimeMonitoringSystem.getCommunity());
+        values.put(AppConstant.GENDER, realTimeMonitoringSystem.getGender());
+        values.put(AppConstant.LAST_VISITED_DATE, realTimeMonitoringSystem.getLastVisitedDate());
+
+        long id = db.insert(DBHelper.WORK_LIST_TABLE_BASED_ON_FINYEAR_VIlLAGE, null, values);
+        Log.d("Inserted_id_Worklist", String.valueOf(id));
+
+        return realTimeMonitoringSystem;
+    }
+
+    public ArrayList<RealTimeMonitoringSystem> getAllWorkLIst() {
+
+        ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery("select * from " + DBHelper.WORK_LIST_TABLE_BASED_ON_FINYEAR_VIlLAGE, null);
+            // cursor = db.query(CardsDBHelper.TABLE_CARDS,
+            //       COLUMNS, null, null, null, null, null);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    RealTimeMonitoringSystem card = new RealTimeMonitoringSystem();
+
+                    card.setDistictCode(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.DISTRICT_CODE)));
+                    card.setBlockCode(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.BLOCK_CODE)));
+                    card.setPvCode(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.PV_CODE)));
+                    card.setWorkId(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.WORK_ID)));
+                    card.setSchemeGroupID(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.SCHEME_GROUP_ID)));
+                    card.setSchemeID(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.SCHEME_ID)));
+                    card.setSchemeGroupName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.SCHEME_GROUP_NAME)));
+                    card.setSchemeName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.KEY_SCHEME_NAME)));
+                    card.setFinancialYear(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.FINANCIAL_YEAR)));
+                    card.setAgencyName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.AGENCY_NAME)));
+                    card.setWorkGroupNmae(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.WORK_GROUP_NAME)));
+                    card.setWorkName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.WORK_NAME)));
+                    card.setWorkGroupID(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.WORK_GROUP_ID)));
+                    card.setWorkTypeID(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.WORK_TYPE)));
+                    card.setCurrentStage(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.CURRENT_STAGE_OF_WORK)));
+                    card.setAsValue(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.AS_VALUE)));
+                    card.setAmountSpendSoFar(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.AMOUNT_SPENT_SOFAR)));
+                    card.setStageName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.STAGE_NAME)));
+                    card.setBeneficiaryName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.BENEFICIARY_NAME)));
+                    card.setBeneficiaryFatherName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.BENEFICIARY_FATHER_NAME)));
+                    card.setWorkTypeName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.WORK_TYPE_NAME)));
+                    card.setYnCompleted(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.YN_COMPLETED)));
+                    card.setCdProtWorkYn(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.CD_PROT_WORK_YN)));
+                    card.setStateCode(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.STATE_CODE)));
+                    card.setDistrictName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.DISTRICT_NAME)));
+                    card.setBlockName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.BLOCK_NAME)));
+                    card.setPvName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.PV_NAME)));
+                    card.setCommunity(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.COMMUNITY_NAME)));
+                    card.setGender(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.GENDER)));
+                    card.setLastVisitedDate(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.LAST_VISITED_DATE)));
+
+                    cards.add(card);
+                }
+            }
+        } catch (Exception e) {
+            //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return cards;
+    }
+
     public void deleteDistrictTable() {
         db.execSQL("delete from " + DBHelper.DISTRICT_TABLE_NAME);
     }
@@ -328,6 +425,10 @@ public class dbData {
         db.execSQL("delete from " + DBHelper.WORK_STAGE_TABLE);
     }
 
+    public void deleteWorkListTable() {
+        db.execSQL("delete from " + DBHelper.WORK_LIST_TABLE_BASED_ON_FINYEAR_VIlLAGE);
+    }
+
 
     public void deleteAll() {
         deleteDistrictTable();
@@ -336,6 +437,7 @@ public class dbData {
         deleteFinYearTable();
         deleteSchemeTable();
         deleteWorkStageTable();
+        deleteWorkListTable();
     }
 
 
