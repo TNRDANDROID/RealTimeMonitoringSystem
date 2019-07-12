@@ -45,6 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:text="TextView"
             android:layout_weight="4.5"
             android:textSize="15sp"
@@ -74,6 +75,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+
             android:text="TextView"
             android:layout_weight="6.5"
            android:textSize="15sp"
@@ -102,6 +105,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+
             android:text="TextView"
             android:layout_weight="6.5"
            android:textSize="15sp"
@@ -132,6 +137,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="6.5"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+
             android:text="TextView"
             android:textSize="15sp"
             android:textColor="#000000" />
@@ -160,6 +167,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+
             android:layout_weight="6.5"
             android:text="TextView"
            android:textSize="15sp"
@@ -188,6 +197,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+
             android:layout_weight="6.5"
             android:text="TextView"
             android:textSize="15sp"
@@ -216,6 +227,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+
             android:text="TextView"
             android:layout_weight="6.5"
             android:textSize="15sp"
@@ -243,6 +256,7 @@
             android:id="@+id/tv_village"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
             android:layout_weight="6.5"
             android:text="TextView"
            android:textSize="15sp"
@@ -271,6 +285,8 @@
             android:id="@+id/tv_currentStage"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+
             android:text="TextView"
             android:layout_weight="6.5"
            android:textSize="15sp"
@@ -299,6 +315,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:text="BeneficiaryFatherName"
+            android:layout_marginLeft="6dp"
+
             android:layout_weight="6.5"
             android:textSize="15sp"
             android:textColor="#000000" />
@@ -326,6 +344,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:text="MAle"
+            android:layout_marginLeft="6dp"
+
             android:layout_weight="6.5"
             android:textSize="15sp"
             android:textColor="#000000" />
@@ -353,6 +373,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:text="OBC"
+            android:layout_marginLeft="6dp"
+
             android:layout_weight="6.5"
             android:textSize="15sp"
             android:textColor="#000000" />
@@ -380,6 +402,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:text="10000"
+            android:layout_marginLeft="6dp"
+
             android:layout_weight="6.5"
            android:textSize="15sp"
             android:textColor="#000000" />
@@ -409,6 +433,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="6.5"
             android:text="10000"
+            android:layout_marginLeft="6dp"
+
             android:textSize="15sp"
             android:textColor="#000000" />
     </LinearLayout>
@@ -436,6 +462,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="6.5"
             android:text="Date"
+            android:layout_marginLeft="6dp"
+
             android:textSize="15sp"
             android:textColor="#000000" />
     </LinearLayout>
