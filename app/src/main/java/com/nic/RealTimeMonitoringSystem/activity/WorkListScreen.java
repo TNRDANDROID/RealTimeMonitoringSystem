@@ -30,9 +30,7 @@ import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
 import com.nic.RealTimeMonitoringSystem.databinding.ActivityWorkListBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
 import com.nic.RealTimeMonitoringSystem.session.PrefManager;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.nic.RealTimeMonitoringSystem.support.MyDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +108,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
     private void initRecyclerView() {
         recyclerView = activityWorkListBinding.workList;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        recyclerView.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
 
