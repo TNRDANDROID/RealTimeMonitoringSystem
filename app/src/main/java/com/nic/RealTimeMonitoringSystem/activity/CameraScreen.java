@@ -3,6 +3,7 @@ package com.nic.RealTimeMonitoringSystem.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,15 +11,19 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -48,9 +53,14 @@ import com.nic.RealTimeMonitoringSystem.support.MyLocationListener;
 import com.nic.RealTimeMonitoringSystem.utils.CameraUtils;
 import com.nic.RealTimeMonitoringSystem.utils.Utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
@@ -82,6 +92,7 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
     private MyEditTextView description;
     private List<RealTimeMonitoringSystem> StageList = new ArrayList<>();
     String  pref_stage;
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
 
 
@@ -131,9 +142,48 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case  R.id.btn_save :
+                saveImage();
+                break;
         }
     }
+
+    public void saveImage() {
+        dbData.open();
+        ImageView imageView = (ImageView) findViewById(R.id.image_view);
+        byte[] imageInByte = new byte[0];
+        String image_str = "";
+        try {
+            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
+            imageInByte = baos.toByteArray();
+            image_str = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+
+            ContentValues values = new ContentValues();
+            values.put(AppConstant.WORK_ID, getIntent().getStringExtra(AppConstant.WORK_ID));
+            values.put(AppConstant.TYPE_OF_WORK, getIntent().getStringExtra(AppConstant.TYPE_OF_WORK));
+            values.put(AppConstant.DISTRICT_CODE,prefManager.getDistrictCode() );
+            values.put(AppConstant.BLOCK_CODE,prefManager.getBlockCode() );
+            values.put(AppConstant.PV_CODE,prefManager.getPvCode() );
+            values.put(AppConstant.WORK_STAGE_CODE,StageList.get(cameraScreenBinding.stage.getSelectedItemPosition()).getWorkStageCode() );
+            values.put(AppConstant.KEY_LATITUDE, offlatTextValue.toString());
+            values.put(AppConstant.KEY_LONGITUDE, offlongTextValue.toString());
+            values.put(AppConstant.KEY_IMAGES,image_str.trim());
+            values.put(AppConstant.KEY_CREATED_DATE,sdf.format(new Date()));
+            long id = db.insert(DBHelper.SAVE_IMAGE, null, values);
+
+            if(id > 0){
+                Toasty.success(this, "Success!", Toast.LENGTH_LONG, true).show();
+            }
+            Log.d("insIdsaveImageLatLong", String.valueOf(id));
+
+        } catch (Exception e) {
+            Utils.showAlert(CameraScreen.this, "Atleast Capture one Photo");
+            //e.printStackTrace();
+        }
+    }
+
     public void loadOfflineStageListDBValues() {
         StageList.clear();
 
@@ -143,20 +193,21 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
         Stage = db.rawQuery("select * from " + DBHelper.WORK_STAGE_TABLE + "  where (work_group_id = " + workGroupId + " and work_type_id = " + workTypeid + ") order by work_stage_order asc", null);
 
         RealTimeMonitoringSystem stageListValue = new RealTimeMonitoringSystem();
-        stageListValue.setFinancialYear("Select Stage");
+        stageListValue.setWorkStageName("Select Stage");
         StageList.add(stageListValue);
         if (Stage.getCount() > 0) {
             if (Stage.moveToFirst()) {
                 do {
                     RealTimeMonitoringSystem stageList = new RealTimeMonitoringSystem();
-                    String financialYear = Stage.getString(Stage.getColumnIndexOrThrow(AppConstant.WORK_SATGE_NAME));
-                    stageList.setFinancialYear(financialYear);
+                    String stage = Stage.getString(Stage.getColumnIndexOrThrow(AppConstant.WORK_SATGE_NAME));
+                    stageList.setWorkStageName(stage);
+                    stageList.setWorkStageCode(Stage.getString(Stage.getColumnIndexOrThrow(AppConstant.WORK_STAGE_CODE)));
                     StageList.add(stageList);
                 } while (Stage.moveToNext());
             }
         }
 
-        cameraScreenBinding.stage.setAdapter(new CommonAdapter(this, StageList, "FinYearList"));
+        cameraScreenBinding.stage.setAdapter(new CommonAdapter(this, StageList, "StageList"));
     }
 
     private void captureImage() {

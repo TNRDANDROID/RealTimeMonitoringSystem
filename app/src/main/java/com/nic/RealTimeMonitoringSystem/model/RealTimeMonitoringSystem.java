@@ -2,6 +2,8 @@ package com.nic.RealTimeMonitoringSystem.model;
 
 import android.graphics.Bitmap;
 
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
+
 /**
  * Created by AchanthiSundar on 01-11-2017.
  */
@@ -63,6 +65,52 @@ public class RealTimeMonitoringSystem {
     private String ynCompleted;
     private String cdProtWorkYn;
     private Integer stateCode;
+
+    private String roadName;
+    private Integer cdWorkNo;
+    private Integer cdCode;
+    private String cdName;
+    private String chainageMeter;
+
+    public String getChainageMeter() {
+        return chainageMeter;
+    }
+
+    public void setChainageMeter(String chainageMeter) {
+        this.chainageMeter = chainageMeter;
+    }
+
+    public String getRoadName() {
+        return roadName;
+    }
+
+    public void setRoadName(String roadName) {
+        this.roadName = roadName;
+    }
+
+    public Integer getCdWorkNo() {
+        return cdWorkNo;
+    }
+
+    public void setCdWorkNo(Integer cdWorkNo) {
+        this.cdWorkNo = cdWorkNo;
+    }
+
+    public Integer getCdCode() {
+        return cdCode;
+    }
+
+    public void setCdCode(Integer cdCode) {
+        this.cdCode = cdCode;
+    }
+
+    public String getCdName() {
+        return cdName;
+    }
+
+    public void setCdName(String cdName) {
+        this.cdName = cdName;
+    }
 
     public String getYnCompleted() {
         return ynCompleted;
@@ -251,13 +299,27 @@ public class RealTimeMonitoringSystem {
     }
 
     private Integer WorkId;
-
-    private String type;
+    private String typeOfWork;
     private String imageRemark;
     private String dateTime;
     private String imageAvailable;
+    private String createdDate;
 
+    public String getCreatedDate() {
+        return createdDate;
+    }
 
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getTypeOfWork() {
+        return typeOfWork;
+    }
+
+    public void setTypeOfWork(String typeOfWork) {
+        this.typeOfWork = typeOfWork;
+    }
 
     public String getImageAvailable() {
         return imageAvailable;
@@ -265,14 +327,6 @@ public class RealTimeMonitoringSystem {
 
     public void setImageAvailable(String imageAvailable) {
         this.imageAvailable = imageAvailable;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String pointType) {
-        this.type = pointType;
     }
 
     public String getImageRemark() {

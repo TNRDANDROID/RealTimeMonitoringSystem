@@ -3,8 +3,10 @@ package com.nic.RealTimeMonitoringSystem.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -31,6 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class HomePage extends AppCompatActivity implements Api.ServerResponseListener, View.OnClickListener, MyDialog.myOnClickListener {
@@ -38,6 +41,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
     private PrefManager prefManager;
     public dbData dbData = new dbData(this);
     private String isHome;
+    JSONObject dataset = new JSONObject();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +58,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
         if (Utils.isOnline() && !isHome.equalsIgnoreCase("Home")) {
             fetchAllResponseFromApi();
         }
+        syncButtonVisibility();
     }
 
 
@@ -63,29 +68,28 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
 //        getDistrictList();
 //        getBlockList();
         getStageList();
+     //   getAdditionalWorkStageList();
         getFinYearList();
+    }
+
+    public void syncButtonVisibility() {
+        dbData.open();
+        ArrayList<RealTimeMonitoringSystem> workImageCount = dbData.getSavedWorkImage();
+
+        if (workImageCount.size() > 0) {
+            homeScreenBinding.sync.setVisibility(View.VISIBLE);
+            homeScreenBinding.pendingCount.setText(String.valueOf(workImageCount.size()));
+        }else {
+            homeScreenBinding.sync.setVisibility(View.GONE);
+            homeScreenBinding.pendingCount.setText("NIL");
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.log_out:
-//                dbData.open();
-//                ArrayList<ODFMonitoringListValue> activityCount = dbData.getSavedActivity();
-                if (!Utils.isOnline()) {
-                    Utils.showAlert(this, "Logging out while offline may leads to loss of data!");
-                } else {
-//                    if (!(activityCount.size() > 0 )) {
-//                        closeApplication();
-//                    }else{
-//                        Utils.showAlert(this,"Sync all the data before logout!");
-//                    }
-                    closeApplication();
-                }
-                break;
+
         }
-
-
     }
 
     public void getDistrictList() {
@@ -123,6 +127,14 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
     public void getStageList() {
         try {
             new ApiService(this).makeJSONObjectRequest("StageList", Api.Method.POST, UrlGenerator.getServicesListUrl(), stageListJsonParams(), "not cache", this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getAdditionalWorkStageList() {
+        try {
+            new ApiService(this).makeJSONObjectRequest("AdditionalWorkStageList", Api.Method.POST, UrlGenerator.getServicesListUrl(), additionalstageListJsonParams(), "not cache", this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -178,6 +190,15 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
         dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
         dataSet.put(AppConstant.DATA_CONTENT, authKey);
         Log.d("StageList", "" + authKey);
+        return dataSet;
+    }
+
+    public JSONObject additionalstageListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.additionalstageListJsonParams().toString());
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("AdditionalStageList", "" + authKey);
         return dataSet;
     }
 
@@ -250,6 +271,15 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
                     new InsertStageTask().execute(jsonObject);
                 }
                 Log.d("StageList", "" + responseDecryptedKey);
+            }
+            if ("AdditionalWorkStageList".equals(urlType) && responseObj != null) {
+                String key = responseObj.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                    new InsertAdditionalStageTask().execute(jsonObject);
+                }
+                Log.d("AdditionalWorkStageList", "" + responseDecryptedKey);
             }
 
         } catch (JSONException e) {
@@ -458,6 +488,39 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
             return null;
         }
     }
+
+    public class InsertAdditionalStageTask extends AsyncTask<JSONObject, Void, Void> {
+
+        @Override
+        protected Void doInBackground(JSONObject... params) {
+            ArrayList<RealTimeMonitoringSystem> stage_count = dbData.getAdditionalStage();
+            if (stage_count.size() <= 0) {
+                if (params.length > 0) {
+                    JSONArray jsonArray = new JSONArray();
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.JSON_DATA);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        RealTimeMonitoringSystem stage = new RealTimeMonitoringSystem();
+                        try {
+                            stage.setWorkGroupID(jsonArray.getJSONObject(i).getString(AppConstant.WORK_GROUP_ID));
+                            stage.setWorkTypeID(jsonArray.getJSONObject(i).getString(AppConstant.WORK_TYPE_ID));
+                            stage.setWorkStageOrder(jsonArray.getJSONObject(i).getString(AppConstant.WORK_STAGE_ORDER));
+                            stage.setWorkStageCode(jsonArray.getJSONObject(i).getString(AppConstant.WORK_STAGE_CODE));
+                            stage.setWorkStageName(jsonArray.getJSONObject(i).getString(AppConstant.WORK_SATGE_NAME));
+
+                            dbData.insertAdditionalStage(stage);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+    }
     @Override
     public void OnError(VolleyError volleyError) {
 
@@ -506,6 +569,85 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
             startActivity(intent);
             finish();
             overridePendingTransition(R.anim.slide_enter, R.anim.slide_exit);
+        }
+    }
+
+    public void toUpload() {
+        if(Utils.isOnline()) {
+          //  new toUploadTask().execute();
+        }
+        else {
+            Utils.showAlert(this,"Please Turn on Your Mobile Data to Upload");
+        }
+    }
+
+    public class toUploadTask extends AsyncTask<Void, Void,
+            JSONObject> {
+        @Override
+        protected JSONObject doInBackground(Void... voids) {
+            dbData.open();
+            JSONArray track_data = new JSONArray();
+            ArrayList<RealTimeMonitoringSystem> assets = dbData.getSavedWorkImage();
+
+            if (assets.size() > 0) {
+                for (int i = 0; i < assets.size(); i++) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put(AppConstant.WORK_ID,assets.get(i).getWorkId());
+                        jsonObject.put(AppConstant.DISTRICT_CODE,assets.get(i).getDistictCode());
+                        jsonObject.put(AppConstant.BLOCK_CODE,assets.get(i).getBlockCode());
+                        jsonObject.put(AppConstant.PV_CODE,assets.get(i).getPvCode());
+                        jsonObject.put(AppConstant.TYPE_OF_WORK,assets.get(i).getTypeOfWork());
+                        jsonObject.put(AppConstant.WORK_STAGE_CODE,assets.get(i).getWorkStageCode());
+                        jsonObject.put(AppConstant.KEY_LATITUDE,assets.get(i).getLatitude());
+                        jsonObject.put(AppConstant.KEY_LONGITUDE,assets.get(i).getLongitude());
+                        jsonObject.put(AppConstant.KEY_CREATED_DATE,assets.get(i).getCreatedDate());
+
+                        Bitmap bitmap = assets.get(i).getImage();
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
+                        byte[] imageInByte = baos.toByteArray();
+                        String image_str = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+
+                        jsonObject.put(AppConstant.KEY_IMAGES,image_str);
+
+                        track_data.put(jsonObject);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                dataset = new JSONObject();
+
+                try {
+                    dataset.put(AppConstant.KEY_SERVICE_ID,"save");
+                    dataset.put(AppConstant.KEY_TRACK_DATA,track_data);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return dataset;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject dataset) {
+            super.onPostExecute(dataset);
+        }
+    }
+
+    public void logout() {
+        dbData.open();
+        ArrayList<RealTimeMonitoringSystem> activityCount = dbData.getSavedWorkImage();
+        if (!Utils.isOnline()) {
+            Utils.showAlert(this, "Logging out while offline may leads to loss of data!");
+        } else {
+            if (!(activityCount.size() > 0 )) {
+                closeApplication();
+            }else{
+                Utils.showAlert(this,"Sync all the data before logout!");
+            }
         }
     }
 }

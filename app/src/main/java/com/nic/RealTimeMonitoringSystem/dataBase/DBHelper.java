@@ -15,7 +15,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SCHEME_TABLE_NAME = "SchemeList";
     public static final String FINANCIAL_YEAR_TABLE_NAME = "FinancialYear";
     public static final String WORK_STAGE_TABLE = "work_type_stage_link";
+    public static final String ADDITIONAL_WORK_STAGE_TABLE = "addditional_work_stages";
     public static final String WORK_LIST_TABLE_BASED_ON_FINYEAR_VIlLAGE = "WorkList_based_on_finYear_village";
+    public static final String ADDITIONAL_WORK_LIST = "additional_work_list";
+    public static final String SAVE_IMAGE = "save_image";
 
     private Context context;
 
@@ -50,6 +53,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 "scheme_seq_id INTEGER)");
 
         db.execSQL("CREATE TABLE " + WORK_STAGE_TABLE + " ("
+                + "work_group_id  INTEGER," +
+                "work_type_id  INTEGER," +
+                "work_stage_order  INTEGER," +
+                "work_stage_code  INTEGER," +
+                "work_stage_name TEXT)");
+
+        db.execSQL("CREATE TABLE " + ADDITIONAL_WORK_STAGE_TABLE + " ("
                 + "work_group_id  INTEGER," +
                 "work_type_id  INTEGER," +
                 "work_stage_order  INTEGER," +
@@ -91,6 +101,31 @@ public class DBHelper extends SQLiteOpenHelper {
                 "community_name TEXT," +
                 "gender_text TEXT," +
                 "upd_date TEXT)");
+
+        db.execSQL("CREATE TABLE " + ADDITIONAL_WORK_LIST + " ("
+                + "scheme_id  INTEGER," +
+                "fin_year  TEXT," +
+                "work_id  INTEGER," +
+                "work_group_id  INTEGER," +
+                "roadname  TEXT," +
+                "cd_work_no  INTEGER," +
+                "cd_code  INTEGER," +
+                "cd_name  TEXT," +
+                "chainage_meter  TEXT," +
+                "work_stage_name TEXT)");
+
+        db.execSQL("CREATE TABLE " + SAVE_IMAGE + " ("
+                + "work_id INTEGER," +
+                "type_of_work TEXT," +
+                "dcode TEXT," +
+                "bcode TEXT," +
+                "pvcode TEXT," +
+                "work_stage_code TEXT," +
+                "latitude TEXT," +
+                "longitude TEXT," +
+                "images blob," +
+                "server_flag  INTEGER DEFAULT 0," +
+                "created_date TEXT)");
 
     }
 

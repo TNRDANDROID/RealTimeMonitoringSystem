@@ -1189,6 +1189,13 @@ public class Utils {
         return dataSet;
     }
 
+    public static JSONObject additionalstageListJsonParams() throws JSONException {
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.ADDITIONAL_STAGE_LIST);
+        Log.d("object", "" + dataSet);
+        return dataSet;
+    }
+
     public static JSONObject schemeListBlockWiseJsonParams(Activity activity) throws JSONException {
         prefManager = new PrefManager(activity);
         JSONObject dataSet = new JSONObject();

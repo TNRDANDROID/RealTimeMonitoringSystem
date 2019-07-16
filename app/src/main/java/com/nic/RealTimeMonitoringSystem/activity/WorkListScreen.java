@@ -292,6 +292,10 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                 JSONObject jsonObject = new JSONObject(responseDecryptedSchemeKey);
                 if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
                     new InsertWorkListTask().execute(jsonObject.getJSONObject(AppConstant.JSON_DATA));
+                    String jsondata = String.valueOf(jsonObject.getJSONObject(AppConstant.JSON_DATA).getJSONArray(AppConstant.ADDITIONAL_WORK));
+                    if(jsondata != null){
+                        new InsertAdditioanlListTask().execute(jsonObject.getJSONObject(AppConstant.JSON_DATA));
+                    }
                     initRecyclerView();
                 } else if(jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("NO_RECORD")){
                     dbData.open();
@@ -366,6 +370,51 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                             workList.setLastVisitedDate(jsonArray.getJSONObject(i).getString(AppConstant.LAST_VISITED_DATE));
 
                             dbData.insertWorkList(workList);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+    public class InsertAdditioanlListTask extends AsyncTask<JSONObject, Void, Void> {
+
+        @Override
+        protected Void doInBackground(JSONObject... params) {
+
+            dbData.open();
+            if(Utils.isOnline()){
+                dbData.deleteAdditionalListTable();
+            }
+            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllAdditionalWork();
+            if (workList_count.size() <= 0) {
+                if (params.length > 0) {
+                    JSONArray jsonArray = new JSONArray();
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.ADDITIONAL_WORK);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        RealTimeMonitoringSystem additioanlList = new RealTimeMonitoringSystem();
+                        try {
+                            additioanlList.setSchemeID(jsonArray.getJSONObject(i).getInt(AppConstant.SCHEME_ID));
+                            additioanlList.setFinancialYear(jsonArray.getJSONObject(i).getString(AppConstant.FINANCIAL_YEAR));
+                            additioanlList.setWorkId(jsonArray.getJSONObject(i).getInt(AppConstant.WORK_ID));
+                            additioanlList.setWorkGroupID(jsonArray.getJSONObject(i).getString(AppConstant.WORK_GROUP_ID));
+                            additioanlList.setRoadName(jsonArray.getJSONObject(i).getString(AppConstant.ROAD_NAME));
+                            additioanlList.setCdWorkNo(jsonArray.getJSONObject(i).getInt(AppConstant.CD_WORK_NO));
+                            additioanlList.setCdCode(jsonArray.getJSONObject(i).getInt(AppConstant.CD_CODE));
+                            additioanlList.setCdName(jsonArray.getJSONObject(i).getString(AppConstant.CD_NAME));
+                            additioanlList.setChainageMeter(jsonArray.getJSONObject(i).getString(AppConstant.CHAINAGE_METER));
+                            additioanlList.setWorkStageName(jsonArray.getJSONObject(i).getString(AppConstant.WORK_SATGE_NAME));
+
+
+                            dbData.insertAdditionalWorkList(additioanlList);
 
                         } catch (JSONException e) {
                             e.printStackTrace();

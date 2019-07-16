@@ -38,6 +38,7 @@ public class AppConstant {
     public static String N_YEAR = "nyear";
     public static String KEY_SCHEME_FINYEAR_LIST_LAST_NYEARS = "scheme_finyear_list_last_nyears";
     public static String STAGE_LIST = "work_type_stage_link";
+    public static String ADDITIONAL_STAGE_LIST = "";
     public static String FINANCIAL_YEAR = "fin_year";
     public static String WORK_GROUP_ID = "work_group_id";
     public static String WORK_TYPE_ID = "work_type_id";
@@ -81,7 +82,17 @@ public class AppConstant {
     public static String ADDITIONAL_WORK = "additional_work";
     public static String TYPE_OF_WORK = "type_of_work";
 
+    public static String ROAD_NAME = "roadname";
+    public static String CD_WORK_NO = "cd_work_no";
+    public static String CD_CODE = "cd_code";
+    public static String CD_NAME = "cd_name";
+    public static String CHAINAGE_METER = "chainage_meter";
 
+    public static String KEY_IMAGES = "images";
+    public static String KEY_CREATED_DATE = "created_date";
+    public static String KEY_LATITUDE = "latitude";
+    public static String KEY_LONGITUDE = "longitude";
 
+    public static String KEY_TRACK_DATA = "track_data";
 
 }

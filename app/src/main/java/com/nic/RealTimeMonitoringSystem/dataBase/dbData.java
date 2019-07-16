@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 
 import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
@@ -306,6 +309,58 @@ public class dbData {
         return cards;
     }
 
+    public RealTimeMonitoringSystem insertAdditionalStage(RealTimeMonitoringSystem realTimeMonitoringSystem) {
+
+        ContentValues values = new ContentValues();
+        values.put(AppConstant.WORK_GROUP_ID, realTimeMonitoringSystem.getWorkGroupID());
+        values.put(AppConstant.WORK_TYPE_ID, realTimeMonitoringSystem.getWorkTypeID());
+        values.put(AppConstant.WORK_STAGE_ORDER, realTimeMonitoringSystem.getWorkStageOrder());
+        values.put(AppConstant.WORK_STAGE_CODE, realTimeMonitoringSystem.getWorkStageCode());
+        values.put(AppConstant.WORK_SATGE_NAME, realTimeMonitoringSystem.getWorkStageName());
+
+        long id = db.insert(DBHelper.ADDITIONAL_WORK_STAGE_TABLE, null, values);
+        Log.d("Inserted_id_Add_Stage", String.valueOf(id));
+
+        return realTimeMonitoringSystem;
+    }
+
+    public ArrayList<RealTimeMonitoringSystem> getAdditionalStage() {
+
+        ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery("select * from " + DBHelper.ADDITIONAL_WORK_STAGE_TABLE, null);
+            // cursor = db.query(CardsDBHelper.TABLE_CARDS,
+            //       COLUMNS, null, null, null, null, null);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    RealTimeMonitoringSystem card = new RealTimeMonitoringSystem();
+                    card.setWorkGroupID(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_GROUP_ID)));
+                    card.setWorkTypeID(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_TYPE_ID)));
+                    card.setWorkStageOrder(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_STAGE_ORDER)));
+                    card.setWorkStageCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_STAGE_CODE)));
+
+                    card.setWorkStageName(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_SATGE_NAME)));
+
+                    cards.add(card);
+                }
+            }
+        } catch (Exception e) {
+            //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return cards;
+    }
+
     public RealTimeMonitoringSystem insertWorkList(RealTimeMonitoringSystem realTimeMonitoringSystem) {
 
         ContentValues values = new ContentValues();
@@ -403,6 +458,113 @@ public class dbData {
         return cards;
     }
 
+    public RealTimeMonitoringSystem insertAdditionalWorkList(RealTimeMonitoringSystem realTimeMonitoringSystem) {
+
+        ContentValues values = new ContentValues();
+        values.put(AppConstant.SCHEME_ID, realTimeMonitoringSystem.getSchemeID());
+        values.put(AppConstant.FINANCIAL_YEAR, realTimeMonitoringSystem.getFinancialYear());
+        values.put(AppConstant.WORK_ID, realTimeMonitoringSystem.getWorkId());
+        values.put(AppConstant.WORK_GROUP_ID, realTimeMonitoringSystem.getWorkGroupID());
+        values.put(AppConstant.ROAD_NAME, realTimeMonitoringSystem.getRoadName());
+        values.put(AppConstant.CD_WORK_NO, realTimeMonitoringSystem.getCdWorkNo());
+        values.put(AppConstant.CD_CODE, realTimeMonitoringSystem.getCdCode());
+        values.put(AppConstant.CD_NAME, realTimeMonitoringSystem.getCdName());
+        values.put(AppConstant.CHAINAGE_METER, realTimeMonitoringSystem.getChainageMeter());
+        values.put(AppConstant.WORK_SATGE_NAME, realTimeMonitoringSystem.getWorkStageName());
+
+
+        long id = db.insert(DBHelper.ADDITIONAL_WORK_LIST, null, values);
+        Log.d("Inserted_id_Additional", String.valueOf(id));
+
+        return realTimeMonitoringSystem;
+    }
+
+    public ArrayList<RealTimeMonitoringSystem> getAllAdditionalWork() {
+
+        ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery("select * from " + DBHelper.ADDITIONAL_WORK_LIST, null);
+            // cursor = db.query(CardsDBHelper.TABLE_CARDS,
+            //       COLUMNS, null, null, null, null, null);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    RealTimeMonitoringSystem card = new RealTimeMonitoringSystem();
+
+                    card.setSchemeID(Integer.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.SCHEME_ID))));
+                    card.setFinancialYear(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.FINANCIAL_YEAR)));
+                    card.setWorkId(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.WORK_ID)));
+                    card.setWorkGroupID(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.WORK_GROUP_ID)));
+                    card.setRoadName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.ROAD_NAME)));
+                    card.setCdWorkNo(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.CD_WORK_NO)));
+                    card.setCdCode(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.CD_CODE)));
+                    card.setCdName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.CD_NAME)));
+                    card.setChainageMeter(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.CHAINAGE_METER)));
+                    card.setWorkStageName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.WORK_SATGE_NAME)));
+
+                    cards.add(card);
+                }
+            }
+        } catch (Exception e) {
+            //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return cards;
+    }
+
+    public ArrayList<RealTimeMonitoringSystem> getSavedWorkImage() {
+
+        ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(DBHelper.SAVE_IMAGE,
+                    new String[]{"*"}, "server_flag = ?", new String[]{"0"}, null, null, null);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+
+                    byte[] photo = cursor.getBlob(cursor.getColumnIndexOrThrow(AppConstant.KEY_IMAGES));
+                    byte[] decodedString = Base64.decode(photo, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                    RealTimeMonitoringSystem card = new RealTimeMonitoringSystem();
+                    card.setWorkId(cursor.getInt(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_ID)));
+                    card.setDistictCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.DISTRICT_CODE)));
+                    card.setBlockCode(cursor.getString(cursor
+                            .getColumnIndex(AppConstant.BLOCK_CODE)));
+                    card.setPvCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.PV_CODE)));
+                    card.setTypeOfWork(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.TYPE_OF_WORK)));
+                    card.setWorkStageCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_STAGE_CODE)));
+                    card.setLatitude(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.KEY_LATITUDE)));
+                    card.setLongitude(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.KEY_LONGITUDE)));
+                    card.setImage(decodedByte);
+                    card.setCreatedDate(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.KEY_CREATED_DATE)));
+
+                    cards.add(card);
+                }
+            }
+        } catch (Exception e){
+            //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
+        } finally{
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return cards;
+    }
+
     public void deleteDistrictTable() {
         db.execSQL("delete from " + DBHelper.DISTRICT_TABLE_NAME);
     }
@@ -429,6 +591,10 @@ public class dbData {
         db.execSQL("delete from " + DBHelper.WORK_LIST_TABLE_BASED_ON_FINYEAR_VIlLAGE);
     }
 
+    public void deleteAdditionalListTable() {
+        db.execSQL("delete from " + DBHelper.ADDITIONAL_WORK_LIST);
+    }
+
 
     public void deleteAll() {
         deleteDistrictTable();
@@ -438,6 +604,7 @@ public class dbData {
         deleteSchemeTable();
         deleteWorkStageTable();
         deleteWorkListTable();
+        deleteAdditionalListTable();
     }
 
 

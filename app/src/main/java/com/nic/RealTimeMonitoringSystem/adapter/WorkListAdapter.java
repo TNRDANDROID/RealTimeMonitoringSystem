@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.nic.RealTimeMonitoringSystem.R;
+import com.nic.RealTimeMonitoringSystem.activity.AdditionalWorkScreen;
 import com.nic.RealTimeMonitoringSystem.activity.CameraScreen;
 import com.nic.RealTimeMonitoringSystem.activity.WorkListScreen;
 import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
@@ -197,6 +198,13 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
                 openCameraScreen(position);
             }
         });
+
+        holder.adapterWorkListBinding.viewAdditionalWorks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openAdditionalWorkList(position);
+            }
+        });
     }
 
 
@@ -239,8 +247,17 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
         Activity activity = (Activity) context;
         Intent intent = new Intent(activity, CameraScreen.class);
         intent.putExtra(AppConstant.TYPE_OF_WORK,AppConstant.MAIN_WORK);
+        intent.putExtra(AppConstant.WORK_ID,WorkListValuesFiltered.get(pos).getWorkId());
         intent.putExtra(AppConstant.WORK_GROUP_ID,WorkListValuesFiltered.get(pos).getWorkGroupID());
         intent.putExtra(AppConstant.WORK_TYPE_ID,WorkListValuesFiltered.get(pos).getWorkTypeID());
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+    }
+
+    public void openAdditionalWorkList(int pos) {
+        Activity activity = (Activity) context;
+        Intent intent = new Intent(activity, AdditionalWorkScreen.class);
+        intent.putExtra(AppConstant.WORK_ID,WorkListValuesFiltered.get(pos).getWorkId());
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
