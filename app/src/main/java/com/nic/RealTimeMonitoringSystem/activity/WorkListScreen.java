@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -19,10 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
-import com.bumptech.glide.util.Util;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.adapter.CommonAdapter;
@@ -292,8 +289,8 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                 JSONObject jsonObject = new JSONObject(responseDecryptedSchemeKey);
                 if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
                     new InsertWorkListTask().execute(jsonObject.getJSONObject(AppConstant.JSON_DATA));
-                    String jsondata = String.valueOf(jsonObject.getJSONObject(AppConstant.JSON_DATA).getJSONArray(AppConstant.ADDITIONAL_WORK));
-                    if(jsondata != null){
+                    JSONArray jsondata = jsonObject.getJSONObject(AppConstant.JSON_DATA).getJSONArray(AppConstant.ADDITIONAL_WORK);
+                    if (jsondata.length() > 0) {
                         new InsertAdditioanlListTask().execute(jsonObject.getJSONObject(AppConstant.JSON_DATA));
                     }
                     initRecyclerView();
