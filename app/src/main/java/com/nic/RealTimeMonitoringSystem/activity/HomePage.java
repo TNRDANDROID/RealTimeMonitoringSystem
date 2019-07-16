@@ -26,6 +26,7 @@ import com.nic.RealTimeMonitoringSystem.databinding.HomeScreenBinding;
 import com.nic.RealTimeMonitoringSystem.dialog.MyDialog;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
 import com.nic.RealTimeMonitoringSystem.session.PrefManager;
+import com.nic.RealTimeMonitoringSystem.support.ProgressHUD;
 import com.nic.RealTimeMonitoringSystem.utils.UrlGenerator;
 import com.nic.RealTimeMonitoringSystem.utils.Utils;
 
@@ -42,6 +43,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
     public dbData dbData = new dbData(this);
     private String isHome;
     JSONObject dataset = new JSONObject();
+    private ProgressHUD progressHUD;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
 //        getDistrictList();
 //        getBlockList();
         getStageList();
-     //   getAdditionalWorkStageList();
+        getAdditionalWorkStageList();
         getFinYearList();
     }
 
@@ -487,6 +489,20 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
             }
             return null;
         }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (progressHUD != null) {
+                progressHUD.cancel();
+            }
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressHUD = ProgressHUD.show(HomePage.this, "Downloading", true, false, null);
+        }
     }
 
     public class InsertAdditionalStageTask extends AsyncTask<JSONObject, Void, Void> {
@@ -505,8 +521,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
                     for (int i = 0; i < jsonArray.length(); i++) {
                         RealTimeMonitoringSystem stage = new RealTimeMonitoringSystem();
                         try {
-                            stage.setWorkGroupID(jsonArray.getJSONObject(i).getString(AppConstant.WORK_GROUP_ID));
-                            stage.setWorkTypeID(jsonArray.getJSONObject(i).getString(AppConstant.WORK_TYPE_ID));
+                            stage.setWorkTypeCode(jsonArray.getJSONObject(i).getString(AppConstant.WORK_TYPE_CODE));
                             stage.setWorkStageOrder(jsonArray.getJSONObject(i).getString(AppConstant.WORK_STAGE_ORDER));
                             stage.setWorkStageCode(jsonArray.getJSONObject(i).getString(AppConstant.WORK_STAGE_CODE));
                             stage.setWorkStageName(jsonArray.getJSONObject(i).getString(AppConstant.WORK_SATGE_NAME));
@@ -574,7 +589,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
 
     public void toUpload() {
         if(Utils.isOnline()) {
-          //  new toUploadTask().execute();
+            new toUploadTask().execute();
         }
         else {
             Utils.showAlert(this,"Please Turn on Your Mobile Data to Upload");
@@ -649,5 +664,11 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
                 Utils.showAlert(this,"Sync all the data before logout!");
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        syncButtonVisibility();
     }
 }

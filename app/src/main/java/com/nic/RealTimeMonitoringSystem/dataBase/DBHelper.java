@@ -60,8 +60,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "work_stage_name TEXT)");
 
         db.execSQL("CREATE TABLE " + ADDITIONAL_WORK_STAGE_TABLE + " ("
-                + "work_group_id  INTEGER," +
-                "work_type_id  INTEGER," +
+                + "work_type_code  INTEGER," +
                 "work_stage_order  INTEGER," +
                 "work_stage_code  INTEGER," +
                 "work_stage_name TEXT)");

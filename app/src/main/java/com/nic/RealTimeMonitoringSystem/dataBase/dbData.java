@@ -312,8 +312,7 @@ public class dbData {
     public RealTimeMonitoringSystem insertAdditionalStage(RealTimeMonitoringSystem realTimeMonitoringSystem) {
 
         ContentValues values = new ContentValues();
-        values.put(AppConstant.WORK_GROUP_ID, realTimeMonitoringSystem.getWorkGroupID());
-        values.put(AppConstant.WORK_TYPE_ID, realTimeMonitoringSystem.getWorkTypeID());
+        values.put(AppConstant.WORK_TYPE_CODE, realTimeMonitoringSystem.getWorkTypeCode());
         values.put(AppConstant.WORK_STAGE_ORDER, realTimeMonitoringSystem.getWorkStageOrder());
         values.put(AppConstant.WORK_STAGE_CODE, realTimeMonitoringSystem.getWorkStageCode());
         values.put(AppConstant.WORK_SATGE_NAME, realTimeMonitoringSystem.getWorkStageName());
@@ -336,10 +335,8 @@ public class dbData {
             if (cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
                     RealTimeMonitoringSystem card = new RealTimeMonitoringSystem();
-                    card.setWorkGroupID(cursor.getString(cursor
-                            .getColumnIndexOrThrow(AppConstant.WORK_GROUP_ID)));
-                    card.setWorkTypeID(cursor.getString(cursor
-                            .getColumnIndexOrThrow(AppConstant.WORK_TYPE_ID)));
+                    card.setWorkTypeCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_TYPE_CODE)));;
                     card.setWorkStageOrder(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.WORK_STAGE_ORDER)));
                     card.setWorkStageCode(cursor.getString(cursor

@@ -135,8 +135,8 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
         Activity activity = (Activity) context;
         Intent intent = new Intent(activity, CameraScreen.class);
         intent.putExtra(AppConstant.TYPE_OF_WORK,AppConstant.ADDITIONAL_WORK);
-        intent.putExtra(AppConstant.WORK_GROUP_ID,AdditionalListValuesFiltered.get(pos).getWorkGroupID());
-        intent.putExtra(AppConstant.WORK_TYPE_ID,AdditionalListValuesFiltered.get(pos).getWorkTypeID());
+        intent.putExtra(AppConstant.WORK_ID,AdditionalListValuesFiltered.get(pos).getWorkId());
+        intent.putExtra(AppConstant.CD_CODE,String.valueOf(AdditionalListValuesFiltered.get(pos).getCdCode()));
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }

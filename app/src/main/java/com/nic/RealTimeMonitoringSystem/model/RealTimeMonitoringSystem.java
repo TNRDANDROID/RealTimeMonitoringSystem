@@ -304,6 +304,15 @@ public class RealTimeMonitoringSystem {
     private String dateTime;
     private String imageAvailable;
     private String createdDate;
+    private String workTypeCode;
+
+    public String getWorkTypeCode() {
+        return workTypeCode;
+    }
+
+    public void setWorkTypeCode(String workTypeCode) {
+        this.workTypeCode = workTypeCode;
+    }
 
     public String getCreatedDate() {
         return createdDate;

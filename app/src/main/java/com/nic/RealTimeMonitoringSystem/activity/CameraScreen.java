@@ -186,11 +186,24 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
 
     public void loadOfflineStageListDBValues() {
         StageList.clear();
-
-        String workGroupId = getIntent().getStringExtra(AppConstant.WORK_GROUP_ID);
-        String workTypeid = getIntent().getStringExtra(AppConstant.WORK_TYPE_ID);
         Cursor Stage = null;
-        Stage = db.rawQuery("select * from " + DBHelper.WORK_STAGE_TABLE + "  where (work_group_id = " + workGroupId + " and work_type_id = " + workTypeid + ") order by work_stage_order asc", null);
+
+        String tye_of_work = getIntent().getStringExtra(AppConstant.TYPE_OF_WORK);
+
+        if(tye_of_work.equalsIgnoreCase(AppConstant.MAIN_WORK)){
+            String workGroupId = getIntent().getStringExtra(AppConstant.WORK_GROUP_ID);
+            String workTypeid = getIntent().getStringExtra(AppConstant.WORK_TYPE_ID);
+
+            Stage = db.rawQuery("select * from " + DBHelper.WORK_STAGE_TABLE + "  where (work_group_id = " + workGroupId + " and work_type_id = " + workTypeid + ") order by work_stage_order asc", null);
+
+        }
+        else if(tye_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)){
+            String workTypecode = getIntent().getStringExtra(AppConstant.CD_CODE);
+
+            Stage = db.rawQuery("select * from " + DBHelper.ADDITIONAL_WORK_STAGE_TABLE + "  where work_type_code =  "+ workTypecode + " order by work_stage_order asc", null);
+
+        }
+
 
         RealTimeMonitoringSystem stageListValue = new RealTimeMonitoringSystem();
         stageListValue.setWorkStageName("Select Stage");
