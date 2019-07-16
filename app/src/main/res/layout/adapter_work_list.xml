@@ -560,7 +560,7 @@
         android:layout_alignParentEnd="true"
         android:background="#f8f8f8"
         android:gravity="center"
-        android:text="View CD Wroks"
+        android:text="View CD Works"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@android:color/black"
