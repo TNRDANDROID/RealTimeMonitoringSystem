@@ -143,7 +143,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
         protected ArrayList<RealTimeMonitoringSystem> doInBackground(Void... params) {
             dbData.open();
             WorkList = new ArrayList<>();
-            WorkList = dbData.getAllWorkLIst("fetch",pref_finYear);
+            WorkList = dbData.getAllWorkLIst("fetch",pref_finYear,prefManager.getPvCode());
             Log.d("WORKLIST_COUNT", String.valueOf(WorkList.size()));
 
             return WorkList;
@@ -324,11 +324,11 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
         protected Void doInBackground(JSONObject... params) {
 
             dbData.open();
-            if(Utils.isOnline()){
-                dbData.deleteWorkListTable();
-            }
-            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllWorkLIst("insert","");
-            if (workList_count.size() <= 0) {
+//            if(Utils.isOnline()){
+//                dbData.deleteWorkListTable();
+//            }
+            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllWorkLIst("insert","","");
+//            if (workList_count.size() <= 0) {
                 if (params.length > 0) {
                     JSONArray jsonArray = new JSONArray();
                     try {
@@ -377,7 +377,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                         }
                     }
                 }
-            }
+//            }
             return null;
         }
     }
@@ -388,11 +388,11 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
         protected Void doInBackground(JSONObject... params) {
 
             dbData.open();
-            if(Utils.isOnline()){
-                dbData.deleteAdditionalListTable();
-            }
+//            if(Utils.isOnline()){
+//                dbData.deleteAdditionalListTable();
+//            }
             ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllAdditionalWork();
-            if (workList_count.size() <= 0) {
+//            if (workList_count.size() <= 0) {
                 if (params.length > 0) {
                     JSONArray jsonArray = new JSONArray();
                     try {
@@ -422,7 +422,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                         }
                     }
                 }
-            }
+//            }
             return null;
         }
     }

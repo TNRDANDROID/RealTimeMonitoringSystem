@@ -89,14 +89,12 @@ public class SlideshowDialogFragment extends DialogFragment {
         lblCount.setText((position + 1) + " of " + images.size());
 
         RealTimeMonitoringSystem image = images.get(position);
-//        if(!image.getImageRemark().equalsIgnoreCase("")){
-//            lblDescription.setVisibility(View.VISIBLE);
-//            lblDescription.setText(image.getImageRemark());
-//        }else{
-//            lblDescription.setVisibility(View.GONE);
-//        }
-//        String date = Utils.parseDateForChart(image.getDateTime());
-//        lblDate.setText(date);
+        if(!image.getImageRemark().equalsIgnoreCase("")){
+            lblDescription.setVisibility(View.VISIBLE);
+            lblDescription.setText(image.getImageRemark());
+        }else{
+            lblDescription.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -125,6 +125,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "latitude TEXT," +
                 "longitude TEXT," +
                 "images blob," +
+                "remark TEXT," +
                 "server_flag  INTEGER DEFAULT 0," +
                 "created_date TEXT)");
 

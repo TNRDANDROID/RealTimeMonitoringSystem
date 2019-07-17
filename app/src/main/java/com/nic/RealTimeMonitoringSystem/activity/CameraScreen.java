@@ -177,6 +177,7 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
             values.put(AppConstant.KEY_LATITUDE, offlatTextValue.toString());
             values.put(AppConstant.KEY_LONGITUDE, offlongTextValue.toString());
             values.put(AppConstant.KEY_IMAGES,image_str.trim());
+            values.put(AppConstant.KEY_IMAGE_REMARK,cameraScreenBinding.description.getText().toString());
             values.put(AppConstant.KEY_CREATED_DATE,sdf.format(new Date()));
             long id = db.insert(DBHelper.SAVE_IMAGE, null, values);
 

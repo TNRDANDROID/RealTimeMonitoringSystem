@@ -398,14 +398,14 @@ public class dbData {
         return realTimeMonitoringSystem;
     }
 
-    public ArrayList<RealTimeMonitoringSystem> getAllWorkLIst(String purpose,String fin_year) {
+    public ArrayList<RealTimeMonitoringSystem> getAllWorkLIst(String purpose,String fin_year,String pvcode) {
 
         ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
         Cursor cursor = null;
         String condition = "";
 
         if(purpose.equalsIgnoreCase("fetch")) {
-            condition = " where fin_year = '" + fin_year +"'";
+            condition = " where fin_year = '" + fin_year +"'"+" and pvcode = '" + pvcode +"'";
         }
 
         try {
@@ -554,6 +554,8 @@ public class dbData {
                     card.setLongitude(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.KEY_LONGITUDE)));
                     card.setImage(decodedByte);
+                    card.setImageRemark(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.KEY_IMAGE_REMARK)));
                     card.setCreatedDate(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.KEY_CREATED_DATE)));
 
@@ -616,6 +618,8 @@ public class dbData {
                     card.setLongitude(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.KEY_LONGITUDE)));
                     card.setImage(decodedByte);
+                    card.setImageRemark(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.KEY_IMAGE_REMARK)));
                     card.setCreatedDate(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.KEY_CREATED_DATE)));
 
