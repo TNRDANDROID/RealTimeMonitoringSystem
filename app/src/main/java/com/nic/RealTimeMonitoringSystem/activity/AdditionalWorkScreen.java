@@ -58,6 +58,7 @@ public class AdditionalWorkScreen extends AppCompatActivity implements View.OnCl
     private PrefManager prefManager;
     private SQLiteDatabase db;
     public static DBHelper dbHelper;
+    ArrayList<RealTimeMonitoringSystem> additionalList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,6 +78,9 @@ public class AdditionalWorkScreen extends AppCompatActivity implements View.OnCl
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
 
+        additionalListAdapter = new AdditionalListAdapter(AdditionalWorkScreen.this, additionalList,dbData);
+        recyclerView.setAdapter(additionalListAdapter);
+
         new fetchAdditionaltask().execute();
 //
 //        new Handler().postDelayed(new Runnable() {
@@ -92,7 +96,7 @@ public class AdditionalWorkScreen extends AppCompatActivity implements View.OnCl
         @Override
         protected ArrayList<RealTimeMonitoringSystem> doInBackground(Void... params) {
             dbData.open();
-            ArrayList<RealTimeMonitoringSystem> additionalList = new ArrayList<>();
+            additionalList = new ArrayList<>();
             additionalList = dbData.getAllAdditionalWork();
             Log.d("ADDITIONAL_COUNT", String.valueOf(additionalList.size()));
             return additionalList;
@@ -101,7 +105,7 @@ public class AdditionalWorkScreen extends AppCompatActivity implements View.OnCl
         @Override
         protected void onPostExecute(ArrayList<RealTimeMonitoringSystem> additionalList) {
             super.onPostExecute(additionalList);
-            additionalListAdapter = new AdditionalListAdapter(AdditionalWorkScreen.this, additionalList);
+            additionalListAdapter = new AdditionalListAdapter(AdditionalWorkScreen.this, additionalList,dbData);
             recyclerView.setAdapter(additionalListAdapter);
             recyclerView.showShimmerAdapter();
             recyclerView.postDelayed(new Runnable() {
@@ -164,6 +168,12 @@ public class AdditionalWorkScreen extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View view) {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        additionalListAdapter.notifyDataSetChanged();
     }
 }
 

@@ -42,7 +42,7 @@ import java.util.ArrayList;
 
 public class FullImageActivity extends AppCompatActivity implements View.OnClickListener, Api.ServerResponseListener {
     private FullImageRecyclerBinding fullImageRecyclerBinding;
-    public String OnOffType;
+    public String OnOffType,work_id;
     private FullImageAdapter fullImageAdapter;
     private PrefManager prefManager;
     private static  ArrayList<RealTimeMonitoringSystem> activityImage = new ArrayList<>();
@@ -54,6 +54,7 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
         fullImageRecyclerBinding.setActivity(this);
         prefManager = new PrefManager(this);
         OnOffType = getIntent().getStringExtra("OnOffType");
+        work_id = getIntent().getStringExtra(AppConstant.WORK_ID);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(),2);
         fullImageRecyclerBinding.imagePreviewRecyclerview.setLayoutManager(mLayoutManager);
@@ -67,9 +68,9 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
             if (Utils.isOnline()) {
                 getOnlineImage();
             }
+        }
         else {
             new fetchImagetask().execute();
-        }
         }
 
     }
@@ -81,13 +82,17 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
             final String dcode = prefManager.getDistrictCode();
             final String bcode = prefManager.getBlockCode();
             final String pvcode = prefManager.getPvCode();
-            String id = "";
+            String type_of_work = "", cd_work_no = "";
 
             if(OnOffType.equalsIgnoreCase("Offline")){
-//                id = getIntent().getStringExtra(AppConstant.KEY_ACTIVITY_ID);
-//                dbData.open();
-//                activityImage = new ArrayList<>();
-//                activityImage = dbData.selectImageActivity(dcode,bcode,pvcode,schedule_id,id,"");
+                type_of_work = getIntent().getStringExtra(AppConstant.TYPE_OF_WORK);
+
+                if (type_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)){
+                    cd_work_no = getIntent().getStringExtra(AppConstant.CD_WORK_NO);
+                }
+                dbData.open();
+                activityImage = new ArrayList<>();
+                activityImage = dbData.selectImage(dcode,bcode,pvcode,work_id,type_of_work,cd_work_no);
             }
 
             Log.d("IMAGE_COUNT", String.valueOf(activityImage.size()));

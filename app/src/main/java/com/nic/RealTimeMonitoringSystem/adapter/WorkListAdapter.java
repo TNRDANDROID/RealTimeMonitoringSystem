@@ -17,10 +17,13 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.activity.AdditionalWorkScreen;
 import com.nic.RealTimeMonitoringSystem.activity.CameraScreen;
+import com.nic.RealTimeMonitoringSystem.activity.FullImageActivity;
 import com.nic.RealTimeMonitoringSystem.activity.WorkListScreen;
 import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
+import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
 import com.nic.RealTimeMonitoringSystem.databinding.AdapterWorkListBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
+import com.nic.RealTimeMonitoringSystem.session.PrefManager;
 import com.nic.RealTimeMonitoringSystem.utils.Utils;
 
 import java.util.ArrayList;
@@ -32,14 +35,21 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
     private String letter;
     private Context context;
     private ColorGenerator generator = ColorGenerator.MATERIAL;
+    public final String dcode,bcode,pvcode;
+    PrefManager prefManager;
+    private final dbData dbData;
 
     private LayoutInflater layoutInflater;
 
-    public WorkListAdapter(Context context, List<RealTimeMonitoringSystem> WorkListValues) {
+    public WorkListAdapter(Context context, List<RealTimeMonitoringSystem> WorkListValues,dbData dbData) {
         this.context = context;
         this.WorkListValues = WorkListValues;
         this.WorkListValuesFiltered = WorkListValues;
-
+        this.dbData = dbData;
+        prefManager = new PrefManager(context);
+        dcode = prefManager.getDistrictCode();
+        bcode = prefManager.getBlockCode();
+        pvcode = prefManager.getPvCode();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -205,6 +215,24 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
                 openAdditionalWorkList(position);
             }
         });
+
+        final String work_id = String.valueOf(WorkListValuesFiltered.get(position).getWorkId());
+
+        ArrayList<RealTimeMonitoringSystem> imageOffline = dbData.selectImage(dcode,bcode,pvcode,work_id,AppConstant.MAIN_WORK,"");
+
+        if(imageOffline.size() > 0) {
+            holder.adapterWorkListBinding.viewOfflineImage.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.adapterWorkListBinding.viewOfflineImage.setVisibility(View.GONE);
+        }
+
+        holder.adapterWorkListBinding.viewOfflineImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewOfflineImages(work_id,AppConstant.MAIN_WORK,"Offline");
+            }
+        });
     }
 
 
@@ -247,7 +275,7 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
         Activity activity = (Activity) context;
         Intent intent = new Intent(activity, CameraScreen.class);
         intent.putExtra(AppConstant.TYPE_OF_WORK,AppConstant.MAIN_WORK);
-        intent.putExtra(AppConstant.WORK_ID,WorkListValuesFiltered.get(pos).getWorkId());
+        intent.putExtra(AppConstant.WORK_ID,String.valueOf(WorkListValuesFiltered.get(pos).getWorkId()));
         intent.putExtra(AppConstant.WORK_GROUP_ID,WorkListValuesFiltered.get(pos).getWorkGroupID());
         intent.putExtra(AppConstant.WORK_TYPE_ID,WorkListValuesFiltered.get(pos).getWorkTypeID());
         activity.startActivity(intent);
@@ -265,6 +293,28 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
     @Override
     public int getItemCount() {
         return WorkListValuesFiltered == null ? 0 : WorkListValuesFiltered.size();
+    }
+
+    public void viewOfflineImages(String work_id,String type_of_work,String OnOffType) {
+        Activity activity = (Activity) context;
+        Intent intent = new Intent(context, FullImageActivity.class);
+        intent.putExtra(AppConstant.WORK_ID,work_id);
+        intent.putExtra("OnOffType",OnOffType);
+
+        if(OnOffType.equalsIgnoreCase("Offline")){
+            intent.putExtra(AppConstant.TYPE_OF_WORK,type_of_work);
+            activity.startActivity(intent);
+        }
+        else if(OnOffType.equalsIgnoreCase("Online")) {
+            if(Utils.isOnline()){
+                activity.startActivity(intent);
+            }else {
+                Utils.showAlert(activity,"Your Internet seems to be Offline.Images can be viewed only in Online mode.");
+            }
+        }
+
+
+        activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 }
 

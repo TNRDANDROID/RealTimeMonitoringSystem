@@ -398,15 +398,19 @@ public class dbData {
         return realTimeMonitoringSystem;
     }
 
-    public ArrayList<RealTimeMonitoringSystem> getAllWorkLIst() {
+    public ArrayList<RealTimeMonitoringSystem> getAllWorkLIst(String purpose,String fin_year) {
 
         ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
         Cursor cursor = null;
+        String condition = "";
+
+        if(purpose.equalsIgnoreCase("fetch")) {
+            condition = " where fin_year = '" + fin_year +"'";
+        }
 
         try {
-            cursor = db.rawQuery("select * from " + DBHelper.WORK_LIST_TABLE_BASED_ON_FINYEAR_VIlLAGE, null);
-            // cursor = db.query(CardsDBHelper.TABLE_CARDS,
-            //       COLUMNS, null, null, null, null, null);
+            cursor = db.rawQuery("select * from " + DBHelper.WORK_LIST_TABLE_BASED_ON_FINYEAR_VIlLAGE +  condition, null);
+
             if (cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
                     RealTimeMonitoringSystem card = new RealTimeMonitoringSystem();
@@ -531,6 +535,72 @@ public class dbData {
                     RealTimeMonitoringSystem card = new RealTimeMonitoringSystem();
                     card.setWorkId(cursor.getInt(cursor
                             .getColumnIndexOrThrow(AppConstant.WORK_ID)));
+                    card.setWorkGroupID(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_GROUP_ID)));
+                    card.setCdWorkNo(cursor.getInt(cursor
+                            .getColumnIndexOrThrow(AppConstant.CD_WORK_NO)));
+                    card.setDistictCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.DISTRICT_CODE)));
+                    card.setBlockCode(cursor.getString(cursor
+                            .getColumnIndex(AppConstant.BLOCK_CODE)));
+                    card.setPvCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.PV_CODE)));
+                    card.setTypeOfWork(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.TYPE_OF_WORK)));
+                    card.setWorkStageCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_STAGE_CODE)));
+                    card.setLatitude(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.KEY_LATITUDE)));
+                    card.setLongitude(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.KEY_LONGITUDE)));
+                    card.setImage(decodedByte);
+                    card.setCreatedDate(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.KEY_CREATED_DATE)));
+
+                    cards.add(card);
+                }
+            }
+        } catch (Exception e){
+            //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
+        } finally{
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return cards;
+    }
+
+    public ArrayList<RealTimeMonitoringSystem> selectImage(String dcode,String bcode, String pvcode,String work_id,String type_of_work,String cd_work_no) {
+
+        ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
+        Cursor cursor = null;
+        String selection = null;
+        String[] selectionArgs = null;
+        if (type_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)) {
+            selection = "dcode = ? and bcode = ? and pvcode = ? and work_id = ? and type_of_work = ? and cd_work_no = ?";
+            selectionArgs = new String[]{dcode,bcode,pvcode,work_id,type_of_work,cd_work_no};
+        }else {
+            selection = "dcode = ? and bcode = ? and pvcode = ? and work_id = ? and type_of_work = ?";
+            selectionArgs = new String[]{dcode,bcode,pvcode,work_id,type_of_work};
+        }
+
+        try {
+            cursor = db.query(DBHelper.SAVE_IMAGE,
+                    new String[]{"*"}, selection,selectionArgs, null, null, null);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+
+                    byte[] photo = cursor.getBlob(cursor.getColumnIndexOrThrow(AppConstant.KEY_IMAGES));
+                    byte[] decodedString = Base64.decode(photo, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                    RealTimeMonitoringSystem card = new RealTimeMonitoringSystem();
+                    card.setWorkId(cursor.getInt(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_ID)));
+                    card.setWorkGroupID(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_GROUP_ID)));
+                    card.setCdWorkNo(cursor.getInt(cursor
+                            .getColumnIndexOrThrow(AppConstant.CD_WORK_NO)));
                     card.setDistictCode(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.DISTRICT_CODE)));
                     card.setBlockCode(cursor.getString(cursor

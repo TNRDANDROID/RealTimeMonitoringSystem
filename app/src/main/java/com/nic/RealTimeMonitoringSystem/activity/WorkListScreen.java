@@ -51,7 +51,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
     public dbData dbData = new dbData(this);
     private SearchView searchView;
     String pref_Scheme, pref_finYear;
-    private List<RealTimeMonitoringSystem> WorkList = new ArrayList<>();
+    private ArrayList<RealTimeMonitoringSystem> WorkList = new ArrayList<>();
     private List<RealTimeMonitoringSystem> Scheme = new ArrayList<>();
     private List<RealTimeMonitoringSystem> FinYearList = new ArrayList<>();
     private PrefManager prefManager;
@@ -72,7 +72,9 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
         prefManager = new PrefManager(this);
         prefManager.setPvCode(getIntent().getStringExtra(AppConstant.PV_CODE));
         setSupportActionBar(activityWorkListBinding.toolbar);
-        // initRecyclerView();
+       initRecyclerView();
+        workListAdapter = new WorkListAdapter(WorkListScreen.this, WorkList,dbData);
+        recyclerView.setAdapter(workListAdapter);
 
         activityWorkListBinding.finyearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -80,8 +82,16 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                 if (position > 0) {
                     pref_finYear = FinYearList.get(position).getFinancialYear();
                     prefManager.setFinancialyearName(pref_finYear);
-                    //  loadOfflineSchemeListDBValues(pref_finYear);
-                    getWorkList();
+                    WorkList = new ArrayList<>();
+                    workListAdapter.notifyDataSetChanged();
+                    if(Utils.isOnline()){
+                        getWorkList();
+                    }
+                    else {
+                       // initRecyclerView();
+                        new fetchScheduletask().execute();
+                    }
+
                 }
             }
 
@@ -124,14 +134,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
 
-        new fetchScheduletask().execute();
-//
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                new fetchScheduletask().execute();
-//            }
-//        }, 2000);
+       // new fetchScheduletask().execute();
     }
 
     public class fetchScheduletask extends AsyncTask<Void, Void,
@@ -139,16 +142,17 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
         @Override
         protected ArrayList<RealTimeMonitoringSystem> doInBackground(Void... params) {
             dbData.open();
-            ArrayList<RealTimeMonitoringSystem> workList = new ArrayList<>();
-            workList = dbData.getAllWorkLIst();
-            Log.d("WORKLIST_COUNT", String.valueOf(workList.size()));
-            return workList;
+            WorkList = new ArrayList<>();
+            WorkList = dbData.getAllWorkLIst("fetch",pref_finYear);
+            Log.d("WORKLIST_COUNT", String.valueOf(WorkList.size()));
+
+            return WorkList;
         }
 
         @Override
         protected void onPostExecute(ArrayList<RealTimeMonitoringSystem> workList) {
             super.onPostExecute(workList);
-            workListAdapter = new WorkListAdapter(WorkListScreen.this, workList);
+            workListAdapter = new WorkListAdapter(WorkListScreen.this, WorkList,dbData);
             recyclerView.setAdapter(workListAdapter);
             recyclerView.showShimmerAdapter();
             recyclerView.postDelayed(new Runnable() {
@@ -293,13 +297,13 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                     if (jsondata.length() > 0) {
                         new InsertAdditioanlListTask().execute(jsonObject.getJSONObject(AppConstant.JSON_DATA));
                     }
-                    initRecyclerView();
+                    new fetchScheduletask().execute();
                 } else if(jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("NO_RECORD")){
                     dbData.open();
                     if(Utils.isOnline()){
                         dbData.deleteWorkListTable();
                     }
-                    initRecyclerView();
+                    new fetchScheduletask().execute();
                     Utils.showAlert(this,"NO RECORD FOUND!");
                 }
                 Log.d("SchemeList", "" + responseDecryptedSchemeKey);
@@ -323,7 +327,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
             if(Utils.isOnline()){
                 dbData.deleteWorkListTable();
             }
-            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllWorkLIst();
+            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllWorkLIst("insert","");
             if (workList_count.size() <= 0) {
                 if (params.length > 0) {
                     JSONArray jsonArray = new JSONArray();
@@ -421,6 +425,13 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
             }
             return null;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        workListAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(workListAdapter);
     }
 }
 

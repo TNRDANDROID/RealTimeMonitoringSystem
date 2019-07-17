@@ -10,11 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
+import com.nic.RealTimeMonitoringSystem.databinding.FullImageRecyclerBinding;
+import com.nic.RealTimeMonitoringSystem.databinding.GalleryThumbnailBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
 import com.nic.RealTimeMonitoringSystem.session.PrefManager;
 import com.nic.RealTimeMonitoringSystem.support.MyCustomTextView;
@@ -27,7 +30,8 @@ public class FullImageAdapter extends RecyclerView.Adapter<FullImageAdapter.MyVi
     private Context context;
     private PrefManager prefManager;
     private List<RealTimeMonitoringSystem> imagePreviewlistvalues;
-    private final com.nic.RealTimeMonitoringSystem.dataBase.dbData dbData;
+    private final dbData dbData;
+    private LayoutInflater layoutInflater;
 
     public FullImageAdapter(Context context, List<RealTimeMonitoringSystem> imagePreviewlistvalues, dbData dbData) {
 
@@ -38,26 +42,24 @@ public class FullImageAdapter extends RecyclerView.Adapter<FullImageAdapter.MyVi
     }
 
     @Override
-    public FullImageAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.gallery_thumbnail, parent, false);
-        return new  MyViewHolder(itemView);
+    public FullImageAdapter.MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        if (layoutInflater == null) {
+            layoutInflater = LayoutInflater.from(viewGroup.getContext());
+        }
+        GalleryThumbnailBinding galleryThumbnailBinding =
+                DataBindingUtil.inflate(layoutInflater, R.layout.gallery_thumbnail, viewGroup, false);
+        return new FullImageAdapter.MyViewHolder(galleryThumbnailBinding);
+
     }
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private ImageView thumbnail;
-        private MyCustomTextView description,title;
+        private GalleryThumbnailBinding galleryThumbnailBinding;
 
-
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
-//            description = (MyCustomTextView) itemView.findViewById(R.id.description);
-//            title = (MyCustomTextView) itemView.findViewById(R.id.title);
-
-
+        public MyViewHolder(GalleryThumbnailBinding Binding) {
+            super(Binding.getRoot());
+            galleryThumbnailBinding = Binding;
         }
-
 
     }
 
@@ -68,7 +70,7 @@ public class FullImageAdapter extends RecyclerView.Adapter<FullImageAdapter.MyVi
 //        holder.title.setText(imagePreviewlistvalues.get(position).getType()+" Activity");
         Glide.with(context).load(imagePreviewlistvalues.get(position).getImage())
                 .thumbnail(0.5f)
-                .into(holder.thumbnail);
+                .into(holder.galleryThumbnailBinding.thumbnail);
 
 
 

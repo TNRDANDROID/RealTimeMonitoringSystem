@@ -16,10 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.activity.CameraScreen;
+import com.nic.RealTimeMonitoringSystem.activity.FullImageActivity;
 import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
+import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
 import com.nic.RealTimeMonitoringSystem.databinding.AdapterAdditionalListBinding;
 import com.nic.RealTimeMonitoringSystem.databinding.AdapterWorkListBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
+import com.nic.RealTimeMonitoringSystem.session.PrefManager;
 import com.nic.RealTimeMonitoringSystem.utils.Utils;
 
 import java.util.ArrayList;
@@ -31,13 +34,21 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
     private String letter;
     private Context context;
     private ColorGenerator generator = ColorGenerator.MATERIAL;
+    private final dbData dbData;
+    PrefManager prefManager;
+    public final String dcode,bcode,pvcode;
 
     private LayoutInflater layoutInflater;
 
-    public AdditionalListAdapter(Context context, List<RealTimeMonitoringSystem> WorkListValues) {
+    public AdditionalListAdapter(Context context, List<RealTimeMonitoringSystem> WorkListValues,dbData dbData) {
         this.context = context;
+        prefManager = new PrefManager(context);
         this.AdditionalListValues = WorkListValues;
         this.AdditionalListValuesFiltered = WorkListValues;
+        this.dbData = dbData;
+        dcode = prefManager.getDistrictCode();
+        bcode = prefManager.getBlockCode();
+        pvcode = prefManager.getPvCode();
 
     }
 
@@ -93,6 +104,25 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
                 openCameraScreen(position);
             }
         });
+
+        final String work_id = String.valueOf(AdditionalListValuesFiltered.get(position).getWorkId());
+        final String cd_work_no = String.valueOf(AdditionalListValuesFiltered.get(position).getCdWorkNo());
+
+        ArrayList<RealTimeMonitoringSystem> imageOffline = dbData.selectImage(dcode,bcode,pvcode,work_id,AppConstant.ADDITIONAL_WORK,cd_work_no);
+
+        if(imageOffline.size() > 0) {
+            holder.adapterAdditionalListBinding.viewOfflineImage.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.adapterAdditionalListBinding.viewOfflineImage.setVisibility(View.GONE);
+        }
+
+        holder.adapterAdditionalListBinding.viewOfflineImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewOfflineImages(work_id,cd_work_no,AppConstant.ADDITIONAL_WORK,"Offline");
+            }
+        });
     }
 
 
@@ -135,7 +165,9 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
         Activity activity = (Activity) context;
         Intent intent = new Intent(activity, CameraScreen.class);
         intent.putExtra(AppConstant.TYPE_OF_WORK,AppConstant.ADDITIONAL_WORK);
-        intent.putExtra(AppConstant.WORK_ID,AdditionalListValuesFiltered.get(pos).getWorkId());
+        intent.putExtra(AppConstant.WORK_GROUP_ID,String.valueOf(AdditionalListValuesFiltered.get(pos).getWorkGroupID()));
+        intent.putExtra(AppConstant.CD_WORK_NO,String.valueOf(AdditionalListValuesFiltered.get(pos).getCdWorkNo()));
+        intent.putExtra(AppConstant.WORK_ID,String.valueOf(AdditionalListValuesFiltered.get(pos).getWorkId()));
         intent.putExtra(AppConstant.CD_CODE,String.valueOf(AdditionalListValuesFiltered.get(pos).getCdCode()));
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
@@ -144,6 +176,29 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
     @Override
     public int getItemCount() {
         return AdditionalListValuesFiltered == null ? 0 : AdditionalListValuesFiltered.size();
+    }
+
+    public void viewOfflineImages(String work_id,String cd_work_no,String type_of_work,String OnOffType) {
+        Activity activity = (Activity) context;
+        Intent intent = new Intent(context, FullImageActivity.class);
+        intent.putExtra(AppConstant.WORK_ID,work_id);
+        intent.putExtra(AppConstant.CD_WORK_NO,cd_work_no);
+        intent.putExtra("OnOffType",OnOffType);
+
+        if(OnOffType.equalsIgnoreCase("Offline")){
+            intent.putExtra(AppConstant.TYPE_OF_WORK,type_of_work);
+            activity.startActivity(intent);
+        }
+        else if(OnOffType.equalsIgnoreCase("Online")) {
+            if(Utils.isOnline()){
+                activity.startActivity(intent);
+            }else {
+                Utils.showAlert(activity,"Your Internet seems to be Offline.Images can be viewed only in Online mode.");
+            }
+        }
+
+
+        activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 }
 

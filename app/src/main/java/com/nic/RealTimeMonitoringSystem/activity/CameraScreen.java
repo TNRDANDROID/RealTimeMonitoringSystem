@@ -92,7 +92,8 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
     private MyEditTextView description;
     private List<RealTimeMonitoringSystem> StageList = new ArrayList<>();
     String  pref_stage;
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    String type_of_work;
 
 
 
@@ -137,6 +138,8 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
             }
 
         });
+
+        type_of_work =  getIntent().getStringExtra(AppConstant.TYPE_OF_WORK);
     }
 
     @Override
@@ -162,7 +165,11 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
 
             ContentValues values = new ContentValues();
             values.put(AppConstant.WORK_ID, getIntent().getStringExtra(AppConstant.WORK_ID));
-            values.put(AppConstant.TYPE_OF_WORK, getIntent().getStringExtra(AppConstant.TYPE_OF_WORK));
+            values.put(AppConstant.WORK_GROUP_ID, getIntent().getStringExtra(AppConstant.WORK_GROUP_ID));
+            values.put(AppConstant.TYPE_OF_WORK, type_of_work);
+            if(type_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)) {
+                values.put(AppConstant.CD_WORK_NO, getIntent().getStringExtra(AppConstant.CD_WORK_NO));
+            }
             values.put(AppConstant.DISTRICT_CODE,prefManager.getDistrictCode() );
             values.put(AppConstant.BLOCK_CODE,prefManager.getBlockCode() );
             values.put(AppConstant.PV_CODE,prefManager.getPvCode() );
@@ -175,6 +182,7 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
 
             if(id > 0){
                 Toasty.success(this, "Success!", Toast.LENGTH_LONG, true).show();
+                onBackPressed();
             }
             Log.d("insIdsaveImageLatLong", String.valueOf(id));
 

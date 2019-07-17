@@ -116,6 +116,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + SAVE_IMAGE + " ("
                 + "work_id INTEGER," +
                 "type_of_work TEXT," +
+                "work_group_id  INTEGER," +
+                "cd_work_no  INTEGER," +
                 "dcode TEXT," +
                 "bcode TEXT," +
                 "pvcode TEXT," +

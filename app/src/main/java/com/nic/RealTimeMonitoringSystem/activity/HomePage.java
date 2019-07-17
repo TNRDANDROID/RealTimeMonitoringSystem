@@ -608,11 +608,18 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
                 for (int i = 0; i < assets.size(); i++) {
                     JSONObject jsonObject = new JSONObject();
                     try {
-                        jsonObject.put(AppConstant.WORK_ID,assets.get(i).getWorkId());
+                        String work_id = String.valueOf(assets.get(i).getWorkId());
+
+                        jsonObject.put(AppConstant.WORK_ID,work_id);
+                        jsonObject.put(AppConstant.WORK_GROUP_ID,assets.get(i).getWorkGroupID());
                         jsonObject.put(AppConstant.DISTRICT_CODE,assets.get(i).getDistictCode());
                         jsonObject.put(AppConstant.BLOCK_CODE,assets.get(i).getBlockCode());
                         jsonObject.put(AppConstant.PV_CODE,assets.get(i).getPvCode());
                         jsonObject.put(AppConstant.TYPE_OF_WORK,assets.get(i).getTypeOfWork());
+                        if(assets.get(i).getTypeOfWork().equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)){
+                            String cd_work_no = String.valueOf(assets.get(i).getCdWorkNo());
+                            jsonObject.put(AppConstant.CD_WORK_NO,cd_work_no);
+                        }
                         jsonObject.put(AppConstant.WORK_STAGE_CODE,assets.get(i).getWorkStageCode());
                         jsonObject.put(AppConstant.KEY_LATITUDE,assets.get(i).getLatitude());
                         jsonObject.put(AppConstant.KEY_LONGITUDE,assets.get(i).getLongitude());
