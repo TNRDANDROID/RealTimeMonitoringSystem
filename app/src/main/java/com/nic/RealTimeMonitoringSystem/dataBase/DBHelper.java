@@ -102,7 +102,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 "upd_date TEXT)");
 
         db.execSQL("CREATE TABLE " + ADDITIONAL_WORK_LIST + " ("
-                + "scheme_id  INTEGER," +
+                + "dcode INTEGER," +
+                "bcode INTEGER," +
+                "pvcode INTEGER," +
+                "scheme_id  INTEGER," +
                 "fin_year  TEXT," +
                 "work_id  INTEGER," +
                 "work_group_id  INTEGER," +

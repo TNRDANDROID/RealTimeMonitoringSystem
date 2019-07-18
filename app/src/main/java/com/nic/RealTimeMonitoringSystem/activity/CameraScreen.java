@@ -153,6 +153,12 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
 
     public void saveImage() {
         dbData.open();
+        long id = 0; String whereClause = "";String[] whereArgs = null;
+        String work_id = getIntent().getStringExtra(AppConstant.WORK_ID);
+        String dcode = prefManager.getDistrictCode();
+        String bcode = prefManager.getBlockCode();
+        String pvcode = prefManager.getPvCode();
+
         ImageView imageView = (ImageView) findViewById(R.id.image_view);
         byte[] imageInByte = new byte[0];
         String image_str = "";
@@ -164,22 +170,50 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
             image_str = Base64.encodeToString(imageInByte, Base64.DEFAULT);
 
             ContentValues values = new ContentValues();
-            values.put(AppConstant.WORK_ID, getIntent().getStringExtra(AppConstant.WORK_ID));
+            values.put(AppConstant.WORK_ID,work_id );
             values.put(AppConstant.WORK_GROUP_ID, getIntent().getStringExtra(AppConstant.WORK_GROUP_ID));
             values.put(AppConstant.TYPE_OF_WORK, type_of_work);
             if(type_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)) {
                 values.put(AppConstant.CD_WORK_NO, getIntent().getStringExtra(AppConstant.CD_WORK_NO));
             }
-            values.put(AppConstant.DISTRICT_CODE,prefManager.getDistrictCode() );
-            values.put(AppConstant.BLOCK_CODE,prefManager.getBlockCode() );
-            values.put(AppConstant.PV_CODE,prefManager.getPvCode() );
+            values.put(AppConstant.DISTRICT_CODE,dcode );
+            values.put(AppConstant.BLOCK_CODE,bcode );
+            values.put(AppConstant.PV_CODE,pvcode );
             values.put(AppConstant.WORK_STAGE_CODE,StageList.get(cameraScreenBinding.stage.getSelectedItemPosition()).getWorkStageCode() );
             values.put(AppConstant.KEY_LATITUDE, offlatTextValue.toString());
             values.put(AppConstant.KEY_LONGITUDE, offlongTextValue.toString());
             values.put(AppConstant.KEY_IMAGES,image_str.trim());
             values.put(AppConstant.KEY_IMAGE_REMARK,cameraScreenBinding.description.getText().toString());
             values.put(AppConstant.KEY_CREATED_DATE,sdf.format(new Date()));
-            long id = db.insert(DBHelper.SAVE_IMAGE, null, values);
+
+
+            if (type_of_work.equalsIgnoreCase(AppConstant.MAIN_WORK)) {
+                whereClause = "dcode = ? and bcode = ? and pvcode = ? and work_id = ? and type_of_work = ?";
+                whereArgs = new String[]{dcode,bcode,pvcode,work_id,type_of_work};dbData.open();
+                ArrayList<RealTimeMonitoringSystem> imageOffline = dbData.selectImage(dcode,bcode,pvcode,work_id,AppConstant.MAIN_WORK,"");
+
+                if(imageOffline.size() < 1) {
+                    id = db.insert(DBHelper.SAVE_IMAGE, null, values);
+                }
+                else {
+                    id = db.update(DBHelper.SAVE_IMAGE, values, whereClause, whereArgs);
+                }
+            }else if(type_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)){
+
+                String cd_work_no = getIntent().getStringExtra(AppConstant.CD_WORK_NO);
+
+                whereClause = "dcode = ? and bcode = ? and pvcode = ? and work_id = ? and type_of_work = ? and cd_work_no = ?";
+                whereArgs = new String[]{dcode,bcode,pvcode,work_id,type_of_work,cd_work_no};
+
+                ArrayList<RealTimeMonitoringSystem> imageOffline = dbData.selectImage(dcode,bcode,pvcode,work_id,AppConstant.ADDITIONAL_WORK,cd_work_no );
+
+                if(imageOffline.size() < 1) {
+                    id = db.insert(DBHelper.SAVE_IMAGE, null, values);
+                }
+                else {
+                    id = db.update(DBHelper.SAVE_IMAGE, values, whereClause, whereArgs);
+                }
+            }
 
             if(id > 0){
                 Toasty.success(this, "Success!", Toast.LENGTH_LONG, true).show();

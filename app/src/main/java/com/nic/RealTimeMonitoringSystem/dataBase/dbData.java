@@ -398,15 +398,15 @@ public class dbData {
         return realTimeMonitoringSystem;
     }
 
-    public ArrayList<RealTimeMonitoringSystem> getAllWorkLIst(String purpose,String fin_year,String pvcode) {
+    public ArrayList<RealTimeMonitoringSystem> getAllWorkLIst(String purpose, String fin_year, String dcode, String bcode, String pvcode) {
 
         ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
         Cursor cursor = null;
         String condition = "";
 
-        if(purpose.equalsIgnoreCase("fetch")) {
-            condition = " where fin_year = '" + fin_year +"'"+" and pvcode = '" + pvcode +"'";
-        }
+     //   if(purpose.equalsIgnoreCase("fetch")) {
+            condition = " where fin_year = '" + fin_year + "' and dcode = "+dcode+" and bcode = "+bcode+ " and pvcode = "+pvcode;
+     //   }
 
         try {
             cursor = db.rawQuery("select * from " + DBHelper.WORK_LIST_TABLE_BASED_ON_FINYEAR_VIlLAGE +  condition, null);
@@ -462,6 +462,9 @@ public class dbData {
     public RealTimeMonitoringSystem insertAdditionalWorkList(RealTimeMonitoringSystem realTimeMonitoringSystem) {
 
         ContentValues values = new ContentValues();
+        values.put(AppConstant.DISTRICT_CODE, realTimeMonitoringSystem.getDistictCode());
+        values.put(AppConstant.BLOCK_CODE, realTimeMonitoringSystem.getBlockCode());
+        values.put(AppConstant.PV_CODE, realTimeMonitoringSystem.getPvCode());
         values.put(AppConstant.SCHEME_ID, realTimeMonitoringSystem.getSchemeID());
         values.put(AppConstant.FINANCIAL_YEAR, realTimeMonitoringSystem.getFinancialYear());
         values.put(AppConstant.WORK_ID, realTimeMonitoringSystem.getWorkId());
@@ -480,19 +483,31 @@ public class dbData {
         return realTimeMonitoringSystem;
     }
 
-    public ArrayList<RealTimeMonitoringSystem> getAllAdditionalWork() {
+    public ArrayList<RealTimeMonitoringSystem> getAllAdditionalWork(String work_id,String fin_year, String dcode, String bcode, String pvcode) {
 
         ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
         Cursor cursor = null;
 
+        String condition = "";
+
+        if (work_id != "") {
+            condition = " where work_id = " + work_id + " and fin_year = '" + fin_year + "' and dcode = " + dcode + " and bcode = " + bcode + " and pvcode = " + pvcode;
+        }else {
+            condition = " where fin_year = '" + fin_year + "' and dcode = " + dcode + " and bcode = " + bcode + " and pvcode = " + pvcode;
+        }
+
+
         try {
-            cursor = db.rawQuery("select * from " + DBHelper.ADDITIONAL_WORK_LIST, null);
+            cursor = db.rawQuery("select * from " + DBHelper.ADDITIONAL_WORK_LIST + condition, null);
             // cursor = db.query(CardsDBHelper.TABLE_CARDS,
             //       COLUMNS, null, null, null, null, null);
             if (cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
                     RealTimeMonitoringSystem card = new RealTimeMonitoringSystem();
 
+                    card.setDistictCode(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.DISTRICT_CODE)));
+                    card.setBlockCode(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.BLOCK_CODE)));
+                    card.setPvCode(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.PV_CODE)));
                     card.setSchemeID(Integer.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.SCHEME_ID))));
                     card.setFinancialYear(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.FINANCIAL_YEAR)));
                     card.setWorkId(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.WORK_ID)));
@@ -573,7 +588,7 @@ public class dbData {
     }
 
     public ArrayList<RealTimeMonitoringSystem> selectImage(String dcode,String bcode, String pvcode,String work_id,String type_of_work,String cd_work_no) {
-
+        db.isOpen();
         ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
         Cursor cursor = null;
         String selection = null;

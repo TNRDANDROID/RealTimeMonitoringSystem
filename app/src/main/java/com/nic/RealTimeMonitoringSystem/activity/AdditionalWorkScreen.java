@@ -58,6 +58,7 @@ public class AdditionalWorkScreen extends AppCompatActivity implements View.OnCl
     private PrefManager prefManager;
     private SQLiteDatabase db;
     public static DBHelper dbHelper;
+    private String work_id;
     ArrayList<RealTimeMonitoringSystem> additionalList = new ArrayList<>();
 
     @Override
@@ -71,6 +72,7 @@ public class AdditionalWorkScreen extends AppCompatActivity implements View.OnCl
     }
 
     private void initRecyclerView() {
+        work_id = getIntent().getStringExtra(AppConstant.WORK_ID);
         activityAdditionalListBinding.workList.setVisibility(View.VISIBLE);
         recyclerView = activityAdditionalListBinding.workList;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -97,7 +99,7 @@ public class AdditionalWorkScreen extends AppCompatActivity implements View.OnCl
         protected ArrayList<RealTimeMonitoringSystem> doInBackground(Void... params) {
             dbData.open();
             additionalList = new ArrayList<>();
-            additionalList = dbData.getAllAdditionalWork();
+            additionalList = dbData.getAllAdditionalWork(work_id,prefManager.getFinancialyearName(),prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode());
             Log.d("ADDITIONAL_COUNT", String.valueOf(additionalList.size()));
             return additionalList;
         }

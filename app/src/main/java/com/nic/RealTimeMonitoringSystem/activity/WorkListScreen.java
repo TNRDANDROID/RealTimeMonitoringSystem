@@ -143,7 +143,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
         protected ArrayList<RealTimeMonitoringSystem> doInBackground(Void... params) {
             dbData.open();
             WorkList = new ArrayList<>();
-            WorkList = dbData.getAllWorkLIst("fetch",pref_finYear,prefManager.getPvCode());
+            WorkList = dbData.getAllWorkLIst("fetch",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode());
             Log.d("WORKLIST_COUNT", String.valueOf(WorkList.size()));
 
             return WorkList;
@@ -320,6 +320,20 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
 
     public class InsertWorkListTask extends AsyncTask<JSONObject, Void, Void> {
 
+        private  boolean running = true;
+
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllWorkLIst("insert",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode());
+//            if (workList_count.size() <= 0) {
+//                running = true;
+//            }else {
+//                running = false;
+//              //  Utils.showAlert(WorkListScreen.this,"Already Downloaded");
+//            }
+//        }
+
         @Override
         protected Void doInBackground(JSONObject... params) {
 
@@ -327,8 +341,8 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
 //            if(Utils.isOnline()){
 //                dbData.deleteWorkListTable();
 //            }
-            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllWorkLIst("insert","","");
-//            if (workList_count.size() <= 0) {
+            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllWorkLIst("insert",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode());
+           if (workList_count.size() <= 0) {
                 if (params.length > 0) {
                     JSONArray jsonArray = new JSONArray();
                     try {
@@ -377,7 +391,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                         }
                     }
                 }
-//            }
+           }
             return null;
         }
     }
@@ -391,8 +405,8 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
 //            if(Utils.isOnline()){
 //                dbData.deleteAdditionalListTable();
 //            }
-            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllAdditionalWork();
-//            if (workList_count.size() <= 0) {
+            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllAdditionalWork("",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode());
+            if (workList_count.size() <= 0) {
                 if (params.length > 0) {
                     JSONArray jsonArray = new JSONArray();
                     try {
@@ -403,6 +417,10 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                     for (int i = 0; i < jsonArray.length(); i++) {
                         RealTimeMonitoringSystem additioanlList = new RealTimeMonitoringSystem();
                         try {
+
+                            additioanlList.setDistictCode(prefManager.getDistrictCode());
+                            additioanlList.setBlockCode(prefManager.getBlockCode());
+                            additioanlList.setPvCode(prefManager.getPvCode());
                             additioanlList.setSchemeID(jsonArray.getJSONObject(i).getInt(AppConstant.SCHEME_ID));
                             additioanlList.setFinancialYear(jsonArray.getJSONObject(i).getString(AppConstant.FINANCIAL_YEAR));
                             additioanlList.setWorkId(jsonArray.getJSONObject(i).getInt(AppConstant.WORK_ID));
@@ -422,7 +440,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                         }
                     }
                 }
-//            }
+           }
             return null;
         }
     }

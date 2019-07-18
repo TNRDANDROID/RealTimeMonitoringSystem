@@ -285,7 +285,7 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
     public void openAdditionalWorkList(int pos) {
         Activity activity = (Activity) context;
         Intent intent = new Intent(activity, AdditionalWorkScreen.class);
-        intent.putExtra(AppConstant.WORK_ID,WorkListValuesFiltered.get(pos).getWorkId());
+        intent.putExtra(AppConstant.WORK_ID,String.valueOf(WorkListValuesFiltered.get(pos).getWorkId()));
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
