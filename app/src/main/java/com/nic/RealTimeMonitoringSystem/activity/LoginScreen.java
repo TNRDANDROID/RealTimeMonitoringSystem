@@ -58,11 +58,10 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
 
     public LoginScreenBinding loginScreenBinding;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         loginScreenBinding = DataBindingUtil.setContentView(this, R.layout.login_screen);
         loginScreenBinding.setActivity(this);
         intializeUI();

@@ -98,7 +98,7 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
         }
 
 
-        holder.adapterAdditionalListBinding.additioanlLayout.setOnClickListener(new View.OnClickListener() {
+        holder.adapterAdditionalListBinding.takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openCameraScreen(position);

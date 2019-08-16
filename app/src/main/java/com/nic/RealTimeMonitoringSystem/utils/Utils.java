@@ -1210,8 +1210,6 @@ public class Utils {
         JSONObject dataSet = new JSONObject();
         dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.WORK_LIST_BASED_ON_FINYEAR_VILLAGE);
         dataSet.put(AppConstant.FINANCIAL_YEAR, prefManager.getFinancialyearName());
-        dataSet.put(AppConstant.DISTRICT_CODE, prefManager.getDistrictCode());
-        dataSet.put(AppConstant.BLOCK_CODE, prefManager.getBlockCode());
         dataSet.put(AppConstant.PV_CODE, prefManager.getPvCode());
         Log.d("objectworkLis", "" + dataSet);
         return dataSet;

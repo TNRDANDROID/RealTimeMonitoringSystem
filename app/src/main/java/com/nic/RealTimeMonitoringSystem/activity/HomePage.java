@@ -283,6 +283,18 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
                 }
                 Log.d("AdditionalWorkStageList", "" + responseDecryptedKey);
             }
+            if ("saveImage".equals(urlType) && responseObj != null) {
+                String key = responseObj.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                    Utils.showAlert(this, "Your Image is saved");
+//                    dbData.open();
+//                    dbData.deleteSavedActivity();
+                    syncButtonVisibility();
+                }
+                Log.d("savedImage", "" + responseDecryptedBlockKey);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -632,6 +644,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
                         String image_str = Base64.encodeToString(imageInByte, Base64.DEFAULT);
 
                         jsonObject.put(AppConstant.KEY_IMAGES,image_str);
+                        jsonObject.put(AppConstant.KEY_IMAGE_REMARK,assets.get(i).getImageRemark());
 
                         track_data.put(jsonObject);
 
@@ -643,7 +656,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
                 dataset = new JSONObject();
 
                 try {
-                    dataset.put(AppConstant.KEY_SERVICE_ID,"save");
+                    dataset.put(AppConstant.KEY_SERVICE_ID,"work_phy_stage_save");
                     dataset.put(AppConstant.KEY_TRACK_DATA,track_data);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -656,9 +669,25 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
         @Override
         protected void onPostExecute(JSONObject dataset) {
             super.onPostExecute(dataset);
+            syncData();
+        }
+    }
+    public void syncData() {
+        try {
+            new ApiService(this).makeJSONObjectRequest("saveImage", Api.Method.POST, UrlGenerator.getWorkListUrl(), saveListJsonParams(), "not cache", this);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
+    public JSONObject saveListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), dataset.toString());
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("saveImage", "" + authKey);
+        return dataSet;
+    }
     public void logout() {
         dbData.open();
         ArrayList<RealTimeMonitoringSystem> activityCount = dbData.getSavedWorkImage();

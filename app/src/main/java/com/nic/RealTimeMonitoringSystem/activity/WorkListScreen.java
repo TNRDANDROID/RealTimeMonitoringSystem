@@ -34,6 +34,7 @@ import com.nic.RealTimeMonitoringSystem.databinding.ActivityWorkListBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
 import com.nic.RealTimeMonitoringSystem.session.PrefManager;
 import com.nic.RealTimeMonitoringSystem.support.MyDividerItemDecoration;
+import com.nic.RealTimeMonitoringSystem.support.ProgressHUD;
 import com.nic.RealTimeMonitoringSystem.utils.UrlGenerator;
 import com.nic.RealTimeMonitoringSystem.utils.Utils;
 
@@ -57,6 +58,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
     private PrefManager prefManager;
     private SQLiteDatabase db;
     public static DBHelper dbHelper;
+    private ProgressHUD progressHUD;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -393,6 +395,19 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                 }
            }
             return null;
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressHUD = ProgressHUD.show(WorkListScreen.this, "Downloading", true, false, null);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(progressHUD!=null){
+                progressHUD.cancel();
+            }
         }
     }
 

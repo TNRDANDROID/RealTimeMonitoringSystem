@@ -194,15 +194,13 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
 
 
         if(WorkListValuesFiltered.get(position).getCdProtWorkYn().equalsIgnoreCase("Y")){
-            holder.adapterWorkListBinding.belowSpace.setVisibility(View.GONE);
             holder.adapterWorkListBinding.viewAdditionalWorks.setVisibility(View.VISIBLE);
         }else {
-            holder.adapterWorkListBinding.belowSpace.setVisibility(View.VISIBLE);
             holder.adapterWorkListBinding.viewAdditionalWorks.setVisibility(View.GONE);
         }
 
 
-        holder.adapterWorkListBinding.workLayout.setOnClickListener(new View.OnClickListener() {
+        holder.adapterWorkListBinding.takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openCameraScreen(position);
