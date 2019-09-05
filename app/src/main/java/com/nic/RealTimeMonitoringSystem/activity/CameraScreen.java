@@ -175,6 +175,7 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
             ContentValues values = new ContentValues();
             values.put(AppConstant.WORK_ID,work_id );
             values.put(AppConstant.WORK_GROUP_ID, getIntent().getStringExtra(AppConstant.WORK_GROUP_ID));
+            values.put(AppConstant.WORK_TYPE_ID, getIntent().getStringExtra(AppConstant.WORK_TYPE_ID));
             values.put(AppConstant.TYPE_OF_WORK, type_of_work);
             if(type_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)) {
                 values.put(AppConstant.CD_WORK_NO, getIntent().getStringExtra(AppConstant.CD_WORK_NO));
@@ -239,14 +240,16 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
         if(tye_of_work.equalsIgnoreCase(AppConstant.MAIN_WORK)){
             String workGroupId = getIntent().getStringExtra(AppConstant.WORK_GROUP_ID);
             String workTypeid = getIntent().getStringExtra(AppConstant.WORK_TYPE_ID);
+            String currentStageCode = getIntent().getStringExtra(AppConstant.CURRENT_STAGE_OF_WORK);
 
-            Stage = db.rawQuery("select * from " + DBHelper.WORK_STAGE_TABLE + "  where (work_group_id = " + workGroupId + " and work_type_id = " + workTypeid + ") order by work_stage_order asc", null);
-
+          //  Stage = db.rawQuery("select * from " + DBHelper.WORK_STAGE_TABLE + "  where (work_group_id = " + workGroupId + " and work_type_id = " + workTypeid + ") order by work_stage_order asc", null);
+            Stage = db.rawQuery("select * from "+DBHelper.WORK_STAGE_TABLE+" where work_stage_order >(select work_stage_order from "+DBHelper.WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_group_id=" + workGroupId + "  and work_type_id=" + workTypeid + ")  and work_group_id=" + workGroupId + "  and work_type_id=" + workTypeid + " order by work_stage_order", null);
         }
         else if(tye_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)){
             String workTypecode = getIntent().getStringExtra(AppConstant.CD_CODE);
 
-            Stage = db.rawQuery("select * from " + DBHelper.ADDITIONAL_WORK_STAGE_TABLE + "  where work_type_code =  "+ workTypecode + " order by work_stage_order asc", null);
+           // Stage = db.rawQuery("select * from " + DBHelper.ADDITIONAL_WORK_STAGE_TABLE + "  where work_type_code =  "+ workTypecode + " order by work_stage_order asc", null);
+            Stage = db.rawQuery("select * from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_order>(select work_stage_order from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_code='4' and work_type_code ="+workTypecode+")  and work_type_code="+workTypecode+"  order by work_stage_order", null);
 
         }
 

@@ -289,8 +289,11 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
                 JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
                 if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
                     Utils.showAlert(this, "Your Image is saved");
-//                    dbData.open();
-//                    dbData.deleteSavedActivity();
+                    dbData.open();
+                    dbData.deletesavedImage();
+                    dbData.deleteWorkListTable();
+                    dbData.deleteAdditionalListTable();
+                    getAdditionalWorkStageList();
                     syncButtonVisibility();
                 }
                 Log.d("savedImage", "" + responseDecryptedBlockKey);
@@ -624,6 +627,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
 
                         jsonObject.put(AppConstant.WORK_ID,work_id);
                         jsonObject.put(AppConstant.WORK_GROUP_ID,assets.get(i).getWorkGroupID());
+                        jsonObject.put(AppConstant.WORK_TYPE_ID,assets.get(i).getWorkTypeID());
                         jsonObject.put(AppConstant.DISTRICT_CODE,assets.get(i).getDistictCode());
                         jsonObject.put(AppConstant.BLOCK_CODE,assets.get(i).getBlockCode());
                         jsonObject.put(AppConstant.PV_CODE,assets.get(i).getPvCode());

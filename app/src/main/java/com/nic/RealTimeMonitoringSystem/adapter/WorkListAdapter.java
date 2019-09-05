@@ -3,6 +3,8 @@ package com.nic.RealTimeMonitoringSystem.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.nic.RealTimeMonitoringSystem.activity.CameraScreen;
 import com.nic.RealTimeMonitoringSystem.activity.FullImageActivity;
 import com.nic.RealTimeMonitoringSystem.activity.WorkListScreen;
 import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
+import com.nic.RealTimeMonitoringSystem.dataBase.DBHelper;
 import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
 import com.nic.RealTimeMonitoringSystem.databinding.AdapterWorkListBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
@@ -38,6 +41,8 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
     public final String dcode,bcode,pvcode;
     PrefManager prefManager;
     private final dbData dbData;
+    public static DBHelper dbHelper;
+    public static SQLiteDatabase db;
 
     private LayoutInflater layoutInflater;
 
@@ -50,6 +55,12 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
         dcode = prefManager.getDistrictCode();
         bcode = prefManager.getBlockCode();
         pvcode = prefManager.getPvCode();
+        try {
+            dbHelper = new DBHelper(context);
+            db = dbHelper.getWritableDatabase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -231,6 +242,20 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
                 viewOfflineImages(work_id,AppConstant.MAIN_WORK,"Offline");
             }
         });
+
+        String workGroupId = String.valueOf(WorkListValuesFiltered.get(position).getWorkGroupID());
+        String workTypeid = String.valueOf(WorkListValuesFiltered.get(position).getWorkTypeID());
+        String currentStageCode = String.valueOf(WorkListValuesFiltered.get(position).getCurrentStage());
+
+        String sql = "select * from "+ DBHelper.WORK_STAGE_TABLE+" where work_stage_order >(select work_stage_order from "+DBHelper.WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_group_id=" + workGroupId + "  and work_type_id=" + workTypeid + ")  and work_group_id=" + workGroupId + "  and work_type_id=" + workTypeid + " order by work_stage_order";
+        Cursor Stage = db.rawQuery(sql, null);
+
+        if(Stage.getCount() > 0 ){
+            holder.adapterWorkListBinding.takePhoto.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.adapterWorkListBinding.takePhoto.setVisibility(View.GONE);
+        }
     }
 
 
@@ -276,6 +301,7 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
         intent.putExtra(AppConstant.WORK_ID,String.valueOf(WorkListValuesFiltered.get(pos).getWorkId()));
         intent.putExtra(AppConstant.WORK_GROUP_ID,WorkListValuesFiltered.get(pos).getWorkGroupID());
         intent.putExtra(AppConstant.WORK_TYPE_ID,WorkListValuesFiltered.get(pos).getWorkTypeID());
+        intent.putExtra(AppConstant.CURRENT_STAGE_OF_WORK,String.valueOf(WorkListValuesFiltered.get(pos).getCurrentStage()));
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
