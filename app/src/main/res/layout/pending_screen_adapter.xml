@@ -225,6 +225,7 @@ android:layout_below="@id/view_offline_images"
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/cd_view"
                         android:layout_width="match_parent"
                         android:layout_height="1.5dp"
                         android:layout_gravity="bottom"

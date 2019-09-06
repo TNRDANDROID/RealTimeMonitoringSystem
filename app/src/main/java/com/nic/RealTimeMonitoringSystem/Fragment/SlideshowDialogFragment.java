@@ -93,12 +93,12 @@ public class SlideshowDialogFragment extends DialogFragment {
         }else{
             lblDescription.setVisibility(View.GONE);
         }
-        if (!image.getStageName().equalsIgnoreCase("")) {
-            lblTitle.setVisibility(View.VISIBLE);
-            lblTitle.setText(image.getStageName());
-        } else {
-            lblTitle.setVisibility(View.GONE);
-        }
+//        if (!image.getStageName().equalsIgnoreCase("")) {
+//            lblTitle.setVisibility(View.VISIBLE);
+//            lblTitle.setText(image.getStageName());
+//        } else {
+//            lblTitle.setVisibility(View.GONE);
+//        }
     }
 
     @Override

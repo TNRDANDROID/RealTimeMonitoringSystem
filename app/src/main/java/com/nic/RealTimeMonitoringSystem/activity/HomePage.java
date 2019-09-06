@@ -81,14 +81,14 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
         if (workImageCount.size() > 0) {
             homeScreenBinding.sync.setVisibility(View.VISIBLE);
             homeScreenBinding.pendingCount.setText(String.valueOf(workImageCount.size()));
-        }else {
+        } else {
             homeScreenBinding.sync.setVisibility(View.GONE);
             homeScreenBinding.pendingCount.setText("NIL");
         }
     }
 
     public void openPendingScreen() {
-        Intent intent = new Intent(this,PendingScreen.class);
+        Intent intent = new Intent(this, PendingScreen.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
@@ -225,15 +225,15 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
         try {
             String urlType = serverResponse.getApi();
             JSONObject responseObj = serverResponse.getJsonResponse();
-                if ("BlockList".equals(urlType) && responseObj != null) {
-                    String key = responseObj.getString(AppConstant.ENCODE_DATA);
-                    String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
-                    JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
-                    if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
-                        new InsertBlockTask().execute(jsonObject);
-                    }
-                    Log.d("BlockList", "" + responseDecryptedBlockKey);
+            if ("BlockList".equals(urlType) && responseObj != null) {
+                String key = responseObj.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                    new InsertBlockTask().execute(jsonObject);
                 }
+                Log.d("BlockList", "" + responseDecryptedBlockKey);
+            }
 
 
             if ("DistrictList".equals(urlType) && responseObj != null) {
@@ -450,7 +450,6 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
         }
     }
 
-
     public class InsertFinYearTask extends AsyncTask<JSONObject, Void, Void> {
 
         @Override
@@ -612,7 +611,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
 
     public void toUpload() {
         if(Utils.isOnline()) {
-            new toUploadTask().execute();
+//            new toUploadTask().execute();
         }
         else {
             Utils.showAlert(this,"Please Turn on Your Mobile Data to Upload");
