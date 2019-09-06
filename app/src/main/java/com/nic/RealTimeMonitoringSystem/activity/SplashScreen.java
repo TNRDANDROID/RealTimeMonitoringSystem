@@ -9,10 +9,12 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.nic.RealTimeMonitoringSystem.BuildConfig;
 import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.databinding.SplashScreenBinding;
 import com.nic.RealTimeMonitoringSystem.helper.AppVersionHelper;
 import com.nic.RealTimeMonitoringSystem.session.PrefManager;
+import com.nic.RealTimeMonitoringSystem.utils.Utils;
 
 
 public class SplashScreen extends AppCompatActivity implements
@@ -30,13 +32,16 @@ public class SplashScreen extends AppCompatActivity implements
         splashScreenBinding = DataBindingUtil.setContentView(this,R.layout.splash_screen);
         splashScreenBinding.setActivity(this);
         prefManager = new PrefManager(this);
-        showSignInScreen();
-//        if (Utils.isOnline()) {
-//           checkAppVersion();
-//        } else {
-//            showSignInScreen();
-//
-//        }
+        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("production")) {
+            if (Utils.isOnline()) {
+                checkAppVersion();
+            } else {
+                showSignInScreen();
+
+            }
+        } else {
+            showSignInScreen();
+        }
     }
 
 

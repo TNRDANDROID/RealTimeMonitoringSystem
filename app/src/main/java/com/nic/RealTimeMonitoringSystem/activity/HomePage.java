@@ -540,6 +540,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
                             stage.setWorkStageOrder(jsonArray.getJSONObject(i).getString(AppConstant.WORK_STAGE_ORDER));
                             stage.setWorkStageCode(jsonArray.getJSONObject(i).getString(AppConstant.WORK_STAGE_CODE));
                             stage.setWorkStageName(jsonArray.getJSONObject(i).getString(AppConstant.WORK_SATGE_NAME));
+                            stage.setWorkTypeFlagLe(jsonArray.getJSONObject(i).getString(AppConstant.CD_TYPE_FLAG));
 
                             dbData.insertAdditionalStage(stage);
                         } catch (JSONException e) {

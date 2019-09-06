@@ -316,6 +316,7 @@ public class dbData {
         values.put(AppConstant.WORK_STAGE_ORDER, realTimeMonitoringSystem.getWorkStageOrder());
         values.put(AppConstant.WORK_STAGE_CODE, realTimeMonitoringSystem.getWorkStageCode());
         values.put(AppConstant.WORK_SATGE_NAME, realTimeMonitoringSystem.getWorkStageName());
+        values.put(AppConstant.CD_TYPE_FLAG, realTimeMonitoringSystem.getWorkTypeFlagLe());
 
         long id = db.insert(DBHelper.ADDITIONAL_WORK_STAGE_TABLE, null, values);
         Log.d("Inserted_id_Add_Stage", String.valueOf(id));
@@ -344,6 +345,8 @@ public class dbData {
 
                     card.setWorkStageName(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.WORK_SATGE_NAME)));
+                    card.setWorkTypeFlagLe(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.CD_TYPE_FLAG)));
 
                     cards.add(card);
                 }
@@ -471,6 +474,9 @@ public class dbData {
         values.put(AppConstant.WORK_GROUP_ID, realTimeMonitoringSystem.getWorkGroupID());
         values.put(AppConstant.ROAD_NAME, realTimeMonitoringSystem.getRoadName());
         values.put(AppConstant.CD_WORK_NO, realTimeMonitoringSystem.getCdWorkNo());
+        values.put(AppConstant.CURRENT_STAGE_OF_WORK, realTimeMonitoringSystem.getCurrentStage());
+        values.put(AppConstant.CD_TYPE_ID, realTimeMonitoringSystem.getCdTypeId());
+        values.put(AppConstant.WORK_TYPE_FLAG_LE, realTimeMonitoringSystem.getWorkTypeFlagLe());
         values.put(AppConstant.CD_CODE, realTimeMonitoringSystem.getCdCode());
         values.put(AppConstant.CD_NAME, realTimeMonitoringSystem.getCdName());
         values.put(AppConstant.CHAINAGE_METER, realTimeMonitoringSystem.getChainageMeter());
@@ -514,6 +520,9 @@ public class dbData {
                     card.setWorkGroupID(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.WORK_GROUP_ID)));
                     card.setRoadName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.ROAD_NAME)));
                     card.setCdWorkNo(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.CD_WORK_NO)));
+                    card.setCurrentStage(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.CURRENT_STAGE_OF_WORK)));
+                    card.setCdTypeId(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.CD_TYPE_ID)));
+                    card.setWorkTypeFlagLe(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.WORK_TYPE_FLAG_LE)));
                     card.setCdCode(cursor.getInt(cursor.getColumnIndexOrThrow(AppConstant.CD_CODE)));
                     card.setCdName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.CD_NAME)));
                     card.setChainageMeter(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.CHAINAGE_METER)));

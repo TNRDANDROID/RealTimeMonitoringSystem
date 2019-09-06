@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
@@ -246,14 +247,17 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
             Stage = db.rawQuery("select * from "+DBHelper.WORK_STAGE_TABLE+" where work_stage_order >(select work_stage_order from "+DBHelper.WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_group_id=" + workGroupId + "  and work_type_id=" + workTypeid + ")  and work_group_id=" + workGroupId + "  and work_type_id=" + workTypeid + " order by work_stage_order", null);
         }
         else if(tye_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)){
-            String workTypecode = getIntent().getStringExtra(AppConstant.CD_CODE);
-
+            String workTypeID = getIntent().getStringExtra(AppConstant.CD_TYPE_ID);
+            String currentStageCode = getIntent().getStringExtra(AppConstant.CURRENT_STAGE_OF_WORK);
+            String workTypeFlag = getIntent().getStringExtra(AppConstant.WORK_TYPE_FLAG_LE);
            // Stage = db.rawQuery("select * from " + DBHelper.ADDITIONAL_WORK_STAGE_TABLE + "  where work_type_code =  "+ workTypecode + " order by work_stage_order asc", null);
-            Stage = db.rawQuery("select * from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_order>(select work_stage_order from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_code='4' and work_type_code ="+workTypecode+")  and work_type_code="+workTypecode+"  order by work_stage_order", null);
+            String sqlQry = SQLiteQueryBuilder.buildQueryString(false,DBHelper.ADDITIONAL_WORK_STAGE_TABLE, null, "work_stage_order>(select work_stage_order from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"') and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"' order by work_stage_order", null, null, null, null);
+            Stage = db.rawQuery("select * from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_order>(select work_stage_order from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"') and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"' order by work_stage_order", null);
+            Log.d("stageQuery",""+sqlQry);
 
         }
 
-
+        StageList.clear();
         RealTimeMonitoringSystem stageListValue = new RealTimeMonitoringSystem();
         stageListValue.setWorkStageName("Select Stage");
         StageList.add(stageListValue);

@@ -169,6 +169,9 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
         intent.putExtra(AppConstant.CD_WORK_NO,String.valueOf(AdditionalListValuesFiltered.get(pos).getCdWorkNo()));
         intent.putExtra(AppConstant.WORK_ID,String.valueOf(AdditionalListValuesFiltered.get(pos).getWorkId()));
         intent.putExtra(AppConstant.CD_CODE,String.valueOf(AdditionalListValuesFiltered.get(pos).getCdCode()));
+        intent.putExtra(AppConstant.CURRENT_STAGE_OF_WORK,String.valueOf(AdditionalListValuesFiltered.get(pos).getCurrentStage()));
+        intent.putExtra(AppConstant.CD_TYPE_ID,String.valueOf(AdditionalListValuesFiltered.get(pos).getCdTypeId()));
+        intent.putExtra(AppConstant.WORK_TYPE_FLAG_LE,AdditionalListValuesFiltered.get(pos).getWorkTypeFlagLe());
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }

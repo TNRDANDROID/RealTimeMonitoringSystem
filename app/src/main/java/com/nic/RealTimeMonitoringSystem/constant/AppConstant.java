@@ -39,6 +39,9 @@ public class AppConstant {
     public static String KEY_SCHEME_FINYEAR_LIST_LAST_NYEARS = "scheme_finyear_list_last_nyears";
     public static String STAGE_LIST = "work_type_stage_link";
     public static String ADDITIONAL_STAGE_LIST = "cdwork_stage_link";
+    public static String WORK_TYPE_FLAG_LE = "work_type_flag_le";
+    public static String CD_TYPE_ID = "cd_type_id";
+    public static String CD_TYPE_FLAG= "cd_type_flag";
     public static String FINANCIAL_YEAR = "fin_year";
     public static String WORK_GROUP_ID = "work_group_id";
     public static String WORK_TYPE_ID = "work_type_id";

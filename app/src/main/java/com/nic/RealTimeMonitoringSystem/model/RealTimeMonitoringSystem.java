@@ -71,6 +71,25 @@ public class RealTimeMonitoringSystem {
     private Integer cdCode;
     private String cdName;
     private String chainageMeter;
+    private Integer cdTypeId;
+
+    public Integer getCdTypeId() {
+        return cdTypeId;
+    }
+
+    public void setCdTypeId(Integer cdTypeId) {
+        this.cdTypeId = cdTypeId;
+    }
+
+    public String getWorkTypeFlagLe() {
+        return workTypeFlagLe;
+    }
+
+    public void setWorkTypeFlagLe(String workTypeFlagLe) {
+        this.workTypeFlagLe = workTypeFlagLe;
+    }
+
+    private String workTypeFlagLe;
 
     public String getChainageMeter() {
         return chainageMeter;

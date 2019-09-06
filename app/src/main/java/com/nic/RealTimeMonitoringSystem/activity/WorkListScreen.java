@@ -445,6 +445,9 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                             additioanlList.setCdCode(jsonArray.getJSONObject(i).getInt(AppConstant.CD_CODE));
                             additioanlList.setCdName(jsonArray.getJSONObject(i).getString(AppConstant.CD_NAME));
                             additioanlList.setChainageMeter(jsonArray.getJSONObject(i).getString(AppConstant.CHAINAGE_METER));
+                            additioanlList.setCurrentStage(jsonArray.getJSONObject(i).getInt(AppConstant.CURRENT_STAGE_OF_WORK));
+                            additioanlList.setCdTypeId(jsonArray.getJSONObject(i).getInt(AppConstant.CD_TYPE_ID));
+                            additioanlList.setWorkTypeFlagLe(jsonArray.getJSONObject(i).getString(AppConstant.WORK_TYPE_FLAG_LE));
                             additioanlList.setWorkStageName(jsonArray.getJSONObject(i).getString(AppConstant.WORK_SATGE_NAME));
 
 

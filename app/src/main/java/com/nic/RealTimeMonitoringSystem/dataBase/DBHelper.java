@@ -63,7 +63,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "work_type_code  INTEGER," +
                 "work_stage_order  INTEGER," +
                 "work_stage_code  INTEGER," +
-                "work_stage_name TEXT)");
+                "work_stage_name TEXT," +
+                "cd_type_flag TEXT)");
 
         db.execSQL("CREATE TABLE " + FINANCIAL_YEAR_TABLE_NAME + " ("
                 + "fin_year TEXT)");
@@ -111,6 +112,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 "work_group_id  INTEGER," +
                 "roadname  TEXT," +
                 "cd_work_no  INTEGER," +
+                "current_stage_of_work INTEGER," +
+                "cd_type_id INTEGER," +
+                "work_type_flag_le  TEXT," +
                 "cd_code  INTEGER," +
                 "cd_name  TEXT," +
                 "chainage_meter  TEXT," +
