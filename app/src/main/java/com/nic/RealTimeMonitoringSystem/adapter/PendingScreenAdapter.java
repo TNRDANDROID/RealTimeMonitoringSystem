@@ -18,6 +18,7 @@ import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.activity.WorkListScreen;
 import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
 import com.nic.RealTimeMonitoringSystem.databinding.AdapterVillageListBinding;
+import com.nic.RealTimeMonitoringSystem.databinding.PendingScreenAdapterBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
 
 import java.util.ArrayList;
@@ -41,11 +42,11 @@ public class PendingScreenAdapter extends RecyclerView.Adapter<PendingScreenAdap
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private AdapterVillageListBinding adapterVillageListBinding;
+        private PendingScreenAdapterBinding pendingScreenAdapterBinding;
 
-        public MyViewHolder(AdapterVillageListBinding Binding) {
+        public MyViewHolder(PendingScreenAdapterBinding Binding) {
             super(Binding.getRoot());
-            adapterVillageListBinding = Binding;
+            pendingScreenAdapterBinding = Binding;
         }
     }
 
@@ -54,28 +55,22 @@ public class PendingScreenAdapter extends RecyclerView.Adapter<PendingScreenAdap
         if (layoutInflater == null) {
             layoutInflater = LayoutInflater.from(viewGroup.getContext());
         }
-        AdapterVillageListBinding adapterVillageListBinding =
-                DataBindingUtil.inflate(layoutInflater, R.layout.adapter_village_list, viewGroup, false);
-        return new PendingScreenAdapter.MyViewHolder(adapterVillageListBinding);
+        PendingScreenAdapterBinding pendingScreenAdapterBinding =
+                DataBindingUtil.inflate(layoutInflater, R.layout.pending_screen_adapter, viewGroup, false);
+        return new PendingScreenAdapter.MyViewHolder(pendingScreenAdapterBinding);
     }
 
     @Override
     public void onBindViewHolder(PendingScreenAdapter.MyViewHolder holder, final int position) {
 
-        holder.adapterVillageListBinding.villageName.setText(pendingListFiltered.get(position).getPvName());
+        holder.pendingScreenAdapterBinding.workId.setText(pendingListFiltered.get(position).getWorkId());
+        if(!pendingListFiltered.get(position).getCdWorkNo().equals("")) {
+            holder.pendingScreenAdapterBinding.cdWorkNo.setText(pendingListFiltered.get(position).getCdWorkNo());
+        }else{
+            holder.pendingScreenAdapterBinding.cdWorkLayout.setVisibility(View.GONE);
+        }
+        holder.pendingScreenAdapterBinding.stageName.setText(pendingListFiltered.get(position).getStageName());
 
-        letter = String.valueOf(pendingListFiltered.get(position).getPvName().charAt(0));
-
-        TextDrawable drawable = TextDrawable.builder()
-                .buildRound(letter, generator.getRandomColor());
-
-        holder.adapterVillageListBinding.villageFirstLetter.setImageDrawable(drawable);
-        holder.adapterVillageListBinding.villageCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewHousingWorks(position);
-            }
-        });
     }
 
 
