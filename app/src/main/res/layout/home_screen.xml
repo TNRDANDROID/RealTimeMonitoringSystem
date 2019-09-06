@@ -217,13 +217,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:visibility="visible"
-                    android:onClick="@{()-> activity.toUpload()}"
+                    android:onClick="@{()-> activity.openPendingScreen()}"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Syn"
+                        android:text="Sync"
                         style="@style/font_circular_bold"
                         android:textColor="#000080"
                         android:textSize="13sp" />

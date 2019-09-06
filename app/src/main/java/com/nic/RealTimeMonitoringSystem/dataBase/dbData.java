@@ -573,6 +573,8 @@ public class dbData {
                             .getColumnIndexOrThrow(AppConstant.TYPE_OF_WORK)));
                     card.setWorkStageCode(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.WORK_STAGE_CODE)));
+                    card.setWorkStageName(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_SATGE_NAME)));
                     card.setLatitude(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.KEY_LATITUDE)));
                     card.setLongitude(cursor.getString(cursor

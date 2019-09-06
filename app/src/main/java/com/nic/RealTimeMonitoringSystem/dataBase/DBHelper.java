@@ -130,6 +130,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "bcode TEXT," +
                 "pvcode TEXT," +
                 "work_stage_code TEXT," +
+                "work_stage_name TEXT," +
                 "latitude TEXT," +
                 "longitude TEXT," +
                 "images blob," +

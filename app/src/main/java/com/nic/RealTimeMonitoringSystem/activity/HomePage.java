@@ -87,6 +87,13 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
         }
     }
 
+    public void openPendingScreen() {
+        Intent intent = new Intent(this,PendingScreen.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

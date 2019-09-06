@@ -185,6 +185,7 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
             values.put(AppConstant.BLOCK_CODE,bcode );
             values.put(AppConstant.PV_CODE,pvcode );
             values.put(AppConstant.WORK_STAGE_CODE,StageList.get(cameraScreenBinding.stage.getSelectedItemPosition()).getWorkStageCode() );
+            values.put(AppConstant.WORK_SATGE_NAME,StageList.get(cameraScreenBinding.stage.getSelectedItemPosition()).getWorkStageName() );
             values.put(AppConstant.KEY_LATITUDE, offlatTextValue.toString());
             values.put(AppConstant.KEY_LONGITUDE, offlongTextValue.toString());
             values.put(AppConstant.KEY_IMAGES,image_str.trim());

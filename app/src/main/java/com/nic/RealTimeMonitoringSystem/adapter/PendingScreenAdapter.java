@@ -63,13 +63,13 @@ public class PendingScreenAdapter extends RecyclerView.Adapter<PendingScreenAdap
     @Override
     public void onBindViewHolder(PendingScreenAdapter.MyViewHolder holder, final int position) {
 
-        holder.pendingScreenAdapterBinding.workId.setText(pendingListFiltered.get(position).getWorkId());
-        if(!pendingListFiltered.get(position).getCdWorkNo().equals("")) {
-            holder.pendingScreenAdapterBinding.cdWorkNo.setText(pendingListFiltered.get(position).getCdWorkNo());
-        }else{
-            holder.pendingScreenAdapterBinding.cdWorkLayout.setVisibility(View.GONE);
-        }
-        holder.pendingScreenAdapterBinding.stageName.setText(pendingListFiltered.get(position).getStageName());
+      holder.pendingScreenAdapterBinding.workId.setText(pendingListFiltered.get(position).getWorkId());
+//        if(!pendingListFiltered.get(position).getCdWorkNo().equals("")) {
+//            holder.pendingScreenAdapterBinding.cdWorkNo.setText(pendingListFiltered.get(position).getCdWorkNo());
+//        }else{
+//            holder.pendingScreenAdapterBinding.cdWorkLayout.setVisibility(View.GONE);
+//        }
+     //   holder.pendingScreenAdapterBinding.stageName.setText(pendingListFiltered.get(position).getStageName());
 
     }
 
