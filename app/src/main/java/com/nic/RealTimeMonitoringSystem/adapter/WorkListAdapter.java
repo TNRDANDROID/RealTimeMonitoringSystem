@@ -256,7 +256,7 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
         String workTypeid = String.valueOf(WorkListValuesFiltered.get(position).getWorkTypeID());
         String currentStageCode = String.valueOf(WorkListValuesFiltered.get(position).getCurrentStage());
 
-        String sql = "select * from "+ DBHelper.WORK_STAGE_TABLE+" where work_stage_order >(select work_stage_order from "+DBHelper.WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_group_id=" + workGroupId + "  and work_type_id=" + workTypeid + ")  and work_group_id=" + workGroupId + "  and work_type_id=" + workTypeid + " order by work_stage_order";
+        String sql = "select * from "+ DBHelper.WORK_STAGE_TABLE+" where work_stage_order >(select work_stage_order from "+DBHelper.WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_group_id=" + workGroupId + "  and work_type_id=" + workTypeid + ")  and work_group_id=" + workGroupId + "  and work_type_id=" + workTypeid + " and work_stage_code != 11 order by work_stage_order";
         Cursor Stage = db.rawQuery(sql, null);
 
         if(Stage.getCount() > 0 ){

@@ -1,13 +1,11 @@
 package com.nic.RealTimeMonitoringSystem.activity;
 
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -29,10 +27,10 @@ import com.nic.RealTimeMonitoringSystem.api.ApiService;
 import com.nic.RealTimeMonitoringSystem.api.ServerResponse;
 import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
 import com.nic.RealTimeMonitoringSystem.dataBase.DBHelper;
+import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
 import com.nic.RealTimeMonitoringSystem.databinding.PendingScreenBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
 import com.nic.RealTimeMonitoringSystem.session.PrefManager;
-import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
 import com.nic.RealTimeMonitoringSystem.support.ProgressHUD;
 import com.nic.RealTimeMonitoringSystem.utils.UrlGenerator;
 import com.nic.RealTimeMonitoringSystem.utils.Utils;
@@ -248,16 +246,18 @@ public class PendingScreen extends AppCompatActivity implements Api.ServerRespon
                 String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
                 JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
                 if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
-                    Utils.showAlert(this, "Your Image is saved");
+                    Utils.showAlert(this, "Your Data is Synchronized to the server!");
                     String type_of_work = prefManager.getTypeOfWork();
                     dbData.open();
                     if(type_of_work.equalsIgnoreCase(AppConstant.MAIN_WORK))
                     {
+                        dbData.deleteWorkListTable();
                         db.delete(DBHelper.SAVE_IMAGE, "dcode = ? and bcode = ? and pvcode = ? and work_id = ? and  type_of_work = ?", new String[]{prefManager.getDistrictCode(), prefManager.getBlockCode(), prefManager.getPvCode(), prefManager.getDeleteWorkId(),type_of_work});
                         pendingScreenAdapter.removeSavedItem(prefManager.getDeleteAdapterPosition());
                         pendingScreenAdapter.notifyDataSetChanged();
                     }else if(type_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK))
                     {
+                        dbData.deleteAdditionalListTable();
                         db.delete(DBHelper.SAVE_IMAGE, "dcode = ? and bcode = ? and pvcode = ? and work_id = ? and  type_of_work = ? and cd_work_no = ? and work_type_flag_le = ?", new String[]{prefManager.getDistrictCode(), prefManager.getBlockCode(), prefManager.getPvCode(), prefManager.getDeleteWorkId(),type_of_work,prefManager.getDeleteCdWorkNo(),prefManager.getDeleteCdWorkTypeFlag()});
                         pendingScreenAdapter.removeSavedItem(prefManager.getDeleteAdapterPosition());
                         pendingScreenAdapter.notifyDataSetChanged();
