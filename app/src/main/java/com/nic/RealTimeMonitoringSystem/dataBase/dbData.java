@@ -563,6 +563,8 @@ public class dbData {
                             .getColumnIndexOrThrow(AppConstant.WORK_GROUP_ID)));
                     card.setCdWorkNo(cursor.getInt(cursor
                             .getColumnIndexOrThrow(AppConstant.CD_WORK_NO)));
+                    card.setWorkTypeFlagLe(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_TYPE_FLAG_LE)));
                     card.setDistictCode(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.DISTRICT_CODE)));
                     card.setBlockCode(cursor.getString(cursor
@@ -598,15 +600,15 @@ public class dbData {
         return cards;
     }
 
-    public ArrayList<RealTimeMonitoringSystem> selectImage(String dcode,String bcode, String pvcode,String work_id,String type_of_work,String cd_work_no) {
+    public ArrayList<RealTimeMonitoringSystem> selectImage(String dcode,String bcode, String pvcode,String work_id,String type_of_work,String cd_work_no,String work_type_flag_le) {
         db.isOpen();
         ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
         Cursor cursor = null;
         String selection = null;
         String[] selectionArgs = null;
         if (type_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)) {
-            selection = "dcode = ? and bcode = ? and pvcode = ? and work_id = ? and type_of_work = ? and cd_work_no = ?";
-            selectionArgs = new String[]{dcode,bcode,pvcode,work_id,type_of_work,cd_work_no};
+            selection = "dcode = ? and bcode = ? and pvcode = ? and work_id = ? and type_of_work = ? and cd_work_no = ? and work_type_flag_le = ?";
+            selectionArgs = new String[]{dcode,bcode,pvcode,work_id,type_of_work,cd_work_no,work_type_flag_le};
         }else {
             selection = "dcode = ? and bcode = ? and pvcode = ? and work_id = ? and type_of_work = ?";
             selectionArgs = new String[]{dcode,bcode,pvcode,work_id,type_of_work};

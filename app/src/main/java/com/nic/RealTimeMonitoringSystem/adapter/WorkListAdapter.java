@@ -227,7 +227,7 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
 
         final String work_id = String.valueOf(WorkListValuesFiltered.get(position).getWorkId());
 
-        ArrayList<RealTimeMonitoringSystem> imageOffline = dbData.selectImage(dcode,bcode,pvcode,work_id,AppConstant.MAIN_WORK,"");
+        ArrayList<RealTimeMonitoringSystem> imageOffline = dbData.selectImage(dcode,bcode,pvcode,work_id,AppConstant.MAIN_WORK,"","");
 
         if(imageOffline.size() > 0) {
             holder.adapterWorkListBinding.viewOfflineImage.setVisibility(View.VISIBLE);

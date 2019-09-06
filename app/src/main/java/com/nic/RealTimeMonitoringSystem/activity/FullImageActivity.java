@@ -82,17 +82,18 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
             final String dcode = prefManager.getDistrictCode();
             final String bcode = prefManager.getBlockCode();
             final String pvcode = prefManager.getPvCode();
-            String type_of_work = "", cd_work_no = "";
+            String type_of_work = "", cd_work_no = "", work_type_flag_le = "";
 
             if(OnOffType.equalsIgnoreCase("Offline")){
                 type_of_work = getIntent().getStringExtra(AppConstant.TYPE_OF_WORK);
 
                 if (type_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)){
                     cd_work_no = getIntent().getStringExtra(AppConstant.CD_WORK_NO);
+                    work_type_flag_le = getIntent().getStringExtra(AppConstant.WORK_TYPE_FLAG_LE);
                 }
                 dbData.open();
                 activityImage = new ArrayList<>();
-                activityImage = dbData.selectImage(dcode,bcode,pvcode,work_id,type_of_work,cd_work_no);
+                activityImage = dbData.selectImage(dcode,bcode,pvcode,work_id,type_of_work,cd_work_no,work_type_flag_le);
             }
 
             Log.d("IMAGE_COUNT", String.valueOf(activityImage.size()));

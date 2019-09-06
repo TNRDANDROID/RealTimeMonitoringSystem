@@ -180,6 +180,7 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
             values.put(AppConstant.TYPE_OF_WORK, type_of_work);
             if(type_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)) {
                 values.put(AppConstant.CD_WORK_NO, getIntent().getStringExtra(AppConstant.CD_WORK_NO));
+                values.put(AppConstant.WORK_TYPE_FLAG_LE, getIntent().getStringExtra(AppConstant.WORK_TYPE_FLAG_LE));
             }
             values.put(AppConstant.DISTRICT_CODE,dcode );
             values.put(AppConstant.BLOCK_CODE,bcode );
@@ -196,7 +197,7 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
             if (type_of_work.equalsIgnoreCase(AppConstant.MAIN_WORK)) {
                 whereClause = "dcode = ? and bcode = ? and pvcode = ? and work_id = ? and type_of_work = ?";
                 whereArgs = new String[]{dcode,bcode,pvcode,work_id,type_of_work};dbData.open();
-                ArrayList<RealTimeMonitoringSystem> imageOffline = dbData.selectImage(dcode,bcode,pvcode,work_id,AppConstant.MAIN_WORK,"");
+                ArrayList<RealTimeMonitoringSystem> imageOffline = dbData.selectImage(dcode,bcode,pvcode,work_id,AppConstant.MAIN_WORK,"","");
 
                 if(imageOffline.size() < 1) {
                     id = db.insert(DBHelper.SAVE_IMAGE, null, values);
@@ -207,11 +208,12 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
             }else if(type_of_work.equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)){
 
                 String cd_work_no = getIntent().getStringExtra(AppConstant.CD_WORK_NO);
+                String work_type_flag_le = getIntent().getStringExtra(AppConstant.WORK_TYPE_FLAG_LE);
 
                 whereClause = "dcode = ? and bcode = ? and pvcode = ? and work_id = ? and type_of_work = ? and cd_work_no = ?";
                 whereArgs = new String[]{dcode,bcode,pvcode,work_id,type_of_work,cd_work_no};
 
-                ArrayList<RealTimeMonitoringSystem> imageOffline = dbData.selectImage(dcode,bcode,pvcode,work_id,AppConstant.ADDITIONAL_WORK,cd_work_no );
+                ArrayList<RealTimeMonitoringSystem> imageOffline = dbData.selectImage(dcode,bcode,pvcode,work_id,AppConstant.ADDITIONAL_WORK,cd_work_no,work_type_flag_le );
 
                 if(imageOffline.size() < 1) {
                     id = db.insert(DBHelper.SAVE_IMAGE, null, values);

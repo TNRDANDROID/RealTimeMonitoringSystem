@@ -126,6 +126,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "work_group_id  INTEGER," +
                 "work_type_id  INTEGER," +
                 "cd_work_no  INTEGER," +
+                "work_type_flag_le  TEXT," +
                 "dcode TEXT," +
                 "bcode TEXT," +
                 "pvcode TEXT," +

@@ -107,8 +107,9 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
 
         final String work_id = String.valueOf(AdditionalListValuesFiltered.get(position).getWorkId());
         final String cd_work_no = String.valueOf(AdditionalListValuesFiltered.get(position).getCdWorkNo());
+        final String work_type_flag_le = String.valueOf(AdditionalListValuesFiltered.get(position).getWorkTypeFlagLe());
 
-        ArrayList<RealTimeMonitoringSystem> imageOffline = dbData.selectImage(dcode,bcode,pvcode,work_id,AppConstant.ADDITIONAL_WORK,cd_work_no);
+        ArrayList<RealTimeMonitoringSystem> imageOffline = dbData.selectImage(dcode,bcode,pvcode,work_id,AppConstant.ADDITIONAL_WORK,cd_work_no,work_type_flag_le);
 
         if(imageOffline.size() > 0) {
             holder.adapterAdditionalListBinding.viewOfflineImage.setVisibility(View.VISIBLE);
@@ -120,7 +121,7 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
         holder.adapterAdditionalListBinding.viewOfflineImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewOfflineImages(work_id,cd_work_no,AppConstant.ADDITIONAL_WORK,"Offline");
+                viewOfflineImages(work_id,cd_work_no,work_type_flag_le,AppConstant.ADDITIONAL_WORK,"Offline");
             }
         });
     }
@@ -181,11 +182,12 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
         return AdditionalListValuesFiltered == null ? 0 : AdditionalListValuesFiltered.size();
     }
 
-    public void viewOfflineImages(String work_id,String cd_work_no,String type_of_work,String OnOffType) {
+    public void viewOfflineImages(String work_id,String cd_work_no,String work_type_flag_le,String type_of_work,String OnOffType) {
         Activity activity = (Activity) context;
         Intent intent = new Intent(context, FullImageActivity.class);
         intent.putExtra(AppConstant.WORK_ID,work_id);
         intent.putExtra(AppConstant.CD_WORK_NO,cd_work_no);
+        intent.putExtra(AppConstant.WORK_TYPE_FLAG_LE,work_type_flag_le);
         intent.putExtra("OnOffType",OnOffType);
 
         if(OnOffType.equalsIgnoreCase("Offline")){

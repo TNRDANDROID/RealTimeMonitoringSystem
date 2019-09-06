@@ -15,11 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.nic.RealTimeMonitoringSystem.R;
+import com.nic.RealTimeMonitoringSystem.activity.FullImageActivity;
 import com.nic.RealTimeMonitoringSystem.activity.WorkListScreen;
 import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
+import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
 import com.nic.RealTimeMonitoringSystem.databinding.AdapterVillageListBinding;
 import com.nic.RealTimeMonitoringSystem.databinding.PendingScreenAdapterBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
+import com.nic.RealTimeMonitoringSystem.session.PrefManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +33,15 @@ public class PendingScreenAdapter extends RecyclerView.Adapter<PendingScreenAdap
     private String letter;
     private Context context;
     private ColorGenerator generator = ColorGenerator.MATERIAL;
+    private dbData  dbData;
+    private PrefManager prefManager;
 
     private LayoutInflater layoutInflater;
 
     public PendingScreenAdapter(Context context, List<RealTimeMonitoringSystem> pendingListValues) {
         this.context = context;
+        prefManager = new PrefManager(context);
+        dbData = new dbData(context);
         this.pendingListValues = pendingListValues;
         this.pendingListFiltered = pendingListValues;
 
@@ -64,13 +71,54 @@ public class PendingScreenAdapter extends RecyclerView.Adapter<PendingScreenAdap
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
       holder.pendingScreenAdapterBinding.workId.setText(String.valueOf(pendingListFiltered.get(position).getWorkId()));
-        if(!pendingListFiltered.get(position).getCdWorkNo().equals("")) {
+        if(pendingListFiltered.get(position).getTypeOfWork().equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)) {
+            holder.pendingScreenAdapterBinding.cdWorkLayout.setVisibility(View.VISIBLE);
             holder.pendingScreenAdapterBinding.cdWorkNo.setText(String.valueOf(pendingListFiltered.get(position).getCdWorkNo()));
         }else{
             holder.pendingScreenAdapterBinding.cdWorkLayout.setVisibility(View.GONE);
         }
-        holder.pendingScreenAdapterBinding.stageName.setText(pendingListFiltered.get(position).getStageName());
+        holder.pendingScreenAdapterBinding.stageName.setText(pendingListFiltered.get(position).getWorkStageName());
 
+        final String dcode = pendingListFiltered.get(position).getDistictCode();
+        final String bcode = pendingListFiltered.get(position).getBlockCode();
+        final String pvcode = pendingListFiltered.get(position).getPvCode();
+        final String work_id = String.valueOf(pendingListFiltered.get(position).getWorkId());
+        final String type_of_work = pendingListFiltered.get(position).getTypeOfWork();
+        final String cd_work_no = String.valueOf(pendingListFiltered.get(position).getCdWorkNo());
+        final String work_type_flag_le = pendingListFiltered.get(position).getWorkTypeFlagLe();
+
+        dbData.open();
+        ArrayList<RealTimeMonitoringSystem> imageCount = dbData.selectImage(dcode,bcode,pvcode,work_id,type_of_work,cd_work_no,work_type_flag_le);
+        if(imageCount.size() > 0) {
+            holder.pendingScreenAdapterBinding.viewOfflineImages.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.pendingScreenAdapterBinding.viewOfflineImages.setVisibility(View.GONE);
+        }
+
+        holder.pendingScreenAdapterBinding.viewOfflineImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                prefManager.setDistrictCode(dcode);
+                prefManager.setBlockCode(bcode);
+                prefManager.setPvCode(pvcode);
+                viewOfflineImages(work_id,cd_work_no,work_type_flag_le,type_of_work,"Offline");
+            }
+        });
+    }
+
+    public void viewOfflineImages(String work_id,String cd_work_no,String work_type_flag_le,String type_of_work,String OnOffType) {
+        Activity activity = (Activity) context;
+        Intent intent = new Intent(context, FullImageActivity.class);
+        intent.putExtra(AppConstant.WORK_ID,work_id);
+        intent.putExtra(AppConstant.CD_WORK_NO,cd_work_no);
+        intent.putExtra(AppConstant.WORK_TYPE_FLAG_LE,work_type_flag_le);
+        intent.putExtra("OnOffType",OnOffType);
+        if(OnOffType.equalsIgnoreCase("Offline")){
+            intent.putExtra(AppConstant.TYPE_OF_WORK,type_of_work);
+            activity.startActivity(intent);
+        }
+        activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
 
