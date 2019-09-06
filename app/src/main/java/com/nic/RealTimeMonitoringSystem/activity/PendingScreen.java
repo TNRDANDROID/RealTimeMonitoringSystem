@@ -59,7 +59,7 @@ public class PendingScreen extends AppCompatActivity implements Api.ServerRespon
         recyclerView = pendingScreenBinding.pendingListRecycler;
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(pendingScreenAdapter);
+
 
         new fetchpendingtask().execute();
 
@@ -83,8 +83,9 @@ public class PendingScreen extends AppCompatActivity implements Api.ServerRespon
             super.onPostExecute(pendingList);
             pendingScreenAdapter = new PendingScreenAdapter(PendingScreen.this,
                     pendingList);
-            pendingScreenBinding.pendingListRecycler.showShimmerAdapter();
-            pendingScreenBinding.pendingListRecycler.postDelayed(new Runnable() {
+            recyclerView.setAdapter(pendingScreenAdapter);
+            recyclerView.showShimmerAdapter();
+            recyclerView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     loadCards();
@@ -95,7 +96,7 @@ public class PendingScreen extends AppCompatActivity implements Api.ServerRespon
 
     private void loadCards() {
 
-        pendingScreenBinding.pendingListRecycler.hideShimmerAdapter();
+        recyclerView.hideShimmerAdapter();
 
     }
 

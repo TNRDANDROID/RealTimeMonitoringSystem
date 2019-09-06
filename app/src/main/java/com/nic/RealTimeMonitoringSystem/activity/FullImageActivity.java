@@ -182,6 +182,7 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
                 try {
                     RealTimeMonitoringSystem imageOnline = new RealTimeMonitoringSystem();
                     imageOnline.setImageRemark(jsonArray.getJSONObject(i).getString(AppConstant.KEY_IMAGE_REMARK));
+                    imageOnline.setStageName(jsonArray.getJSONObject(i).getString(AppConstant.STAGE_NAME));
 
                     byte[] decodedString = Base64.decode(jsonArray.getJSONObject(i).getString(AppConstant.KEY_IMAGE), Base64.DEFAULT);
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);

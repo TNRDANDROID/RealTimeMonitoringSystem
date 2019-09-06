@@ -2,7 +2,6 @@ package com.nic.RealTimeMonitoringSystem.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
 import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
-import com.nic.RealTimeMonitoringSystem.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -94,6 +92,12 @@ public class SlideshowDialogFragment extends DialogFragment {
             lblDescription.setText(image.getImageRemark());
         }else{
             lblDescription.setVisibility(View.GONE);
+        }
+        if (!image.getStageName().equalsIgnoreCase("")) {
+            lblTitle.setVisibility(View.VISIBLE);
+            lblTitle.setText(image.getStageName());
+        } else {
+            lblTitle.setVisibility(View.GONE);
         }
     }
 

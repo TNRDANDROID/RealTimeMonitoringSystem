@@ -51,25 +51,25 @@ public class PendingScreenAdapter extends RecyclerView.Adapter<PendingScreenAdap
     }
 
     @Override
-    public PendingScreenAdapter.MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         if (layoutInflater == null) {
             layoutInflater = LayoutInflater.from(viewGroup.getContext());
         }
         PendingScreenAdapterBinding pendingScreenAdapterBinding =
                 DataBindingUtil.inflate(layoutInflater, R.layout.pending_screen_adapter, viewGroup, false);
-        return new PendingScreenAdapter.MyViewHolder(pendingScreenAdapterBinding);
+        return new MyViewHolder(pendingScreenAdapterBinding);
     }
 
     @Override
-    public void onBindViewHolder(PendingScreenAdapter.MyViewHolder holder, final int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-      holder.pendingScreenAdapterBinding.workId.setText(pendingListFiltered.get(position).getWorkId());
-//        if(!pendingListFiltered.get(position).getCdWorkNo().equals("")) {
-//            holder.pendingScreenAdapterBinding.cdWorkNo.setText(pendingListFiltered.get(position).getCdWorkNo());
-//        }else{
-//            holder.pendingScreenAdapterBinding.cdWorkLayout.setVisibility(View.GONE);
-//        }
-     //   holder.pendingScreenAdapterBinding.stageName.setText(pendingListFiltered.get(position).getStageName());
+      holder.pendingScreenAdapterBinding.workId.setText(String.valueOf(pendingListFiltered.get(position).getWorkId()));
+        if(!pendingListFiltered.get(position).getCdWorkNo().equals("")) {
+            holder.pendingScreenAdapterBinding.cdWorkNo.setText(String.valueOf(pendingListFiltered.get(position).getCdWorkNo()));
+        }else{
+            holder.pendingScreenAdapterBinding.cdWorkLayout.setVisibility(View.GONE);
+        }
+        holder.pendingScreenAdapterBinding.stageName.setText(pendingListFiltered.get(position).getStageName());
 
     }
 
