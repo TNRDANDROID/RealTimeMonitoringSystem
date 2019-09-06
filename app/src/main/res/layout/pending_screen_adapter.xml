@@ -48,7 +48,7 @@
                     android:rotation="180"
                     android:textAlignment="viewEnd"
                     android:textStyle="bold"
-                    android:textColor="@android:color/white"
+                    android:textColor="@android:color/black"
                     android:textSize="18sp" />
 
             </RelativeLayout>
@@ -318,7 +318,7 @@ android:layout_below="@id/view_offline_images"
                             android:text="Sync Data"
                             android:textAlignment="viewEnd"
                             android:textStyle="bold"
-                            android:textColor="@android:color/white"
+                            android:textColor="@android:color/black"
                             android:textSize="18sp" />
 
                     </RelativeLayout>

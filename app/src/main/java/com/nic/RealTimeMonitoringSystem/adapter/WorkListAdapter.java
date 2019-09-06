@@ -239,9 +239,18 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
         holder.adapterWorkListBinding.viewOfflineImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewOfflineImages(work_id,AppConstant.MAIN_WORK,"Offline");
+                viewOfflineImages(work_id,AppConstant.MAIN_WORK,"Offline","","","");
             }
         });
+
+        holder.adapterWorkListBinding.viewOnlineImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewOfflineImages(work_id,AppConstant.MAIN_WORK,"Online",dcode,bcode,pvcode);
+            }
+        });
+
+
 
         String workGroupId = String.valueOf(WorkListValuesFiltered.get(position).getWorkGroupID());
         String workTypeid = String.valueOf(WorkListValuesFiltered.get(position).getWorkTypeID());
@@ -319,7 +328,7 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
         return WorkListValuesFiltered == null ? 0 : WorkListValuesFiltered.size();
     }
 
-    public void viewOfflineImages(String work_id,String type_of_work,String OnOffType) {
+    public void viewOfflineImages(String work_id,String type_of_work,String OnOffType,String dcode,String bcode,String pvcode) {
         Activity activity = (Activity) context;
         Intent intent = new Intent(context, FullImageActivity.class);
         intent.putExtra(AppConstant.WORK_ID,work_id);
@@ -331,6 +340,10 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
         }
         else if(OnOffType.equalsIgnoreCase("Online")) {
             if(Utils.isOnline()){
+                intent.putExtra(AppConstant.DISTRICT_CODE,dcode);
+                intent.putExtra(AppConstant.BLOCK_CODE,bcode);
+                intent.putExtra(AppConstant.PV_CODE,pvcode);
+                intent.putExtra(AppConstant.TYPE_OF_WORK,type_of_work);
                 activity.startActivity(intent);
             }else {
                 Utils.showAlert(activity,"Your Internet seems to be Offline.Images can be viewed only in Online mode.");

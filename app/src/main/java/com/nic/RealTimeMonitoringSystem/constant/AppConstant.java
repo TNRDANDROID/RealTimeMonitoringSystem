@@ -87,6 +87,7 @@ public class AppConstant {
 
     public static String ROAD_NAME = "roadname";
     public static String CD_WORK_NO = "cd_work_no";
+    public static String CD_PORT_WORK_ID_ONLINE_IMAGE = "cd_prot_workid";
     public static String CD_CODE = "cd_code";
     public static String CD_NAME = "cd_name";
     public static String CHAINAGE_METER = "chainage_meter";
@@ -102,5 +103,7 @@ public class AppConstant {
     public static String KEY_ACTIVITY_IMAGE_VIEW = "";
     public static String KEY_IMAGE = "image";
     public static String KEY_IMAGE_REMARK = "remark";
+    public static String KEY_ONLINE_IMAGE_MAIN_WORK_SERVICE_ID = "work_phy_stage_image";
+    public static String KEY_ONLINE_IMAGE_ADDITIONAL_WORK_SERVICE_ID = "cd_work_phy_stage_image";
 
 }

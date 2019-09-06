@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
+import com.bumptech.glide.util.Util;
 import com.nic.RealTimeMonitoringSystem.Fragment.SlideshowDialogFragment;
 import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.adapter.FullImageAdapter;
@@ -134,7 +135,7 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
 
     public void getOnlineImage() {
         try {
-            new ApiService(this).makeJSONObjectRequest("OnlineImage", Api.Method.POST, UrlGenerator.getServicesListUrl(), ImagesJsonParams(), "not cache", this);
+            new ApiService(this).makeJSONObjectRequest("OnlineImage", Api.Method.POST, UrlGenerator.getWorkListUrl(), ImagesJsonParams(), "not cache", this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -151,7 +152,16 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
 
     public JSONObject ImagesListJsonParams() throws JSONException {
         JSONObject dataSet = new JSONObject();
-        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_ACTIVITY_IMAGE_VIEW);
+        if(getIntent().getStringExtra(AppConstant.TYPE_OF_WORK).equalsIgnoreCase(AppConstant.MAIN_WORK)){
+            dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_ONLINE_IMAGE_MAIN_WORK_SERVICE_ID);
+        }else {
+            dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_ONLINE_IMAGE_ADDITIONAL_WORK_SERVICE_ID);
+            dataSet.put(AppConstant.CD_PORT_WORK_ID_ONLINE_IMAGE, getIntent().getStringExtra(AppConstant.CD_WORK_NO));
+        }
+        dataSet.put(AppConstant.DISTRICT_CODE, getIntent().getStringExtra(AppConstant.DISTRICT_CODE));
+        dataSet.put(AppConstant.BLOCK_CODE, getIntent().getStringExtra(AppConstant.BLOCK_CODE));
+        dataSet.put(AppConstant.PV_CODE, getIntent().getStringExtra(AppConstant.PV_CODE));
+        dataSet.put(AppConstant.WORK_ID, getIntent().getStringExtra(AppConstant.WORK_ID));
         Log.d("utils_imageDataset", "" + dataSet);
         return dataSet;
     }
