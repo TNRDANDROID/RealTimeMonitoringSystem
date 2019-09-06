@@ -541,14 +541,24 @@ public class dbData {
         return cards;
     }
 
-    public ArrayList<RealTimeMonitoringSystem> getSavedWorkImage() {
+    public ArrayList<RealTimeMonitoringSystem> getSavedWorkImage(String purpose,String dcode,String bcode,String pvcode,String work_id) {
 
         ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
         Cursor cursor = null;
+        String selection = "server_flag = ? ";
+        String[] selectionArgs = new String[]{"0"};
+
+        if(purpose.equalsIgnoreCase("upload")) {
+            selection = "server_flag = ? and dcode = ? and bcode = ? and pvcode = ? and work_id = ?";
+            selectionArgs = new String[]{"0",dcode,bcode,pvcode,work_id};
+        }
+
+
+
 
         try {
             cursor = db.query(DBHelper.SAVE_IMAGE,
-                    new String[]{"*"}, "server_flag = ?", new String[]{"0"}, null, null, null);
+                    new String[]{"*"}, selection, selectionArgs, null, null, null);
             if (cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
 

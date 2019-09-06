@@ -76,12 +76,12 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
 
     public void syncButtonVisibility() {
         dbData.open();
-        ArrayList<RealTimeMonitoringSystem> workImageCount = dbData.getSavedWorkImage();
+        ArrayList<RealTimeMonitoringSystem> workImageCount = dbData.getSavedWorkImage("","","","","");
 
         if (workImageCount.size() > 0) {
             homeScreenBinding.sync.setVisibility(View.VISIBLE);
             homeScreenBinding.pendingCount.setText(String.valueOf(workImageCount.size()));
-        } else {
+        }else {
             homeScreenBinding.sync.setVisibility(View.GONE);
             homeScreenBinding.pendingCount.setText("NIL");
         }
@@ -608,100 +608,9 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
             overridePendingTransition(R.anim.slide_enter, R.anim.slide_exit);
         }
     }
-
-    public void toUpload() {
-        if(Utils.isOnline()) {
-//            new toUploadTask().execute();
-        }
-        else {
-            Utils.showAlert(this,"Please Turn on Your Mobile Data to Upload");
-        }
-    }
-
-    public class toUploadTask extends AsyncTask<Void, Void,
-            JSONObject> {
-        @Override
-        protected JSONObject doInBackground(Void... voids) {
-            dbData.open();
-            JSONArray track_data = new JSONArray();
-            ArrayList<RealTimeMonitoringSystem> assets = dbData.getSavedWorkImage();
-
-            if (assets.size() > 0) {
-                for (int i = 0; i < assets.size(); i++) {
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        String work_id = String.valueOf(assets.get(i).getWorkId());
-
-                        jsonObject.put(AppConstant.WORK_ID,work_id);
-                        jsonObject.put(AppConstant.WORK_GROUP_ID,assets.get(i).getWorkGroupID());
-                        jsonObject.put(AppConstant.WORK_TYPE_ID,assets.get(i).getWorkTypeID());
-                        jsonObject.put(AppConstant.DISTRICT_CODE,assets.get(i).getDistictCode());
-                        jsonObject.put(AppConstant.BLOCK_CODE,assets.get(i).getBlockCode());
-                        jsonObject.put(AppConstant.PV_CODE,assets.get(i).getPvCode());
-                        jsonObject.put(AppConstant.TYPE_OF_WORK,assets.get(i).getTypeOfWork());
-                        if(assets.get(i).getTypeOfWork().equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)){
-                            String cd_work_no = String.valueOf(assets.get(i).getCdWorkNo());
-                            jsonObject.put(AppConstant.CD_WORK_NO,cd_work_no);
-                        }
-                        jsonObject.put(AppConstant.WORK_STAGE_CODE,assets.get(i).getWorkStageCode());
-                        jsonObject.put(AppConstant.KEY_LATITUDE,assets.get(i).getLatitude());
-                        jsonObject.put(AppConstant.KEY_LONGITUDE,assets.get(i).getLongitude());
-                        jsonObject.put(AppConstant.KEY_CREATED_DATE,assets.get(i).getCreatedDate());
-
-                        Bitmap bitmap = assets.get(i).getImage();
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
-                        byte[] imageInByte = baos.toByteArray();
-                        String image_str = Base64.encodeToString(imageInByte, Base64.DEFAULT);
-
-                        jsonObject.put(AppConstant.KEY_IMAGES,image_str);
-                        jsonObject.put(AppConstant.KEY_IMAGE_REMARK,assets.get(i).getImageRemark());
-
-                        track_data.put(jsonObject);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                dataset = new JSONObject();
-
-                try {
-                    dataset.put(AppConstant.KEY_SERVICE_ID,"work_phy_stage_save");
-                    dataset.put(AppConstant.KEY_TRACK_DATA,track_data);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return dataset;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject dataset) {
-            super.onPostExecute(dataset);
-            syncData();
-        }
-    }
-    public void syncData() {
-        try {
-            new ApiService(this).makeJSONObjectRequest("saveImage", Api.Method.POST, UrlGenerator.getWorkListUrl(), saveListJsonParams(), "not cache", this);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public JSONObject saveListJsonParams() throws JSONException {
-        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), dataset.toString());
-        JSONObject dataSet = new JSONObject();
-        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
-        dataSet.put(AppConstant.DATA_CONTENT, authKey);
-        Log.d("saveImage", "" + authKey);
-        return dataSet;
-    }
     public void logout() {
         dbData.open();
-        ArrayList<RealTimeMonitoringSystem> activityCount = dbData.getSavedWorkImage();
+        ArrayList<RealTimeMonitoringSystem> activityCount = dbData.getSavedWorkImage("","","","","");
         if (!Utils.isOnline()) {
             Utils.showAlert(this, "Logging out while offline may leads to loss of data!");
         } else {

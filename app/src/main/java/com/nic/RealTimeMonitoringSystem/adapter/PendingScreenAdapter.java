@@ -3,6 +3,9 @@ package com.nic.RealTimeMonitoringSystem.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.activity.FullImageActivity;
+import com.nic.RealTimeMonitoringSystem.activity.PendingScreen;
 import com.nic.RealTimeMonitoringSystem.activity.WorkListScreen;
 import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
 import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
@@ -23,7 +27,13 @@ import com.nic.RealTimeMonitoringSystem.databinding.AdapterVillageListBinding;
 import com.nic.RealTimeMonitoringSystem.databinding.PendingScreenAdapterBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
 import com.nic.RealTimeMonitoringSystem.session.PrefManager;
+import com.nic.RealTimeMonitoringSystem.utils.Utils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,9 +82,11 @@ public class PendingScreenAdapter extends RecyclerView.Adapter<PendingScreenAdap
 
       holder.pendingScreenAdapterBinding.workId.setText(String.valueOf(pendingListFiltered.get(position).getWorkId()));
         if(pendingListFiltered.get(position).getTypeOfWork().equalsIgnoreCase(AppConstant.ADDITIONAL_WORK)) {
+            holder.pendingScreenAdapterBinding.cdView.setVisibility(View.VISIBLE);
             holder.pendingScreenAdapterBinding.cdWorkLayout.setVisibility(View.VISIBLE);
             holder.pendingScreenAdapterBinding.cdWorkNo.setText(String.valueOf(pendingListFiltered.get(position).getCdWorkNo()));
         }else{
+            holder.pendingScreenAdapterBinding.cdView.setVisibility(View.GONE);
             holder.pendingScreenAdapterBinding.cdWorkLayout.setVisibility(View.GONE);
         }
         holder.pendingScreenAdapterBinding.stageName.setText(pendingListFiltered.get(position).getWorkStageName());
@@ -105,7 +117,36 @@ public class PendingScreenAdapter extends RecyclerView.Adapter<PendingScreenAdap
                 viewOfflineImages(work_id,cd_work_no,work_type_flag_le,type_of_work,"Offline");
             }
         });
+
+        holder.pendingScreenAdapterBinding.upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Utils.isOnline()) {
+                    RealTimeMonitoringSystem realTimeValue = new RealTimeMonitoringSystem();
+                    realTimeValue.setDistictCode(dcode);
+                    realTimeValue.setBlockCode(bcode);
+                    realTimeValue.setPvCode(pvcode);
+                    realTimeValue.setWorkId(Integer.valueOf(work_id));
+                    prefManager.setDistrictCode(dcode);
+                    prefManager.setBlockCode(bcode);
+                    prefManager.setPvCode(pvcode);
+                    prefManager.setDeleteWorkId(String.valueOf(work_id));
+                    prefManager.setDeleteAdapterPosition(position);
+                    ((PendingScreen) context).new toUploadTask().execute(realTimeValue);
+                } else {
+                    Activity activity = (Activity) context;
+                    Utils.showAlert(activity, "Turn On Mobile Data To Synchronize!");
+                }
+            }
+        });
     }
+
+    public void removeSavedItem(int position) {
+        pendingListFiltered.remove(position);
+        notifyItemRemoved(position);
+        notifyItemChanged(position, pendingListValues.size());
+    }
+
 
     public void viewOfflineImages(String work_id,String cd_work_no,String work_type_flag_le,String type_of_work,String OnOffType) {
         Activity activity = (Activity) context;

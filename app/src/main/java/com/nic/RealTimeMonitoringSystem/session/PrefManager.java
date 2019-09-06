@@ -54,6 +54,11 @@ public class PrefManager {
     private static final String IMEI = "imei";
     private static final String MOTIVATOR_ID = "motivator_id";
     private static final String SCHEDULE_MASTER_ID = "schedule_master_id";
+    private static final String TYPE_OF_WORK = "type_of_work";
+    private static final String DELETE_WORK_ID = "delete_work_id";
+    private static final String DELETE_CD_WORK_NO = "delete_cd_work_no";
+    private static final String DELETE_CD_WORK_TYPE_FLAG = "delete_cd_work_type_flag";
+    private static final String DELETE_ADAPTER_POSITION = "delete_adapter_position";
 
 
     public PrefManager(Context context) {
@@ -203,6 +208,55 @@ public class PrefManager {
     public String getBlockName() {
         return pref.getString(KEY_BLOCK_NAME, null);
     }
+
+    public Object setTypeOfWork(Object key) {
+        editor.putString(TYPE_OF_WORK, String.valueOf(key));
+        editor.commit();
+        return key;
+    }
+
+    public String getTypeOfWork() {
+        return pref.getString(TYPE_OF_WORK, null);
+    }
+
+
+    public String getDeleteWorkId() {
+        return pref.getString(DELETE_WORK_ID,null);
+    }
+
+    public void setDeleteWorkId(String LocationId) {
+        editor.putString(DELETE_WORK_ID,LocationId);
+        editor.commit();
+    }
+
+    public String getDeleteCdWorkNo() {
+        return pref.getString(DELETE_CD_WORK_NO,null);
+    }
+
+    public void setDeleteCdWorkNo(String LocationId) {
+        editor.putString(DELETE_CD_WORK_NO,LocationId);
+        editor.commit();
+    }
+
+    public void setDeleteCdWorkTypeFlag(String LocationId) {
+        editor.putString(DELETE_CD_WORK_TYPE_FLAG,LocationId);
+        editor.commit();
+    }
+
+    public String getDeleteCdWorkTypeFlag() {
+        return pref.getString(DELETE_CD_WORK_TYPE_FLAG,null);
+    }
+
+    public void setDeleteAdapterPosition(Integer LocationId) {
+        editor.putInt(DELETE_ADAPTER_POSITION,LocationId);
+        editor.commit();
+    }
+
+    public Integer getDeleteAdapterPosition() {
+        return pref.getInt(DELETE_ADAPTER_POSITION,0);
+    }
+
+
 
 
     public Object setDesignation(Object key) {
