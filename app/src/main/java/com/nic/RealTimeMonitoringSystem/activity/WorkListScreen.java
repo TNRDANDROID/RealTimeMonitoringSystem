@@ -306,10 +306,10 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                     }
                     new fetchScheduletask().execute();
                 } else if(jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("NO_RECORD")){
-                    dbData.open();
-                    if(Utils.isOnline()){
-                        dbData.deleteWorkListTable();
-                    }
+//                    dbData.open();
+//                    if(Utils.isOnline()){
+//                        dbData.deleteWorkListTable();
+//                    }
                     new fetchScheduletask().execute();
                     Utils.showAlert(this,"NO RECORD FOUND!");
                 }

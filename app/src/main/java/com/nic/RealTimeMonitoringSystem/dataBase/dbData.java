@@ -408,7 +408,7 @@ public class dbData {
         String condition = "";
 
      //   if(purpose.equalsIgnoreCase("fetch")) {
-            condition = " where fin_year = '" + fin_year + "' and dcode = "+dcode+" and bcode = "+bcode+ " and pvcode = "+pvcode;
+            condition = " where fin_year = '" + fin_year + "' and dcode = "+dcode+" and bcode = "+bcode+ " and pvcode = "+pvcode+ " and current_stage_of_work != 10";
      //   }
 
         try {
