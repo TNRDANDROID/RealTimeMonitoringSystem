@@ -290,21 +290,6 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
                 }
                 Log.d("AdditionalWorkStageList", "" + responseDecryptedKey);
             }
-            if ("saveImage".equals(urlType) && responseObj != null) {
-                String key = responseObj.getString(AppConstant.ENCODE_DATA);
-                String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
-                JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
-                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
-                    Utils.showAlert(this, "Your Image is saved");
-                    dbData.open();
-                    dbData.deletesavedImage();
-                    dbData.deleteWorkListTable();
-                    dbData.deleteAdditionalListTable();
-                    getAdditionalWorkStageList();
-                    syncButtonVisibility();
-                }
-                Log.d("savedImage", "" + responseDecryptedBlockKey);
-            }
 
         } catch (JSONException e) {
             e.printStackTrace();

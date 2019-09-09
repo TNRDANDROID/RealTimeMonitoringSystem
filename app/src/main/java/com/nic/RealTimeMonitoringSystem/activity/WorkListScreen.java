@@ -147,13 +147,17 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
             WorkList = new ArrayList<>();
             WorkList = dbData.getAllWorkLIst("fetch",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode());
             Log.d("WORKLIST_COUNT", String.valueOf(WorkList.size()));
-
             return WorkList;
         }
 
         @Override
         protected void onPostExecute(ArrayList<RealTimeMonitoringSystem> workList) {
             super.onPostExecute(workList);
+            if(!Utils.isOnline()) {
+                if (workList.size() == 0) {
+                    Utils.showAlert(WorkListScreen.this, "NO Data Available in Local Database. Please, Turn On mobile data");
+                }
+            }
             workListAdapter = new WorkListAdapter(WorkListScreen.this, WorkList,dbData);
             recyclerView.setAdapter(workListAdapter);
             recyclerView.showShimmerAdapter();
@@ -163,6 +167,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                     loadCards();
                 }
             }, 2000);
+
         }
 
         private void loadCards() {

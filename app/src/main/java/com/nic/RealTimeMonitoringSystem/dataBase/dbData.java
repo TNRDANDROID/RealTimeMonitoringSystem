@@ -704,10 +704,6 @@ public class dbData {
         db.execSQL("delete from " + DBHelper.ADDITIONAL_WORK_LIST);
     }
 
-    public void deletesavedImage(){
-        db.execSQL("delete from " + DBHelper.SAVE_IMAGE);
-    }
-
 
     public void deleteAll() {
         deleteDistrictTable();
