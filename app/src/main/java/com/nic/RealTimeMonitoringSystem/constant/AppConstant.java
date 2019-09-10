@@ -13,7 +13,7 @@ public class AppConstant {
     public static String ENCODE_DATA = "enc_data";
 
     public static String KEY_DISTRICT_LIST_ALL = "district_list_all";
-    public static String KEY_BLOCK_LIST_ALL = "block_list_all";
+    public static String KEY_IMAGE_AVAILABLE = "image_available";
     public static String KEY_VILLAGE_LIST_ALL = "village_list_all";
     public static String KEY_BANK_NAME_LIST = "Generate_bank_name_json";
     public static String KEY_BANK_BRANCH_NAME_LIST = "Generate_branch_name_bank_wise_json";

@@ -100,7 +100,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "pvname TEXT," +
                 "community_name TEXT," +
                 "gender_text TEXT," +
-                "upd_date TEXT)");
+                "upd_date TEXT,"+
+                "image_available TEXT)");
 
         db.execSQL("CREATE TABLE " + ADDITIONAL_WORK_LIST + " ("
                 + "dcode INTEGER," +
@@ -118,7 +119,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "cd_code  INTEGER," +
                 "cd_name  TEXT," +
                 "chainage_meter  TEXT," +
-                "work_stage_name TEXT)");
+                "work_stage_name TEXT,"+
+                "image_available TEXT)");
 
         db.execSQL("CREATE TABLE " + SAVE_IMAGE + " ("
                 + "work_id INTEGER," +

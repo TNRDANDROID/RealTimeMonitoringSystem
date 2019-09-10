@@ -162,11 +162,16 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
         String dcode = prefManager.getDistrictCode();
         String bcode = prefManager.getBlockCode();
         String pvcode = prefManager.getPvCode();
-
+//        BigImageView imageView = (BigImageView) findViewById(R.id.image_view);
         ImageView imageView = (ImageView) findViewById(R.id.image_view);
         byte[] imageInByte = new byte[0];
         String image_str = "";
         try {
+//            File path = imageView.getCurrentImageFile();
+//            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+//            Bitmap bitmap = BitmapFactory.decodeFile(path.getAbsolutePath(),bmOptions);
+//            bitmap = Bitmap.createScaledBitmap(bitmap,bitmap.getWidth(),bitmap.getHeight(),true);
+
             Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
@@ -424,9 +429,17 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
                     rotatedBitmap = bitmap;
             }
             cameraScreenBinding.imageView.setImageBitmap(rotatedBitmap);
+//            cameraScreenBinding.imageView.showImage((getImageUri(rotatedBitmap)));
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+    }
+
+    public Uri getImageUri( Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 
     public static Bitmap rotateImage(Bitmap source, float angle) {

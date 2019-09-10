@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Real Time Monitoring System</string>
+    <string name="app_name">திட்டம்</string>
     <string name="hint_password">Password</string>
     <string name="hint_username">UserName</string>
     <string name="btn_login">Login</string>

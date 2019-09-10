@@ -390,6 +390,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                             workList.setCommunity(jsonArray.getJSONObject(i).getString(AppConstant.COMMUNITY_NAME));
                             workList.setGender(jsonArray.getJSONObject(i).getString(AppConstant.GENDER));
                             workList.setLastVisitedDate(jsonArray.getJSONObject(i).getString(AppConstant.LAST_VISITED_DATE));
+                            workList.setImageAvailable(jsonArray.getJSONObject(i).getString(AppConstant.KEY_IMAGE_AVAILABLE));
 
                             dbData.insertWorkList(workList);
 
@@ -454,6 +455,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                             additioanlList.setCdTypeId(jsonArray.getJSONObject(i).getInt(AppConstant.CD_TYPE_ID));
                             additioanlList.setWorkTypeFlagLe(jsonArray.getJSONObject(i).getString(AppConstant.WORK_TYPE_FLAG_LE));
                             additioanlList.setWorkStageName(jsonArray.getJSONObject(i).getString(AppConstant.WORK_SATGE_NAME));
+                            additioanlList.setImageAvailable(jsonArray.getJSONObject(i).getString(AppConstant.KEY_IMAGE_AVAILABLE));
 
 
                             dbData.insertAdditionalWorkList(additioanlList);

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
-import com.bumptech.glide.util.Util;
 import com.nic.RealTimeMonitoringSystem.Fragment.SlideshowDialogFragment;
 import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.adapter.FullImageAdapter;
@@ -178,6 +176,7 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
                 JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
                 if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
                     generateImageArrayList(jsonObject.getJSONArray(AppConstant.JSON_DATA));
+                    Log.d("Length", "" + jsonObject.getJSONArray(AppConstant.JSON_DATA).length());
                 }
                 Log.d("resp_OnlineImage", "" + responseDecryptedBlockKey);
             }
@@ -192,15 +191,14 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
             for(int i = 0; i < jsonArray.length(); i++ ) {
                 try {
                     RealTimeMonitoringSystem imageOnline = new RealTimeMonitoringSystem();
-                    imageOnline.setImageRemark(jsonArray.getJSONObject(i).getString(AppConstant.KEY_IMAGE_REMARK));
-                    imageOnline.setStageName(jsonArray.getJSONObject(i).getString(AppConstant.STAGE_NAME));
-
-                    byte[] decodedString = Base64.decode(jsonArray.getJSONObject(i).getString(AppConstant.KEY_IMAGE), Base64.DEFAULT);
-                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-                    imageOnline.setImage(decodedByte);
-
-                    activityImage.add(imageOnline);
+//                    imageOnline.setImageRemark(jsonArray.getJSONObject(i).getString(AppConstant.KEY_IMAGE_REMARK));
+                    imageOnline.setWorkStageName(jsonArray.getJSONObject(i).getString(AppConstant.WORK_SATGE_NAME));
+                    if (!(jsonArray.getJSONObject(i).getString(AppConstant.KEY_IMAGE).equalsIgnoreCase("null") || jsonArray.getJSONObject(i).getString(AppConstant.KEY_IMAGE).equalsIgnoreCase(""))) {
+                        byte[] decodedString = Base64.decode(jsonArray.getJSONObject(i).getString(AppConstant.KEY_IMAGE), Base64.DEFAULT);
+                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        imageOnline.setImage(decodedByte);
+                        activityImage.add(imageOnline);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

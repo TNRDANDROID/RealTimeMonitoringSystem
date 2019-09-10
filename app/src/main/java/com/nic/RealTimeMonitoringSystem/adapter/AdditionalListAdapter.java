@@ -124,6 +124,13 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
                 viewOfflineImages(work_id,cd_work_no,work_type_flag_le,AppConstant.ADDITIONAL_WORK,"Offline","","","");
             }
         });
+
+        if (AdditionalListValuesFiltered.get(position).getImageAvailable().equalsIgnoreCase("Y")) {
+            holder.adapterAdditionalListBinding.viewOnlineImage.setVisibility(View.VISIBLE);
+        }
+        else if(AdditionalListValuesFiltered.get(position).getImageAvailable().equalsIgnoreCase("N")){
+            holder.adapterAdditionalListBinding.viewOnlineImage.setVisibility(View.GONE);
+        }
         holder.adapterAdditionalListBinding.viewOnlineImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

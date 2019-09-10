@@ -394,6 +394,7 @@ public class dbData {
         values.put(AppConstant.COMMUNITY_NAME, realTimeMonitoringSystem.getCommunity());
         values.put(AppConstant.GENDER, realTimeMonitoringSystem.getGender());
         values.put(AppConstant.LAST_VISITED_DATE, realTimeMonitoringSystem.getLastVisitedDate());
+        values.put(AppConstant.KEY_IMAGE_AVAILABLE, realTimeMonitoringSystem.getImageAvailable());
 
         long id = db.insert(DBHelper.WORK_LIST_TABLE_BASED_ON_FINYEAR_VIlLAGE, null, values);
         Log.d("Inserted_id_Worklist", String.valueOf(id));
@@ -448,6 +449,7 @@ public class dbData {
                     card.setCommunity(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.COMMUNITY_NAME)));
                     card.setGender(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.GENDER)));
                     card.setLastVisitedDate(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.LAST_VISITED_DATE)));
+                    card.setImageAvailable(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.KEY_IMAGE_AVAILABLE)));
 
                     cards.add(card);
                 }
@@ -481,6 +483,7 @@ public class dbData {
         values.put(AppConstant.CD_NAME, realTimeMonitoringSystem.getCdName());
         values.put(AppConstant.CHAINAGE_METER, realTimeMonitoringSystem.getChainageMeter());
         values.put(AppConstant.WORK_SATGE_NAME, realTimeMonitoringSystem.getWorkStageName());
+        values.put(AppConstant.KEY_IMAGE_AVAILABLE, realTimeMonitoringSystem.getImageAvailable());
 
 
         long id = db.insert(DBHelper.ADDITIONAL_WORK_LIST, null, values);
@@ -527,6 +530,7 @@ public class dbData {
                     card.setCdName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.CD_NAME)));
                     card.setChainageMeter(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.CHAINAGE_METER)));
                     card.setWorkStageName(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.WORK_SATGE_NAME)));
+                    card.setImageAvailable(cursor.getString(cursor.getColumnIndexOrThrow(AppConstant.KEY_IMAGE_AVAILABLE)));
 
                     cards.add(card);
                 }
@@ -660,6 +664,8 @@ public class dbData {
                             .getColumnIndexOrThrow(AppConstant.KEY_IMAGE_REMARK)));
                     card.setCreatedDate(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.KEY_CREATED_DATE)));
+                    card.setWorkStageName(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_SATGE_NAME)));
 
                     cards.add(card);
                 }

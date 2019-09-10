@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.nic.RealTimeMonitoringSystem.BuildConfig;
 import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.databinding.SplashScreenBinding;
 import com.nic.RealTimeMonitoringSystem.helper.AppVersionHelper;
@@ -31,20 +32,15 @@ public class SplashScreen extends AppCompatActivity implements
         splashScreenBinding = DataBindingUtil.setContentView(this,R.layout.splash_screen);
         splashScreenBinding.setActivity(this);
         prefManager = new PrefManager(this);
-//        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("production")) {
-//            if (Utils.isOnline()) {
-//                checkAppVersion();
-//            } else {
-//                showSignInScreen();
-//
-//            }
-//        } else {
-//            showSignInScreen();
-//        }
-        if (Utils.isOnline()) {
+        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("production")) {
+            if (Utils.isOnline()) {
+                checkAppVersion();
+            } else {
+                showSignInScreen();
+
+            }
+        } else {
             showSignInScreen();
-        }else{
-            Utils.showAlert(this,getResources().getString(R.string.no_internet));
         }
     }
 

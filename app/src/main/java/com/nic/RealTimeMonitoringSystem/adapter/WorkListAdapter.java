@@ -20,7 +20,6 @@ import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.activity.AdditionalWorkScreen;
 import com.nic.RealTimeMonitoringSystem.activity.CameraScreen;
 import com.nic.RealTimeMonitoringSystem.activity.FullImageActivity;
-import com.nic.RealTimeMonitoringSystem.activity.WorkListScreen;
 import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
 import com.nic.RealTimeMonitoringSystem.dataBase.DBHelper;
 import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
@@ -242,7 +241,12 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
                 viewOfflineImages(work_id,AppConstant.MAIN_WORK,"Offline","","","");
             }
         });
-
+        if (WorkListValuesFiltered.get(position).getImageAvailable().equalsIgnoreCase("Y")) {
+            holder.adapterWorkListBinding.viewOnlineImage.setVisibility(View.VISIBLE);
+        }
+        else if(WorkListValuesFiltered.get(position).getImageAvailable().equalsIgnoreCase("N")){
+            holder.adapterWorkListBinding.viewOnlineImage.setVisibility(View.GONE);
+        }
         holder.adapterWorkListBinding.viewOnlineImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
