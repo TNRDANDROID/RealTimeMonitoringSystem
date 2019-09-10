@@ -3,6 +3,9 @@ package com.nic.RealTimeMonitoringSystem.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,7 @@ import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.activity.CameraScreen;
 import com.nic.RealTimeMonitoringSystem.activity.FullImageActivity;
 import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
+import com.nic.RealTimeMonitoringSystem.dataBase.DBHelper;
 import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
 import com.nic.RealTimeMonitoringSystem.databinding.AdapterAdditionalListBinding;
 import com.nic.RealTimeMonitoringSystem.databinding.AdapterWorkListBinding;
@@ -37,8 +41,8 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
     private final dbData dbData;
     PrefManager prefManager;
     public final String dcode,bcode,pvcode;
-
-    private LayoutInflater layoutInflater;
+    public static DBHelper dbHelper;
+    public static SQLiteDatabase db;    private LayoutInflater layoutInflater;
 
     public AdditionalListAdapter(Context context, List<RealTimeMonitoringSystem> WorkListValues,dbData dbData) {
         this.context = context;
@@ -49,7 +53,12 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
         dcode = prefManager.getDistrictCode();
         bcode = prefManager.getBlockCode();
         pvcode = prefManager.getPvCode();
-
+        try {
+            dbHelper = new DBHelper(context);
+            db = dbHelper.getWritableDatabase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -97,6 +106,19 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
             holder.adapterAdditionalListBinding.tvWorkstage.setText(AdditionalListValuesFiltered.get(position).getWorkStageName());
         }
 
+        String workTypeID = String.valueOf(AdditionalListValuesFiltered.get(position).getCdTypeId());
+        String currentStageCode = String.valueOf(AdditionalListValuesFiltered.get(position).getCurrentStage());
+        String workTypeFlag = AdditionalListValuesFiltered.get(position).getWorkTypeFlagLe();
+        String sql = "select * from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_order>(select work_stage_order from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"') and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"' and work_stage_code != 11 order by work_stage_order";
+        Cursor Stage = db.rawQuery(sql, null);
+        Log.d("CdWork",""+sql);
+
+        if(Stage.getCount() > 0 ){
+            holder.adapterAdditionalListBinding.takePhoto.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.adapterAdditionalListBinding.takePhoto.setVisibility(View.GONE);
+        }
 
         holder.adapterAdditionalListBinding.takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
