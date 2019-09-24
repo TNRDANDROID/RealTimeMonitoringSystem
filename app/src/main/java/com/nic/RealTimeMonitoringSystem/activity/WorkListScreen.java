@@ -157,9 +157,9 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                 if (workList.size() == 0) {
                     Utils.showAlert(WorkListScreen.this, "No Data Available in Local Database. Please, Turn On mobile data");
                 }
-            }/*else if(workList.size() == 0){
+            }else if(workList.size() == 0){
                 Utils.showAlert(WorkListScreen.this, "No Record Found!");
-            }*/
+            }
             workListAdapter = new WorkListAdapter(WorkListScreen.this, WorkList,dbData);
             recyclerView.setAdapter(workListAdapter);
             recyclerView.showShimmerAdapter();

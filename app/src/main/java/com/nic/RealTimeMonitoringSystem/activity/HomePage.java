@@ -151,7 +151,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
 
     public void getSchemeList() {
         try {
-            new ApiService(this).makeJSONObjectRequest("SchemeList", Api.Method.POST, UrlGenerator.getServicesListUrl(), schemeListJsonParams(), "not cache", this);
+            new ApiService(this).makeJSONObjectRequest("SchemeList", Api.Method.POST, UrlGenerator.getWorkListUrl(), schemeListJsonParams(), "not cache", this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
