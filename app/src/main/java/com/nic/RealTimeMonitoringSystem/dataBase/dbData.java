@@ -1,5 +1,6 @@
 package com.nic.RealTimeMonitoringSystem.dataBase;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,6 +13,7 @@ import android.util.Log;
 
 import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
+import com.nic.RealTimeMonitoringSystem.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -402,15 +404,18 @@ public class dbData {
         return realTimeMonitoringSystem;
     }
 
-    public ArrayList<RealTimeMonitoringSystem> getAllWorkLIst(String purpose, String fin_year, String dcode, String bcode, String pvcode) {
+    public ArrayList<RealTimeMonitoringSystem> getAllWorkLIst(String purpose, String fin_year, String dcode, String bcode, String pvcode,Integer schemeSeqId) {
 
         ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
         Cursor cursor = null;
         String condition = "";
 
-     //   if(purpose.equalsIgnoreCase("fetch")) {
+        if(purpose.equalsIgnoreCase("fetch")) {
+            condition = " where fin_year = '" + fin_year + "' and dcode = "+dcode+" and bcode = "+bcode+ " and pvcode = "+pvcode+ " and scheme_id = "+schemeSeqId+ " and current_stage_of_work != 10";
+        }else{
             condition = " where fin_year = '" + fin_year + "' and dcode = "+dcode+" and bcode = "+bcode+ " and pvcode = "+pvcode+ " and current_stage_of_work != 10";
-     //   }
+
+        }
 
         try {
             cursor = db.rawQuery("select * from " + DBHelper.WORK_LIST_TABLE_BASED_ON_FINYEAR_VIlLAGE +  condition, null);
@@ -455,7 +460,8 @@ public class dbData {
                 }
             }
         } catch (Exception e) {
-            //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
+               Log.d("Excep" +
+                       "", "Exception raised with a value of " + e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -492,7 +498,7 @@ public class dbData {
         return realTimeMonitoringSystem;
     }
 
-    public ArrayList<RealTimeMonitoringSystem> getAllAdditionalWork(String work_id,String fin_year, String dcode, String bcode, String pvcode) {
+    public ArrayList<RealTimeMonitoringSystem> getAllAdditionalWork(String work_id,String fin_year, String dcode, String bcode, String pvcode,Integer schemeSeqId) {
 
         ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
         Cursor cursor = null;
@@ -500,7 +506,7 @@ public class dbData {
         String condition = "";
 
         if (work_id != "") {
-            condition = " where work_id = " + work_id + " and fin_year = '" + fin_year + "' and dcode = " + dcode + " and bcode = " + bcode + " and pvcode = " + pvcode+ " and current_stage_of_work != 10";
+            condition = " where work_id = " + work_id + " and fin_year = '" + fin_year + "' and dcode = " + dcode + " and bcode = " + bcode + " and pvcode = " + pvcode+ " and scheme_id = " + schemeSeqId+ " and current_stage_of_work != 10";
         }else {
             condition = " where fin_year = '" + fin_year + "' and dcode = " + dcode + " and bcode = " + bcode + " and pvcode = " + pvcode+ " and current_stage_of_work != 10";
         }

@@ -45,9 +45,10 @@ public class PrefManager {
     private static final String KEY_AUTOCOMPLETE_SELECTED_BANK_NAME = "autocomplete_selected_bank_name";
     private static final String KEY_AUTOCOMPLETE_SELECTED_BANK_ID = "autocomplete_selected_bank_id";
     private static final String KEY_SPINNER_SELECTED_CATEGORY_ID= "spinner_selected_category_id";
-    private static final String KEY_BLOCK_CODE_JSON = "block_code_json";
+    private static final String KEY_DISTRICT_CODE_JSON = "district_code_json";
     private static final String KEY_VILLAGE_CODE_JSON = "village_code_json";
     private static final String KEY_SCHEME_NAME = "Scheme_Name";
+    private static final String KEY_SCHEME_SEQUENTIAL_ID = "SCHEME_SEQUENTIAL_ID";
     private static final String KEY_FINANCIALYEAR_NAME = "FinancialYear_Name";
 
 
@@ -287,6 +288,14 @@ public class PrefManager {
 
     public String getSchemeName() {return pref.getString(KEY_SCHEME_NAME,null);}
 
+    public  void setKeySpinnerSelectedSchemeSeqId(Integer key) {
+        editor.putInt(KEY_SCHEME_SEQUENTIAL_ID,key);
+        editor.commit();
+    }
+
+    public Integer getKeySpinnerSelectedSchemeSeqId() {return pref.getInt(KEY_SCHEME_SEQUENTIAL_ID,0);}
+
+
     public void setFinancialyearName(String key) {
         editor.putString(KEY_FINANCIALYEAR_NAME,key);
         editor.commit();
@@ -312,18 +321,18 @@ public class PrefManager {
     }
 
 
-    public void setBlockCodeJson(JSONArray jsonarray) {
-        editor.putString(KEY_BLOCK_CODE_JSON, jsonarray.toString());
+    public void setDistrictCodeJson(JSONArray jsonarray) {
+        editor.putString(KEY_DISTRICT_CODE_JSON, jsonarray.toString());
         editor.commit();
     }
 
-    private String getBlockCodeJsonList() {
-        return pref.getString(KEY_BLOCK_CODE_JSON, null);
+    private String getDistrictCodeJsonList() {
+        return pref.getString(KEY_DISTRICT_CODE_JSON, null);
     }
 
-    public JSONArray getBlockCodeJson() {
+    public JSONArray getDistrictCodeJson() {
         JSONArray jsonData = null;
-        String strJson = getBlockCodeJsonList();//second parameter is necessary ie.,Value to return if this preference does not exist.
+        String strJson = getDistrictCodeJsonList();//second parameter is necessary ie.,Value to return if this preference does not exist.
         try {
             if (strJson != null) {
                 jsonData = new JSONArray(strJson);

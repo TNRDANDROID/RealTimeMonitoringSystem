@@ -33,6 +33,7 @@ import com.nic.RealTimeMonitoringSystem.utils.FontCache;
 import com.nic.RealTimeMonitoringSystem.utils.UrlGenerator;
 import com.nic.RealTimeMonitoringSystem.utils.Utils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -241,6 +242,9 @@ Log.d("params",""+params);
                         String userDataDecrypt = Utils.decrypt(prefManager.getEncryptPass(), user_data);
                         Log.d("userdatadecry", "" + userDataDecrypt);
                         jsonObject = new JSONObject(userDataDecrypt);
+                        JSONArray districtCodeJsonArray = new JSONArray();
+                        districtCodeJsonArray.put(jsonObject.get(AppConstant.DISTRICT_CODE));
+                        prefManager.setDistrictCodeJson(districtCodeJsonArray);
                         prefManager.setDistrictCode(jsonObject.get(AppConstant.DISTRICT_CODE));
                         prefManager.setBlockCode(jsonObject.get(AppConstant.BLOCK_CODE));
                         prefManager.setPvCode(jsonObject.get(AppConstant.PV_CODE));

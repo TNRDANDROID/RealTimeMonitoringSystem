@@ -135,7 +135,6 @@
                     android:text="Select Scheme"
                     android:textColor="@android:color/holo_red_dark"
                     android:textSize="@dimen/_15sdp"
-                    android:visibility="gone"
                     customfontdemo:fontName="@string/font_circular_bold" />
 
                 <RelativeLayout
@@ -147,8 +146,7 @@
                     android:layout_marginTop="@dimen/padding"
                     android:layout_marginRight="@dimen/margin_left_20dp"
                     android:background="@drawable/rectangle_box"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:orientation="vertical">
 
                     <TextView
 
@@ -157,7 +155,6 @@
                         android:layout_alignParentStart="true"
                         android:layout_centerInParent="true"
                         android:layout_marginLeft="15dp"
-
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/_15sdp"
                         android:visibility="visible"

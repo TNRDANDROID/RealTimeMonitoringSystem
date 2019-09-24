@@ -99,7 +99,7 @@ public class AdditionalWorkScreen extends AppCompatActivity implements View.OnCl
         protected ArrayList<RealTimeMonitoringSystem> doInBackground(Void... params) {
             dbData.open();
             additionalList = new ArrayList<>();
-            additionalList = dbData.getAllAdditionalWork(work_id,prefManager.getFinancialyearName(),prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode());
+            additionalList = dbData.getAllAdditionalWork(work_id,prefManager.getFinancialyearName(),prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode(),prefManager.getKeySpinnerSelectedSchemeSeqId());
             Log.d("ADDITIONAL_COUNT", String.valueOf(additionalList.size()));
             return additionalList;
         }

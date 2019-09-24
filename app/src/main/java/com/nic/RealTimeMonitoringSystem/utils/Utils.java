@@ -1200,7 +1200,7 @@ public class Utils {
         prefManager = new PrefManager(activity);
         JSONObject dataSet = new JSONObject();
         dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_SCHEME_LIST_DISTRICT_FINYEAR_WISE);
-        dataSet.put(AppConstant.DISTRICT_CODE, prefManager.getDistrictCode());
+        dataSet.put(AppConstant.DISTRICT_CODE, prefManager.getDistrictCodeJson());
         Log.d("objectschemeLis", "" + dataSet);
         return dataSet;
     }
@@ -1210,6 +1210,7 @@ public class Utils {
         JSONObject dataSet = new JSONObject();
         dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.WORK_LIST_BASED_ON_FINYEAR_VILLAGE);
         dataSet.put(AppConstant.FINANCIAL_YEAR, prefManager.getFinancialyearName());
+        dataSet.put(AppConstant.SCHEME_ID, prefManager.getKeySpinnerSelectedSchemeSeqId());
         dataSet.put(AppConstant.PV_CODE, prefManager.getPvCode());
         Log.d("objectworkLis", "" + dataSet);
         return dataSet;

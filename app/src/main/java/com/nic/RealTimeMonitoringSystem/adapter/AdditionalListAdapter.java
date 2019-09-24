@@ -113,7 +113,7 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
         Cursor Stage = db.rawQuery(sql, null);
         Log.d("CdWork",""+sql);
 
-        if(Stage.getCount() > 0 ){
+        if(Stage.getCount() > 0 || currentStageCode.equalsIgnoreCase("1")){
             holder.adapterAdditionalListBinding.takePhoto.setVisibility(View.VISIBLE);
         }
         else {

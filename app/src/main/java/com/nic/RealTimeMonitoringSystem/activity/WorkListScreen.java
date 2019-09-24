@@ -77,23 +77,14 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
        initRecyclerView();
         workListAdapter = new WorkListAdapter(WorkListScreen.this, WorkList,dbData);
         recyclerView.setAdapter(workListAdapter);
-
+        loadOfflineFinYearListDBValues();
         activityWorkListBinding.finyearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position > 0) {
                     pref_finYear = FinYearList.get(position).getFinancialYear();
                     prefManager.setFinancialyearName(pref_finYear);
-                    WorkList = new ArrayList<>();
-                    workListAdapter.notifyDataSetChanged();
-                    if(Utils.isOnline()){
-                        getWorkList();
-                    }
-                    else {
-                       // initRecyclerView();
-                        new fetchScheduletask().execute();
-                    }
-
+                    loadOfflineSchemeListDBValues(pref_finYear);
                 }
             }
 
@@ -109,7 +100,16 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                 if (position > 0) {
                     pref_Scheme = Scheme.get(position).getSchemeName();
                     prefManager.setSchemeName(pref_Scheme);
-//                    prefManager.setKeySpinnerSelectedSchemeSeqId(Scheme.get(position).getSchemeID());
+                    WorkList = new ArrayList<>();
+                    workListAdapter.notifyDataSetChanged();
+                    prefManager.setKeySpinnerSelectedSchemeSeqId(Scheme.get(position).getSchemeSequentialID());
+                    if(Utils.isOnline()){
+                        getWorkList();
+                    }
+                    else {
+                        // initRecyclerView();
+                        new fetchScheduletask().execute();
+                    }
 //                    JSONObject jsonObject = new JSONObject();
 ////                    try {
 ////                        jsonObject.put(AppConstant.KEY_SCHEME_SEQUENTIAL_ID,WorkList.get(position).getSchemeSequentialID());
@@ -125,7 +125,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
 
             }
         });
-        loadOfflineFinYearListDBValues();
+
     }
 
     private void initRecyclerView() {
@@ -145,7 +145,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
         protected ArrayList<RealTimeMonitoringSystem> doInBackground(Void... params) {
             dbData.open();
             WorkList = new ArrayList<>();
-            WorkList = dbData.getAllWorkLIst("fetch",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode());
+            WorkList = dbData.getAllWorkLIst("fetch",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode(),prefManager.getKeySpinnerSelectedSchemeSeqId());
             Log.d("WORKLIST_COUNT", String.valueOf(WorkList.size()));
             return WorkList;
         }
@@ -155,9 +155,11 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
             super.onPostExecute(workList);
             if(!Utils.isOnline()) {
                 if (workList.size() == 0) {
-                    Utils.showAlert(WorkListScreen.this, "NO Data Available in Local Database. Please, Turn On mobile data");
+                    Utils.showAlert(WorkListScreen.this, "No Data Available in Local Database. Please, Turn On mobile data");
                 }
-            }
+            }/*else if(workList.size() == 0){
+                Utils.showAlert(WorkListScreen.this, "No Record Found!");
+            }*/
             workListAdapter = new WorkListAdapter(WorkListScreen.this, WorkList,dbData);
             recyclerView.setAdapter(workListAdapter);
             recyclerView.showShimmerAdapter();
@@ -200,7 +202,9 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
 
     public void loadOfflineSchemeListDBValues(String fin_year) {
         Cursor SchemeList = null;
-        SchemeList = db.rawQuery("SELECT * FROM " + DBHelper.SCHEME_TABLE_NAME + " where fin_year = '" + fin_year + "'", null);
+        String Qury = "SELECT * FROM " + DBHelper.SCHEME_TABLE_NAME + " where fin_year = '" + fin_year + "'";
+        Log.d("Schemequery",""+Qury);
+        SchemeList = db.rawQuery(Qury, null);
 
         Scheme.clear();
         RealTimeMonitoringSystem schemeListValue = new RealTimeMonitoringSystem();
@@ -313,7 +317,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                     new fetchScheduletask().execute();
                     Utils.showAlert(this,"NO RECORD FOUND!");
                 }
-                Log.d("SchemeList", "" + responseDecryptedSchemeKey);
+                Log.d("WorkListResp", "" + responseDecryptedSchemeKey);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -348,7 +352,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
 //            if(Utils.isOnline()){
 //                dbData.deleteWorkListTable();
 //            }
-            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllWorkLIst("insert",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode());
+            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllWorkLIst("insert",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode(),0);
            if (workList_count.size() <= 0) {
                 if (params.length > 0) {
                     JSONArray jsonArray = new JSONArray();
@@ -426,7 +430,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
 //            if(Utils.isOnline()){
 //                dbData.deleteAdditionalListTable();
 //            }
-            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllAdditionalWork("",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode());
+            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllAdditionalWork("",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode(),prefManager.getKeySpinnerSelectedSchemeSeqId());
             if (workList_count.size() <= 0) {
                 if (params.length > 0) {
                     JSONArray jsonArray = new JSONArray();
