@@ -13,7 +13,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/grad"
         android:orientation="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true">
 
@@ -158,7 +158,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="22dp"
-                            android:background="#3CC0E6"
+                            android:background="@drawable/grad"
                             android:onClick="@{()-> activity.checkLoginScreen()}"
                             android:text="Sign in"
                             android:textAllCaps="true"
