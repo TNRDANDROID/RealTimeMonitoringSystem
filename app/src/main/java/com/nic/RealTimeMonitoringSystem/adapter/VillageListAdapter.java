@@ -1,5 +1,6 @@
 package com.nic.RealTimeMonitoringSystem.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import androidx.databinding.DataBindingUtil;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -23,7 +26,7 @@ import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VillageListAdapter extends RecyclerView.Adapter<VillageListAdapter.MyViewHolder> implements Filterable {
+public class VillageListAdapter extends PagedListAdapter<RealTimeMonitoringSystem,VillageListAdapter.MyViewHolder> implements Filterable {
     private List<RealTimeMonitoringSystem> villageListValues;
     private List<RealTimeMonitoringSystem> villageValuesFiltered;
    private String letter;
@@ -31,8 +34,21 @@ public class VillageListAdapter extends RecyclerView.Adapter<VillageListAdapter.
    private ColorGenerator generator = ColorGenerator.MATERIAL;
 
     private LayoutInflater layoutInflater;
+    private static DiffUtil.ItemCallback<RealTimeMonitoringSystem> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<RealTimeMonitoringSystem>() {
+                @Override
+                public boolean areItemsTheSame(RealTimeMonitoringSystem oldItem, RealTimeMonitoringSystem newItem) {
+                    return oldItem.getId() == newItem.getId();
+                }
 
+                @SuppressLint("DiffUtilEquals")
+                @Override
+                public boolean areContentsTheSame(RealTimeMonitoringSystem oldItem, RealTimeMonitoringSystem newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
     public VillageListAdapter(Context context, List<RealTimeMonitoringSystem> villageListValues) {
+        super(DIFF_CALLBACK);
         this.context = context;
         this.villageListValues = villageListValues;
         this.villageValuesFiltered = villageListValues;

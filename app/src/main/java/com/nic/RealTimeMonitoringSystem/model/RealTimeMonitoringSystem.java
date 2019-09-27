@@ -544,5 +544,9 @@ public class RealTimeMonitoringSystem {
         return workStageOrder;
     }
 
+    public Integer getId() {
+        return id;
+    }
+    private Integer id;
 
 }

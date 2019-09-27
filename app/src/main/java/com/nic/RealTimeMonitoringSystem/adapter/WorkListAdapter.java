@@ -1,5 +1,6 @@
 package com.nic.RealTimeMonitoringSystem.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import androidx.databinding.DataBindingUtil;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -31,7 +34,7 @@ import com.nic.RealTimeMonitoringSystem.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyViewHolder> implements Filterable {
+public class WorkListAdapter extends PagedListAdapter<RealTimeMonitoringSystem,WorkListAdapter.MyViewHolder> implements Filterable {
     private List<RealTimeMonitoringSystem> WorkListValues;
     private List<RealTimeMonitoringSystem> WorkListValuesFiltered;
     private String letter;
@@ -44,8 +47,21 @@ public class WorkListAdapter extends RecyclerView.Adapter<WorkListAdapter.MyView
     public static SQLiteDatabase db;
 
     private LayoutInflater layoutInflater;
+    private static DiffUtil.ItemCallback<RealTimeMonitoringSystem> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<RealTimeMonitoringSystem>() {
+                @Override
+                public boolean areItemsTheSame(RealTimeMonitoringSystem oldItem, RealTimeMonitoringSystem newItem) {
+                    return oldItem.getId() == newItem.getId();
+                }
 
+                @SuppressLint("DiffUtilEquals")
+                @Override
+                public boolean areContentsTheSame(RealTimeMonitoringSystem oldItem, RealTimeMonitoringSystem newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
     public WorkListAdapter(Context context, List<RealTimeMonitoringSystem> WorkListValues,dbData dbData) {
+        super(DIFF_CALLBACK);
         this.context = context;
         this.WorkListValues = WorkListValues;
         this.WorkListValuesFiltered = WorkListValues;

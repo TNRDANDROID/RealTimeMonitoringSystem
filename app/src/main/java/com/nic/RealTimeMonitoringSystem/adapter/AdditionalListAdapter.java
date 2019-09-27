@@ -1,11 +1,11 @@
 package com.nic.RealTimeMonitoringSystem.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +14,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import androidx.databinding.DataBindingUtil;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -24,7 +26,6 @@ import com.nic.RealTimeMonitoringSystem.constant.AppConstant;
 import com.nic.RealTimeMonitoringSystem.dataBase.DBHelper;
 import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
 import com.nic.RealTimeMonitoringSystem.databinding.AdapterAdditionalListBinding;
-import com.nic.RealTimeMonitoringSystem.databinding.AdapterWorkListBinding;
 import com.nic.RealTimeMonitoringSystem.model.RealTimeMonitoringSystem;
 import com.nic.RealTimeMonitoringSystem.session.PrefManager;
 import com.nic.RealTimeMonitoringSystem.utils.Utils;
@@ -32,7 +33,7 @@ import com.nic.RealTimeMonitoringSystem.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAdapter.MyViewHolder> implements Filterable {
+public class AdditionalListAdapter extends PagedListAdapter<RealTimeMonitoringSystem, AdditionalListAdapter.MyViewHolder> implements Filterable {
     private List<RealTimeMonitoringSystem> AdditionalListValues;
     private List<RealTimeMonitoringSystem> AdditionalListValuesFiltered;
     private String letter;
@@ -43,8 +44,21 @@ public class AdditionalListAdapter extends RecyclerView.Adapter<AdditionalListAd
     public final String dcode,bcode,pvcode;
     public static DBHelper dbHelper;
     public static SQLiteDatabase db;    private LayoutInflater layoutInflater;
+    private static DiffUtil.ItemCallback<RealTimeMonitoringSystem> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<RealTimeMonitoringSystem>() {
+                @Override
+                public boolean areItemsTheSame(RealTimeMonitoringSystem oldItem, RealTimeMonitoringSystem newItem) {
+                    return oldItem.getId() == newItem.getId();
+                }
 
+                @SuppressLint("DiffUtilEquals")
+                @Override
+                public boolean areContentsTheSame(RealTimeMonitoringSystem oldItem, RealTimeMonitoringSystem newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
     public AdditionalListAdapter(Context context, List<RealTimeMonitoringSystem> WorkListValues,dbData dbData) {
+        super(DIFF_CALLBACK);
         this.context = context;
         prefManager = new PrefManager(context);
         this.AdditionalListValues = WorkListValues;

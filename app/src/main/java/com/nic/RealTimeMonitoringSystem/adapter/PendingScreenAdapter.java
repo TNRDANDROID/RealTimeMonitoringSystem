@@ -1,5 +1,6 @@
 package com.nic.RealTimeMonitoringSystem.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import androidx.databinding.DataBindingUtil;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -37,7 +40,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PendingScreenAdapter extends RecyclerView.Adapter<PendingScreenAdapter.MyViewHolder> implements Filterable {
+public class PendingScreenAdapter extends PagedListAdapter<RealTimeMonitoringSystem,PendingScreenAdapter.MyViewHolder> implements Filterable {
     private List<RealTimeMonitoringSystem> pendingListValues;
     private List<RealTimeMonitoringSystem> pendingListFiltered;
     private String letter;
@@ -48,7 +51,21 @@ public class PendingScreenAdapter extends RecyclerView.Adapter<PendingScreenAdap
 
     private LayoutInflater layoutInflater;
 
+    private static DiffUtil.ItemCallback<RealTimeMonitoringSystem> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<RealTimeMonitoringSystem>() {
+                @Override
+                public boolean areItemsTheSame(RealTimeMonitoringSystem oldItem, RealTimeMonitoringSystem newItem) {
+                    return oldItem.getId() == newItem.getId();
+                }
+
+                @SuppressLint("DiffUtilEquals")
+                @Override
+                public boolean areContentsTheSame(RealTimeMonitoringSystem oldItem, RealTimeMonitoringSystem newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
     public PendingScreenAdapter(Context context, List<RealTimeMonitoringSystem> pendingListValues) {
+        super(DIFF_CALLBACK);
         this.context = context;
         prefManager = new PrefManager(context);
         dbData = new dbData(context);
