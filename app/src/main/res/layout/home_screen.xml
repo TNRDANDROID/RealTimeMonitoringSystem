@@ -197,6 +197,7 @@
                         android:background="@drawable/grad_curve"
                         android:onClick="@{()-> activity.viewVillageList()}"
                         android:text="View Works"
+                        android:textAlignment="center"
                         android:clickable="true"
                         android:textAllCaps="true"
                         android:textColor="@android:color/black"
