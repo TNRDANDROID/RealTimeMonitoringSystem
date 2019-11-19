@@ -13,6 +13,7 @@ import com.nic.RealTimeMonitoringSystem.R;
 import com.nic.RealTimeMonitoringSystem.dataBase.dbData;
 import com.nic.RealTimeMonitoringSystem.session.PrefManager;
 import com.nic.RealTimeMonitoringSystem.support.MyCustomTextView;
+import com.nic.RealTimeMonitoringSystem.utils.Utils;
 
 
 /**
@@ -66,6 +67,7 @@ public class MyDialog {
                 if(type.equals("Logout")) {
                     dbData.open();
                     dbData.deleteAll();
+                    Utils.clearApplicationData(activity);
                     prefManager.clearSession();
                 }
 
