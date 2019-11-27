@@ -157,8 +157,6 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                 if (workList.size() == 0) {
                     Utils.showAlert(WorkListScreen.this, "No Data Available in Local Database. Please, Turn On mobile data");
                 }
-            }else if(workList.size() == 0){
-                Utils.showAlert(WorkListScreen.this, "No Record Found!");
             }
             workListAdapter = new WorkListAdapter(WorkListScreen.this, WorkList,dbData);
             recyclerView.setAdapter(workListAdapter);
@@ -316,6 +314,14 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
 //                    }
                     new fetchScheduletask().execute();
                     Utils.showAlert(this,"NO RECORD FOUND!");
+                }
+                String authKey = responseDecryptedSchemeKey.toString();
+                int maxLogSize = 4000;
+                for(int i = 0; i <= authKey.length() / maxLogSize; i++) {
+                    int start = i * maxLogSize;
+                    int end = (i+1) * maxLogSize;
+                    end = end > authKey.length() ? authKey.length() : end;
+                    Log.v("to_send", authKey.substring(start, end));
                 }
                 Log.d("WorkListResp", "" + responseDecryptedSchemeKey);
             }
