@@ -160,6 +160,7 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
         dataSet.put(AppConstant.BLOCK_CODE, getIntent().getStringExtra(AppConstant.BLOCK_CODE));
         dataSet.put(AppConstant.PV_CODE, getIntent().getStringExtra(AppConstant.PV_CODE));
         dataSet.put(AppConstant.WORK_ID, getIntent().getStringExtra(AppConstant.WORK_ID));
+        dataSet.put(AppConstant.WORK_TYPE_FLAG_LE,  getIntent().getStringExtra(AppConstant.WORK_TYPE_FLAG_LE));
         Log.d("utils_imageDataset", "" + dataSet);
         return dataSet;
     }
