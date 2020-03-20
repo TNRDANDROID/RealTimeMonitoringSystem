@@ -9,8 +9,8 @@ android {
         applicationId "com.nic.RealTimeMonitoringSystem"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 2
-        versionName "2"
+        versionCode 3
+        versionName "3"
     }
     signingConfigs {
         release {
