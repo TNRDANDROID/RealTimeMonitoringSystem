@@ -1174,10 +1174,16 @@ public class Utils {
         return dataSet;
     }
 
-    public static JSONObject schemeFinyearListJsonParams() throws JSONException {
+    public static JSONObject schemeFinyearListJsonParams(Activity activity) throws JSONException {
+        prefManager = new PrefManager(activity);
         JSONObject dataSet = new JSONObject();
         dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_SCHEME_FINYEAR_LIST_LAST_NYEARS);
-        dataSet.put(AppConstant.N_YEAR, 2);
+        if(prefManager.getParticularDCode().equalsIgnoreCase("20")){
+            dataSet.put(AppConstant.N_YEAR, 3);
+        }
+        else{
+            dataSet.put(AppConstant.N_YEAR, 2);
+        }
         Log.d("object", "" + dataSet);
         return dataSet;
     }

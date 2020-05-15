@@ -35,6 +35,7 @@ public class PrefManager {
     private static final String KEY_USER_NAME = "UserName";
     private static final String KEY_USER_PASSWORD = "UserPassword";
     private static final String KEY_DISTRICT_CODE = "District_Code";
+    private static final String KEY_PARTICULAR_DISTRICT_CODE = "Particular_District_Code";
     private static final String KEY_BLOCK_CODE = "Block_Code";
     private static final String KEY_PV_CODE = "Pv_Code";
     private static final String KEY_DISTRICT_NAME = "District_Name";
@@ -162,6 +163,16 @@ public class PrefManager {
 
     public String getDistrictCode() {
         return pref.getString(KEY_DISTRICT_CODE, null);
+    }
+
+    public Object setParicularDCode(Object key) {
+        editor.putString(KEY_PARTICULAR_DISTRICT_CODE, String.valueOf(key));
+        editor.commit();
+        return key;
+    }
+
+    public String getParticularDCode() {
+        return pref.getString(KEY_PARTICULAR_DISTRICT_CODE, null);
     }
 
 

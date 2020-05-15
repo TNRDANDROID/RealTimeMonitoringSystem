@@ -246,6 +246,7 @@ Log.d("params",""+params);
                         districtCodeJsonArray.put(jsonObject.get(AppConstant.DISTRICT_CODE));
                         prefManager.setDistrictCodeJson(districtCodeJsonArray);
                         prefManager.setDistrictCode(jsonObject.get(AppConstant.DISTRICT_CODE));
+                        prefManager.setParicularDCode(jsonObject.get(AppConstant.DISTRICT_CODE));
                         prefManager.setBlockCode(jsonObject.get(AppConstant.BLOCK_CODE));
                         prefManager.setPvCode(jsonObject.get(AppConstant.PV_CODE));
                         prefManager.setDistrictName(jsonObject.get(AppConstant.DISTRICT_NAME));

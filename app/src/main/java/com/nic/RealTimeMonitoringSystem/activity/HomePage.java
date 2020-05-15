@@ -185,7 +185,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
     }
 
     public JSONObject finyearListJsonParams() throws JSONException {
-        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.schemeFinyearListJsonParams().toString());
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.schemeFinyearListJsonParams(this).toString());
         JSONObject dataSet = new JSONObject();
         dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
         dataSet.put(AppConstant.DATA_CONTENT, authKey);
