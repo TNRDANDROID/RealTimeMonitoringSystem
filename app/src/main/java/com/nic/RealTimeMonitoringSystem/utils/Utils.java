@@ -1178,12 +1178,7 @@ public class Utils {
         prefManager = new PrefManager(activity);
         JSONObject dataSet = new JSONObject();
         dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_SCHEME_FINYEAR_LIST_LAST_NYEARS);
-        if(prefManager.getParticularDCode().equalsIgnoreCase("20")){
-            dataSet.put(AppConstant.N_YEAR, 3);
-        }
-        else{
-            dataSet.put(AppConstant.N_YEAR, 2);
-        }
+        dataSet.put(AppConstant.N_YEAR, 3);
         Log.d("object", "" + dataSet);
         return dataSet;
     }
