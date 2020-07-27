@@ -9,8 +9,8 @@ android {
         applicationId "com.nic.RealTimeMonitoringSystem"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 5
-        versionName "5"
+        versionCode 6
+        versionName "6"
     }
     signingConfigs {
         release {
@@ -49,7 +49,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         production {
-            debuggable false
+            debuggable true
             minifyEnabled false
             shrinkResources false
             signingConfig signingConfigs.debug

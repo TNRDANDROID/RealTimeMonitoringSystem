@@ -261,12 +261,12 @@ public class CameraScreen extends AppCompatActivity implements View.OnClickListe
             String currentStageCode = getIntent().getStringExtra(AppConstant.CURRENT_STAGE_OF_WORK);
             String workTypeFlag = getIntent().getStringExtra(AppConstant.WORK_TYPE_FLAG_LE);
            // Stage = db.rawQuery("select * from " + DBHelper.ADDITIONAL_WORK_STAGE_TABLE + "  where work_type_code =  "+ workTypecode + " order by work_stage_order asc", null);
-            String sqlQry = SQLiteQueryBuilder.buildQueryString(false,DBHelper.ADDITIONAL_WORK_STAGE_TABLE, null, "work_stage_order>(select work_stage_order from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"') and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"' and work_stage_code != 11 order by work_stage_order", null, null, null, null);
+            String sqlQry = SQLiteQueryBuilder.buildQueryString(false,DBHelper.ADDITIONAL_WORK_STAGE_TABLE, null, "work_stage_order>(select work_stage_order from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"') and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"' order by work_stage_order", null, null, null, null);
             String checkNotStarted = "select work_stage_order from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"'";
             if(currentStageCode.equalsIgnoreCase("1")){
                 checkNotStarted = "1";
             }
-            Stage = db.rawQuery("select * from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_order>("+checkNotStarted+") and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"' and work_stage_code != 11 order by work_stage_order", null);
+            Stage = db.rawQuery("select * from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_order>("+checkNotStarted+") and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"' order by work_stage_order", null);
             Log.d("stageQuery",""+sqlQry);
 
         }

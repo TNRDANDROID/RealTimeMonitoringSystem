@@ -123,7 +123,7 @@ public class AdditionalListAdapter extends PagedListAdapter<RealTimeMonitoringSy
         String workTypeID = String.valueOf(AdditionalListValuesFiltered.get(position).getCdTypeId());
         String currentStageCode = String.valueOf(AdditionalListValuesFiltered.get(position).getCurrentStage());
         String workTypeFlag = AdditionalListValuesFiltered.get(position).getWorkTypeFlagLe();
-        String sql = "select * from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_order>(select work_stage_order from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"') and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"' and work_stage_code != 11 order by work_stage_order";
+        String sql = "select * from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_order>(select work_stage_order from "+DBHelper.ADDITIONAL_WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"') and work_type_code ="+workTypeID+" and cd_type_flag ='"+workTypeFlag+"' order by work_stage_order";
         Cursor Stage = db.rawQuery(sql, null);
         Log.d("CdWork",""+sql);
 
