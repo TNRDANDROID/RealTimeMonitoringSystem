@@ -434,9 +434,9 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
         protected Void doInBackground(JSONObject... params) {
 
             dbData.open();
-            if(Utils.isOnline()){
-                dbData.deleteAdditionalListTable();
-            }
+//            if(Utils.isOnline()){
+//                dbData.deleteAdditionalListTable();
+//            }
             ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllAdditionalWork("",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode(),prefManager.getKeySpinnerSelectedSchemeSeqId());
             if (workList_count.size() <= 0) {
                 if (params.length > 0) {
