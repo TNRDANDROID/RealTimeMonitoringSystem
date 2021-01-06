@@ -72,6 +72,7 @@ public class HomePage extends AppCompatActivity implements Api.ServerResponseLis
         getStageList();
         getAdditionalWorkStageList();
         getFinYearList();
+
     }
 
     public void syncButtonVisibility() {
