@@ -56,7 +56,6 @@ public class PendingScreen extends AppCompatActivity implements Api.ServerRespon
     JSONObject dataset = new JSONObject();
     private ProgressHUD progressHUD;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
