@@ -158,6 +158,14 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                     Utils.showAlert(WorkListScreen.this, "No Data Available in Local Database. Please, Turn On mobile data");
                 }
             }
+            for (int i=0;i<WorkList.size();i++){
+                for (int j=i+1;j<WorkList.size();j++){
+                    if(WorkList.get(i).getWorkId().equals(WorkList.get(j).getWorkId())){
+                        WorkList.remove(j);
+                        j--;
+                    }
+                }
+            }
             workListAdapter = new WorkListAdapter(WorkListScreen.this, WorkList,dbData);
             recyclerView.setAdapter(workListAdapter);
             recyclerView.showShimmerAdapter();
@@ -359,9 +367,11 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
 //            if(Utils.isOnline()){
 //                dbData.deleteWorkListTable();
 //            }
-            ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllWorkLIst("insert",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode(),0);
-           if (workList_count.size() <= 0) {
+           // ArrayList<RealTimeMonitoringSystem> workList_count = dbData.getAllWorkLIst("insert",pref_finYear,prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode(),0);
+           //if (workList_count.size() <= 0) {
                 if (params.length > 0) {
+
+                   // db.execSQL("delete from "+ DBHelper.WORK_LIST_TABLE_BASED_ON_FINYEAR_VIlLAGE);
                     JSONArray jsonArray = new JSONArray();
                     try {
                         jsonArray = params[0].getJSONArray(AppConstant.MAIN_WORK);
@@ -403,6 +413,7 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                             workList.setLastVisitedDate(jsonArray.getJSONObject(i).getString(AppConstant.LAST_VISITED_DATE));
                             workList.setImageAvailable(jsonArray.getJSONObject(i).getString(AppConstant.KEY_IMAGE_AVAILABLE));
 
+
                             dbData.insertWorkList(workList);
 
                         } catch (JSONException e) {
@@ -410,14 +421,16 @@ public class WorkListScreen extends AppCompatActivity implements View.OnClickLis
                         }
                     }
                 }
-           }
+          // }
             return null;
         }
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             progressHUD = ProgressHUD.show(WorkListScreen.this, "Downloading", true, false, null);
+
         }
+
 
         @Override
         protected void onPostExecute(Void aVoid) {

@@ -279,7 +279,21 @@ public class WorkListAdapter extends PagedListAdapter<RealTimeMonitoringSystem,W
         String sql = "select * from "+ DBHelper.WORK_STAGE_TABLE+" where work_stage_order >(select work_stage_order from "+DBHelper.WORK_STAGE_TABLE+" where work_stage_code='"+currentStageCode+"' and work_group_id=" + workGroupId + "  and work_type_id=" + workTypeid + ")  and work_group_id=" + workGroupId + "  and work_type_id=" + workTypeid + " and work_stage_code != 11 order by work_stage_order";
         Log.d("que",sql);
         Cursor Stage = db.rawQuery(sql, null);
+       /* ArrayList<RealTimeMonitoringSystem> testResult=new ArrayList<>();
+        ArrayList<RealTimeMonitoringSystem> testResult1=new ArrayList<>();
+        ArrayList<RealTimeMonitoringSystem> testResult2=new ArrayList<>();
+        testResult.addAll(getAll_Stage());
+        for(int i=0;i<testResult.size();i++){
+            if(workGroupId.equals(testResult.get(i).getWorkGroupID())){
+                if(workTypeid.equals(testResult.get(i).getWorkTypeID())){
+                    testResult1.add(testResult.get(i));
+                }
 
+            }
+        }
+
+        testResult2.addAll(testResult1);
+*/
         if(Stage.getCount() > 0 ){
             holder.adapterWorkListBinding.takePhoto.setVisibility(View.VISIBLE);
         }
@@ -374,5 +388,43 @@ public class WorkListAdapter extends PagedListAdapter<RealTimeMonitoringSystem,W
 
         activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
+
+    public ArrayList<RealTimeMonitoringSystem> getAll_Stage() {
+
+        ArrayList<RealTimeMonitoringSystem> cards = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery("select * from " + DBHelper.WORK_STAGE_TABLE, null);
+            // cursor = db.query(CardsDBHelper.TABLE_CARDS,
+            //       COLUMNS, null, null, null, null, null);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    RealTimeMonitoringSystem card = new RealTimeMonitoringSystem();
+                    card.setWorkGroupID(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_GROUP_ID)));
+                    card.setWorkTypeID(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_TYPE_ID)));
+                    card.setWorkStageOrder(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_STAGE_ORDER)));
+                    card.setWorkStageCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_STAGE_CODE)));
+
+                    card.setWorkStageName(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WORK_SATGE_NAME)));
+
+                    cards.add(card);
+                }
+            }
+        } catch (Exception e) {
+            //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return cards;
+    }
+
 }
 

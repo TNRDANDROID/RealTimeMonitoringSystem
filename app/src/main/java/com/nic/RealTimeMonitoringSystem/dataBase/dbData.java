@@ -184,7 +184,7 @@ public class dbData {
         values.put(AppConstant.FINANCIAL_YEAR, realTimeMonitoringSystem.getFinancialYear());
 
         long id = db.insert(DBHelper.SCHEME_TABLE_NAME, null, values);
-        Log.d("Inserted_id_Stage", String.valueOf(id));
+        Log.d("Inserted_id_Scheme", String.valueOf(id));
 
         return realTimeMonitoringSystem;
     }
@@ -269,7 +269,7 @@ public class dbData {
         values.put(AppConstant.WORK_SATGE_NAME, realTimeMonitoringSystem.getWorkStageName());
 
         long id = db.insert(DBHelper.WORK_STAGE_TABLE, null, values);
-        Log.d("Inserted_id_Stage", String.valueOf(id));
+        Log.d("Inserted_id_work_Stage", String.valueOf(id));
 
         return realTimeMonitoringSystem;
     }
@@ -506,9 +506,12 @@ public class dbData {
         String condition = "";
 
         if (work_id != "") {
-            condition = " where work_id = " + work_id + " and fin_year = '" + fin_year + "' and dcode = " + dcode + " and bcode = " + bcode + " and pvcode = " + pvcode+ " and scheme_id = " + schemeSeqId+ " and current_stage_of_work != 10";
+            //condition = " where work_id = " + work_id + " and fin_year = '" + fin_year + "' and dcode = " + dcode + " and bcode = " + bcode + " and pvcode = " + pvcode+ " and scheme_id = " + schemeSeqId+ " and current_stage_of_work != 10";
+            condition = " where work_id = " + work_id + " and fin_year = '" + fin_year + "' and dcode = " + dcode + " and bcode = " + bcode + " and pvcode = " + pvcode+ " and scheme_id = " + schemeSeqId;
+
         }else {
-            condition = " where fin_year = '" + fin_year + "' and dcode = " + dcode + " and bcode = " + bcode + " and pvcode = " + pvcode+ " and current_stage_of_work != 10";
+           // condition = " where fin_year = '" + fin_year + "' and dcode = " + dcode + " and bcode = " + bcode + " and pvcode = " + pvcode+ " and current_stage_of_work != 10";
+            condition = " where fin_year = '" + fin_year + "' and dcode = " + dcode + " and bcode = " + bcode + " and pvcode = " + pvcode;
         }
 
 
